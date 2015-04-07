@@ -1,0 +1,13 @@
+<UIView>
+	<Component name="(Library) CustomContentPanel">
+		<SetProperty name="isVisible">false</SetProperty>
+	
+		<Component name=".*" name_regex="true" recursive="true">
+				<SetProperty name="color">255, 255, 255, 255</SetProperty>
+		</Component>
+	</Component>
+	
+	<Sprites>
+		<Sprite name="UnlockingPanel2" width="30" height="30">Sprites/UnlockingPanel2.png</Sprite>
+	</Sprites>
+</UIView>
