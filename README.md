@@ -1,4 +1,4 @@
-# Skylines-Sapphire
+# Sapphire
 
 Sapphire is a UI reskin framework/ mod for Cities: Skylines. It enables authors to create their own skins for the game using straight-forward XML syntax and publish them as mods on the workshop. 
 
