@@ -1,4 +1,4 @@
-## Saphire - Skin module reference
+## Sapphire - Skin module reference
 
 This document defines the syntax of skin modules.
 
