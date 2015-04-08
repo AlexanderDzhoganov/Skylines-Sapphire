@@ -7,7 +7,7 @@ This document defines the syntax of skin modules.
 - 1.1 List of common component properties
 - 1.2 List of supported component types
 
-#### 1.0 Overview of a module
+### 1.0 Overview of a module
 
 A skin module is any XML text file with correct Sapphire structure. The structure is described below.
 
