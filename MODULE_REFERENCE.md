@@ -34,17 +34,17 @@ of each component can be found by decompiling `ColossalManaged.dll` or by using 
 
 Component properties are defined like this:
 ```
-<UIView>
-  <Component name="MyTestPanel">
-    <property>value</property>
-  </Component>
-</UIView>
+<property>value</property>
 ```
 e.g.
 ```
-<size>12.0, 16.0</size>
+<UIView>
+  <Component name="MyTestPanel">
+    <size>12.0, 16.0</size>
+  </Component>
+</UIView>
 ```
-will set a component's size to x = 12.0 and y = 16.0.
+will set `MyTestPanel`'s size to x = 12.0 and y = 16.0.
 
 Components in the UI have sub-components. You access them by defining nested `<Component>` tags like this:
 ```
