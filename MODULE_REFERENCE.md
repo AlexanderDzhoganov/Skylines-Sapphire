@@ -3,8 +3,8 @@
 This document defines the syntax of skin modules.
 
 ### Table of contents
-1.0 Overview of a module
-1.1 List of common component properties
+- 1.0 Overview of a module
+- 1.1 List of common component properties
 
 #### 1.0 Overview of a module
 
