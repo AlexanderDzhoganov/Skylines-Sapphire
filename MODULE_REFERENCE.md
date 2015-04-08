@@ -34,7 +34,11 @@ of each component can be found by decompiling `ColossalManaged.dll` or by using 
 
 Component properties are defined like this:
 ```
-<property>value</property>
+<UIView>
+  <Component name="MyTestPanel">
+    <property>value</property>
+  </Component>
+</UIView>
 ```
 e.g.
 ```
