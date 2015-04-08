@@ -63,6 +63,7 @@
     <Compile Include="Skin.cs" />
     <Compile Include="SkinModule.cs" />
     <Compile Include="SkinLoader.cs" />
+    <Compile Include="TypeUtil.cs" />
     <Compile Include="XmlUtil.cs" />
   </ItemGroup>
   <ItemGroup>

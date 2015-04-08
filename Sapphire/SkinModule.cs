@@ -225,26 +225,51 @@ namespace Sapphire
             {
                 if (t == typeof(int))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     return int.Parse(value);
                 }
 
                 if (t == typeof(uint))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     return uint.Parse(value);
                 }
 
                 if (t == typeof(float))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     return float.Parse(value);
                 }
 
                 if (t == typeof(double))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     return double.Parse(value);
                 }
 
                 if (t == typeof(bool))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     if (value == "true") return true;
                     if (value == "false") return false;
                     if (value == "0") return false;
@@ -259,6 +284,11 @@ namespace Sapphire
 
                 if (t == typeof(Vector2))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     var values = value.Split(',');
                     if (values.Length != 2)
                     {
@@ -270,6 +300,11 @@ namespace Sapphire
 
                 if (t == typeof(Vector3))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     var values = value.Split(',');
                     if (values.Length != 3)
                     {
@@ -281,6 +316,11 @@ namespace Sapphire
 
                 if (t == typeof(Vector4))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     var values = value.Split(',');
                     if (values.Length != 4)
                     {
@@ -292,6 +332,11 @@ namespace Sapphire
 
                 if (t == typeof(Rect))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     var values = value.Split(',');
                     if (values.Length != 4)
                     {
@@ -303,6 +348,11 @@ namespace Sapphire
 
                 if (t == typeof(Color))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     var values = value.Split(',');
                     if (values.Length != 4)
                     {
@@ -314,6 +364,11 @@ namespace Sapphire
 
                 if (t == typeof(Color32))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     var values = value.Split(',');
                     if (values.Length != 4)
                     {
@@ -325,6 +380,11 @@ namespace Sapphire
 
                 if (t == typeof (UITextureAtlas))
                 {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                    }
+
                     var atlasName = value;
                     if (!skin.spriteAtlases.ContainsKey(atlasName))
                     {
@@ -332,6 +392,11 @@ namespace Sapphire
                     }
 
                     return skin.spriteAtlases[atlasName];
+                }
+
+                if (t.IsEnum)
+                {
+                    return Enum.Parse(t, value);
                 }
             }
             catch (Exception ex)
