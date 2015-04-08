@@ -15,7 +15,7 @@ Find me as `nlight` at `#skylines-modders` at `irc.esper.net` or message me on r
 
 ## Creating a new skin for Sapphire
 
-Making a new skin for Sapphire is a simple and straightforward process. Here is an overview of the steps neccessary to create a skin:
+Making a new skin for Sapphire is a straight-forward process. Here is an overview of the steps neccessary to create a skin:
 
 1. Download the example skin and the template skin
 2. Edit SapphireSkin.cs
