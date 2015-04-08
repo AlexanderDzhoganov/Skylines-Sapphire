@@ -54,7 +54,7 @@ After you're done with the example skin go to 1.3.
 3.1 Next define all your skin modules using the syntax below. Skin modules are XML files which define how your skin looks. You can have as many of them as you like. Make sure to utilize modules to split your skin cleverly for easier editing. All modules are loaded and applied in the order defined in skin.xml.
 
 To define a module, add a line like:
-```
+```xml
 <Module class="MainMenu">Modules/MainMenu.xml</Module>
 ```
 to your skin definition.
