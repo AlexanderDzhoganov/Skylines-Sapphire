@@ -1,18 +1,10 @@
 <UIView>
 	<Component name="(Library) OptionsPanel">
 		<isVisible>true</isVisible>
-		<color>255, 255, 255, 255</color>
-		
-		<Component name="OptionsContainer">
-			<Component name="Graphics">
-				<Component name="Apply">
-					<color>255, 255, 255, 255</color>
-				</Component>
-			</Component>
-		</Component>
+		<atlas>Atlas1</atlas>
 	</Component>
 	
-	<Sprites>
+	<SpriteAtlas name="Atlas1">
 		<Sprite name="UnlockingPanel2" width="30" height="30">Sprites/UnlockingPanel2.png</Sprite>
-	</Sprites>
+	</SpriteAtlas>
 </UIView>

@@ -15,10 +15,9 @@ namespace Sapphire
     {
 
         private string sourcePath;
-
         private XmlDocument document;
-
-        private Dictionary<string, Texture2D> spriteTextureCache = new Dictionary<string, Texture2D>(); 
+        private Dictionary<string, Texture2D> spriteTextureCache = new Dictionary<string, Texture2D>();
+        private Dictionary<string, UITextureAtlas> spriteAtlases = new Dictionary<string, UITextureAtlas>();
 
         public static Skin FromXmlFile(string path)
         {
@@ -70,60 +69,73 @@ namespace Sapphire
         {
             Debug.LogWarning("Loading sprites");
 
-            var spritesNode = document.SelectSingleNode("/UIView/Sprites");
-            if (spritesNode == null)
+            var rootNode = document.SelectSingleNode("/UIView");
+
+            if (rootNode == null)
             {
-                Debug.LogWarning("No sprites defined for skin");
-                return;
+                throw new Exception("Skin missing root UIView node");
             }
 
-            var uiAtlas = GetUIAtlas();
-            if (uiAtlas == null)
+            foreach (XmlNode childNode in rootNode)
             {
-                Debug.LogError("Failed to find UI atlas, cannot replace sprites..");
-                return;
-            }
-
-            int count = 0;
-
-            foreach (XmlNode childNode in spritesNode)
-            {
-                var path = childNode.InnerText;
-                var name = XmlUtil.GetAttribute(childNode, "name").Value;
-                Debug.LogWarningFormat("Replacing sprite \"{0}\" in atlast \"{1}\"", name, uiAtlas.name);
-
-                if (spriteTextureCache.ContainsKey(path))
+                if (childNode.Name != "SpriteAtlas")
                 {
-                    TextureAtlasUtils.ReplaceSprite(uiAtlas, name, spriteTextureCache[path]);
                     continue;
                 }
 
-                var widthAttribute = XmlUtil.GetAttribute(childNode, "width");
-                var heightAttribute = XmlUtil.GetAttribute(childNode, "height");
-
-                int width = -1;
-                int height = -1;
-
-                if (!int.TryParse(widthAttribute.Value, out width))
+                var atlasName = XmlUtil.GetAttribute(childNode, "name").Value;
+                if (spriteAtlases.ContainsKey(atlasName))
                 {
-                    throw new MissingAttributeValueException("width", childNode);
+                    Debug.LogWarningFormat("Duplicate atlas name \"{0}\", ignoring second definition..", atlasName);
+                    continue;
                 }
 
-                if (!int.TryParse(heightAttribute.Value, out height))
+                Debug.LogWarningFormat("Generating atlas \"{0}\"", atlasName);
+
+                var atlasPacker = new AtlasPacker();
+
+                int count = 0;
+                foreach (XmlNode spriteNode in childNode.ChildNodes)
                 {
-                    throw new MissingAttributeValueException("height", childNode);
+                    var path = childNode.InnerText;
+                    var name = XmlUtil.GetAttribute(spriteNode, "name").Value;
+                    Debug.LogWarningFormat("Packing sprite \"{0}\" in atlas", name);
+
+                    if (spriteTextureCache.ContainsKey(path))
+                    {
+                        continue;
+                    }
+
+                    var widthAttribute = XmlUtil.GetAttribute(spriteNode, "width");
+                    var heightAttribute = XmlUtil.GetAttribute(spriteNode, "height");
+
+                    int width = -1;
+                    int height = -1;
+
+                    if (!int.TryParse(widthAttribute.Value, out width))
+                    {
+                        throw new MissingAttributeValueException("width", spriteNode);
+                    }
+
+                    if (!int.TryParse(heightAttribute.Value, out height))
+                    {
+                        throw new MissingAttributeValueException("height", spriteNode);
+                    }
+
+                    var fullPath = Path.Combine(Path.GetDirectoryName(sourcePath), path);
+
+                    var texture = new Texture2D(width, height);
+                    texture.LoadImage(File.ReadAllBytes(fullPath));
+                    spriteTextureCache.Add(path, texture);
+
+                    atlasPacker.AddSprite(name, texture);
+                    count++;
                 }
 
-                var fullPath = Path.Combine(Path.GetDirectoryName(sourcePath), path);
-
-                var texture = new Texture2D(width, height);
-                texture.LoadImage(File.ReadAllBytes(fullPath));
-                spriteTextureCache.Add(path, texture);
-                TextureAtlasUtils.ReplaceSprite(uiAtlas, name, texture);
-                count++;
+                Debug.LogWarningFormat("Added {0} sprites..", count);
+                spriteAtlases[atlasName] = atlasPacker.GenerateAtlas();
+                Debug.LogWarningFormat("Atlas \"{0}\" generated", atlasName);
             }
-
-            Debug.LogWarningFormat("Replaced {0} sprites..", count);
         }
 
         public void Apply()
@@ -155,33 +167,15 @@ namespace Sapphire
                 throw new Exception("Skin missing root UIView node");    
             }
 
-            foreach (XmlNode childNode in rootNode.ChildNodes)
-            {
-                if (childNode.Attributes == null)
-                {
-                    Debug.LogWarningFormat("Root child with null attributes: \"{0}\"", childNode.Name);
-                    continue;
-                }
-
-                if (childNode.Name == "Component")
-                {
-                    var name = XmlUtil.GetAttribute(childNode, "name");
-                    var component = GameObject.Find(name.Value).GetComponent<UIComponent>();
-
-                    if (component == null)
-                    {
-                        throw new MissingUIComponentException(name.Value, null, childNode);
-                    }
-
-                    ApplyInternalRecursive(childNode, component);
-                }
-            }
+            ApplyInternalRecursive(rootNode, null);
         }
 
         private void ApplyInternalRecursive(XmlNode node, UIComponent component)
         {
             foreach (XmlNode childNode in node.ChildNodes)
             {
+                Debug.LogWarning("childnode: " + childNode.Name);
+
                 if (childNode.Attributes == null)
                 {
                     Debug.LogWarningFormat("Child with null attributes: \"{0}\"", childNode.Name);
@@ -190,27 +184,29 @@ namespace Sapphire
 
                 if (childNode.Name == "Component")
                 {
-                    var name = XmlUtil.TryGetAttribute(childNode, "name");
-                    var recursive = XmlUtil.TryGetAttribute(childNode, "recursive");
-                    var regex = XmlUtil.TryGetAttribute(childNode, "name_regex");
+                    var nameAttrib = XmlUtil.GetAttribute(childNode, "name");
 
-                    if (name != null)
+                    var regexAttrib = XmlUtil.TryGetAttribute(childNode, "name_regex");
+                    bool regex = regexAttrib != null && regexAttrib.Value == "true";
+
+                    var recursiveAttrib = XmlUtil.TryGetAttribute(childNode, "recursive");
+                    bool recursive = recursiveAttrib != null && recursiveAttrib.Value == "true";
+
+                    var childComponents = FindComponentsInChildren(node, component, nameAttrib.Value, regex, recursive);
+
+                    foreach (var childComponent in childComponents)
                     {
-                        var childComponents = FindComponentsInChildren(node, component, name.Value, regex.Value == "true", recursive.Value == "true");
-                        foreach (var childComponent in childComponents)
-                        {
-                            ApplyInternalRecursive(childNode, childComponent);
-                        }
+                        ApplyInternalRecursive(childNode, childComponent);
                     }
                 }
-                else
+                else if(component != null)
                 {
                     SetPropertyValue(childNode, node, component);
                 }
             }
         }
 
-        private static void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component)
+        private void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component)
         {
             var rProperty = component.GetType().GetProperty(setNode.Name, BindingFlags.Instance | BindingFlags.Public);
 
@@ -219,16 +215,27 @@ namespace Sapphire
                 throw new MissingComponentPropertyException(setNode.Name, component, node);
             }
 
-            rProperty.SetValue(component, ValueParser.GetValueForType(node, rProperty.PropertyType, setNode.InnerText), null);
+            rProperty.SetValue(component, GetValueForType(node, rProperty.PropertyType, setNode.InnerText), null);
         }
 
         private static List<UIComponent> FindComponentsInChildren(XmlNode node, UIComponent component, string childName, bool regex, bool recursive, int depth = 0)
         {
             var results = new List<UIComponent>();
 
-            for (int i = 0; i < component.gameObject.transform.childCount; i++)
+            Transform parentTransform = null;
+
+            if (component == null)
             {
-                var child = component.gameObject.transform.GetChild(i);
+                parentTransform = GameObject.FindObjectOfType<UIView>().gameObject.transform;
+            }
+            else
+            {
+                parentTransform = component.transform;
+            }
+
+            for (int i = 0; i < parentTransform.childCount; i++)
+            {
+                var child = parentTransform.GetChild(i);
                 var childComponent = child.GetComponent<UIComponent>();
 
                 if (!regex)
@@ -270,6 +277,130 @@ namespace Sapphire
             }
 
             return null;
+        }
+
+        private object GetValueForType(XmlNode node, Type t, string value)
+        {
+            try
+            {
+                if (t == typeof(int))
+                {
+                    return int.Parse(value);
+                }
+
+                if (t == typeof(uint))
+                {
+                    return uint.Parse(value);
+                }
+
+                if (t == typeof(float))
+                {
+                    return float.Parse(value);
+                }
+
+                if (t == typeof(double))
+                {
+                    return double.Parse(value);
+                }
+
+                if (t == typeof(bool))
+                {
+                    if (value == "true") return true;
+                    if (value == "false") return false;
+                    if (value == "0") return false;
+                    if (value == "1") return true;
+                    return bool.Parse(value);
+                }
+
+                if (t == typeof(string))
+                {
+                    return value;
+                }
+
+                if (t == typeof(Vector2))
+                {
+                    var values = value.Split(',');
+                    if (values.Length != 2)
+                    {
+                        throw new ParseException("Vector2 definition must have two components", node);
+                    }
+
+                    return new Vector2(float.Parse(values[0]), float.Parse(values[1]));
+                }
+
+                if (t == typeof(Vector3))
+                {
+                    var values = value.Split(',');
+                    if (values.Length != 3)
+                    {
+                        throw new ParseException("Vector3 definition must have three components", node);
+                    }
+
+                    return new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
+                }
+
+                if (t == typeof(Vector4))
+                {
+                    var values = value.Split(',');
+                    if (values.Length != 4)
+                    {
+                        throw new ParseException("Vector4 definition must have four components", node);
+                    }
+
+                    return new Vector4(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+                }
+
+                if (t == typeof(Rect))
+                {
+                    var values = value.Split(',');
+                    if (values.Length != 4)
+                    {
+                        throw new ParseException("Rect definition must have four components", node);
+                    }
+
+                    return new Rect(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+                }
+
+                if (t == typeof(Color))
+                {
+                    var values = value.Split(',');
+                    if (values.Length != 4)
+                    {
+                        throw new ParseException("Color definition must have four components", node);
+                    }
+
+                    return new Color(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+                }
+
+                if (t == typeof(Color32))
+                {
+                    var values = value.Split(',');
+                    if (values.Length != 4)
+                    {
+                        throw new ParseException("Color32 definition must have four components", node);
+                    }
+
+                    return new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
+                }
+
+                if (t == typeof (UITextureAtlas))
+                {
+                    var atlasName = value;
+                    if (!spriteAtlases.ContainsKey(atlasName))
+                    {
+                        throw new ParseException(String.Format("Invalid or unknown atlas name \"{0}\"", atlasName), node);
+                    }
+
+                    return spriteAtlases[atlasName];
+                }
+            }
+            catch (Exception)
+            {
+                throw new ParseException(String.Format(
+                    "Failed to parse value \"{0}\" for type \"{1}\"", value, t), node);
+            }
+
+            throw new UnsupportedTypeException(t, node);
         }
 
     }
