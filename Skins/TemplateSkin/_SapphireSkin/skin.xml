@@ -1,0 +1,13 @@
+<SapphireSkin name="<YOUR SKIN NAME HERE>" author="<YOUR NAME HERE>">
+	<Module class="MainMenu">Modules/MainMenu.xml</Module>
+	<Module class="InGame">Modules/InGame.xml</Module>
+	
+	<SpriteAtlas name="ExampleAtlas1">
+		<Sprite name="ExampleSprite1" width="30" height="30">Sprites/Example.png</Sprite>
+	</SpriteAtlas>
+	
+	<Colors>
+		<Color name="ExampleHEXColor">#FFFFFF</Color>
+		<Color name="ExampleRGBColor">81, 97, 149, 255</Color>
+	</Colors>
+</SapphireSkin>

@@ -1,0 +1,5 @@
+<UIView>
+	<Component name="SomeUIComponent">
+		<someComponentProperty>newValue</someComponentProperty>
+	</Component>
+</UIView>
