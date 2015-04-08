@@ -65,7 +65,7 @@ The `class` attribute specifies which part of the game's UI your module modifies
 
 To define a new atlas in your `skin.xml` use the following syntax:
 
-```
+```xml
 <SpriteAtlas name="ExampleAtlas1">
 ```
 
@@ -78,7 +78,7 @@ To define a new atlas in your `skin.xml` use the following syntax:
 
 3.2.2 And close the tag
 
-```
+```xml
 </SpriteAtlas>
 ```
 
@@ -86,11 +86,11 @@ To define a new atlas in your `skin.xml` use the following syntax:
 
 Sapphire allows you to define named colors that you can use from anywhere in your skin. They are defined in `skin.xml` like this:
 
-```
+```xml
 <Colors>
-		<Color name="ExampleHEXColor">#FFFFFF</Color>
-		<Color name="ExampleRGBColor">81, 97, 149, 255</Color>
-	</Colors>
+	<Color name="ExampleHEXColor">#FFFFFF</Color>
+	<Color name="ExampleRGBColor">81, 97, 149, 255</Color>
+</Colors>
 ```
 You can use either RGBA notation or HTML hex notation for your colors. 
 
@@ -102,7 +102,7 @@ Skin modules are the core of your skin. They define the UI components and proper
 
 All skin modules are contained within `<UIView>` and `</UIView>` tags. These tags define the root of the UI hierarchy (the in-game `UIView` object). Inside these tags you will define <Component> tags with their respective properties. If it all seems confusing, here is an example:
 
-```
+```xml
 <UIView>
 	<Component name="(Library) OptionsPanel">
 		<size>512.0, 512.0</size>
@@ -115,7 +115,7 @@ So here is how this works - when this module gets applied, Sapphire will find th
 
 Component definitions can be nested, for example:
 
-```
+```xml
 <UIView>
 	<Component name="TSBar">
 		<size>1920.0, 49.0</size>
