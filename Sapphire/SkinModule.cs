@@ -112,17 +112,25 @@ namespace Sapphire
                 }
                 else if(component != null)
                 {
-                    SetPropertyValue(childNode, node, component);
+                    var optionalAttrib = XmlUtil.TryGetAttribute(childNode, "optional");
+                    bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
+
+                    SetPropertyValue(childNode, node, component, optional);
                 }
             }
         }
 
-        private void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component)
+        private void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component, bool optional)
         {
             var rProperty = component.GetType().GetProperty(setNode.Name, BindingFlags.Instance | BindingFlags.Public);
 
             if (rProperty == null)
             {
+                if (optional)
+                {
+                    return;
+                }
+
                 throw new MissingComponentPropertyException(setNode.Name, component, node);
             }
 
