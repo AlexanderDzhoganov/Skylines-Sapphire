@@ -5,6 +5,7 @@ This document defines the syntax of skin modules.
 ### Table of contents
 - 1.0 Overview of a module
 - 1.1 List of common component properties
+- 1.2 List of supported component types
 
 #### 1.0 Overview of a module
 
@@ -71,3 +72,13 @@ This is a list of properties that all components have:
 
 #### UIPanel
 - `backgroundSprite` - Sprite - example: `<backgroundSprite>mySprite</backgroundSprite>`
+
+
+### 1.2 List of supported component types
+
+So far the following types can be set through Sapphire:
+- All built-in types - `int`, `uint`, `float`, `string`, `bool`, etc
+- `UITextureAtlas`
+- `Vector2`, `Vector3` and `Vector4`
+- `Rect`
+- `Color` and `Color32`
