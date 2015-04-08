@@ -5,8 +5,14 @@
 	</Component>
 	
 	<Component name="FullScreenContainer">
-		<size>1920.0, 1080.0</size>
+		<size>1920.0, 1010.0</size>
 		<zOrder>999</zOrder>
+	
+		<Component name=".*Panel" name_regex="true">
+			<atlas>BackgroundsAtlas</atlas>
+			<backgroundSprite>DefaultPanelBackground</backgroundSprite>
+			<color named="true">PanelColor</color>
+		</Component>
 	
 		<Component name=".*Library.*" name_regex="true">
 			<atlas>BackgroundsAtlas</atlas>

@@ -3,8 +3,8 @@
 		<atlas>BackgroundsAtlas</atlas>
 		<spriteName>DefaultPanelBackground</spriteName>
 		<color named="true">PanelColor</color>
-		<relativePosition>-5.0, 1031.0, 0.0</relativePosition>
 		<size>1920.0, 49.0</size>
+		<relativePosition>-5.0, 1031.0, 0.0</relativePosition>
 		
 		<Component name="Sprite">
 			<isVisible>false</isVisible>
@@ -15,8 +15,9 @@
 		</Component>
 		
 		<Component name="AdvisorButton">
-			<relativePosition>1000.0, -42.0, 0.0</relativePosition>
 			<size>32.0, 32.0</size>
+			<relativePosition>1000.0, -4.0, 0.0</relativePosition>
+			<zOrder>999</zOrder>
 		</Component>
 		
 		<Component name="OptionsBar">

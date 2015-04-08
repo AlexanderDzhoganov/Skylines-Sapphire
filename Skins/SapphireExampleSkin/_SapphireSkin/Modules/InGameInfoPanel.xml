@@ -5,13 +5,14 @@
 		<relativePosition>0.0, 0.0, 0.0</relativePosition>
 		
 		<Component name="Freecamera">
-			<relativePosition>1860.0, 950.0, 0.0</relativePosition>
 			<size>48.0, 48.0</size>
+			<relativePosition>1860.0, 950.0, 0.0</relativePosition>
 		</Component>
 		
 		<Component name="Happiness">
-			<relativePosition>1090.0, 1018.0, 0.0</relativePosition>
 			<size>48.0, 48.0</size>
+			<relativePosition>1090.0, 1018.0, 0.0</relativePosition>
+			<zOrder>999</zOrder>
 		</Component>
 		
 		<Component name="PanelTime">
@@ -42,19 +43,20 @@
 		</Component>
 		
 		<Component name="Name">
-			<relativePosition>40.0, 970.0, 0.0</relativePosition>
+			<size>200.0, 32.0</size>
+			<relativePosition>38.0, 950.0, 0.0</relativePosition>
 		</Component>
 		
 		<Component name="IncomePanel">
-			<size>133.0, 64.0</size>
-			<relativePosition>1400.0, 1010.0, 0.0</relativePosition>
-
-			<normalBgSprite></normalBgSprite>
-			
 			<Component name="ProjectedIncome">
 				<textScale>2.0</textScale>
 				<relativePosition>64.0, 14.0, 0.0</relativePosition>
 			</Component>
+		
+			<size>133.0, 64.0</size>
+			<relativePosition>1400.0, 1010.0, 0.0</relativePosition>
+
+			<normalBgSprite></normalBgSprite>
 		</Component>
 		
 		<Component name="DemandBack">
