@@ -48,6 +48,8 @@ After you're done with the example skin go to 1.3.
 
 ### 3. Edit skin.xml
 
+Note on comments: You can use XML comments `<!-- this is a comment -->` to comment out parts of your XML.
+
 **3.0** Open _SapphireSkin/skin.xml and edit the first line with your skin name and author name
 `<SapphireSkin name="<YOUR SKIN NAME HERE>" author="<YOUR NAME HERE>">`
 
