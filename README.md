@@ -25,7 +25,7 @@ Making a new skin for Sapphire is a simple and straightforward process. Here is 
 
 1.1 Download and extract [the Sapphire master archive](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/archive/master.zip)
 
-1.2 Navigate to the `Skins/SapphireExampleSkin` folder. *This is a fully-working Sapphire skin that you can test out and modify to learn how the system works.* After you're done looking through the example skin go to 1.3.
+1.2 Navigate to the `Skins/SapphireExampleSkin` folder. ***This is a fully-working Sapphire skin that you can test out and modify to learn how the system works.*** After you're done looking through the example skin go to 1.3.
 
 1.3 When you're ready to make your own skin, nagivate to the `Skins/TemplateSkin` folder of the master archive.
 
