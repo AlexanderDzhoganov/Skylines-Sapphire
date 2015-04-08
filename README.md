@@ -141,7 +141,9 @@ will change the size and position of `TSBar` as well as hide (isVisible = false)
 
 **5.1** Testing
 
-It's very painless to make changes to your skin and test them out. Start C:S and you should see your new skin in the Sapphire skins list. Enable your skin and use the 'Reload active skin' button to reload any changes live. This allows you to work on your skin without restarting the game.
+It's very painless to make changes to your skin and test them out. Start C:S and you should see your new skin in the Sapphire skins list. Enable your skin and use the 'Reload active skin' button to reload any changes live. This allows you to work on your skin without restarting the game. 
+
+**The ModTools console (opened by pressing F7) is very useful in pinpointing any errors in your XML, as it will print out descriptive error messages when you try to re-load your skin. Make sure that "Use ModTools Console", "Hook Unity's logging" and "Log exceptions to console" are all checked in the ModTools main menu (Ctrl+Q).**
 
 **5.2** Publishing your skin
 
