@@ -96,6 +96,8 @@ You can use either RGBA notation or HTML hex notation for your colors.
 
 ### 4. Writing a skin module
 
+#### Note: For detailed information on writing skin modules please [refer to this document](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/blob/master/MODULE_REFERENCE.md)
+
 Skin modules are the core of your skin. They define the UI components and properties that your skin modifies. You can modify any property of any UIComponent in the hierarchy.
 
 **4.1** The <UIView> tag
