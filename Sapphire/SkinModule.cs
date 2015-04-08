@@ -56,9 +56,14 @@ namespace Sapphire
             {
                 ApplyInternal();
             }
+            catch (ParseException ex)
+            {
+                Debug.LogErrorFormat("Error while parsing skin xml ({1}) at node \"{2}\": {3}",
+                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+            }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while parsing skin xml ({1}) at node \"{2}\": {3}",
+                Debug.LogErrorFormat("{0} while applying skin xml ({1}) at node \"{2}\": {3}",
                     ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
             }
             catch (Exception ex)
@@ -221,188 +226,180 @@ namespace Sapphire
 
         private object GetValueForType(XmlNode node, Type t, string value)
         {
-            try
+            if (t == typeof(int))
             {
-                if (t == typeof(int))
+                if (string.IsNullOrEmpty(value))
                 {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    return int.Parse(value);
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
                 }
 
-                if (t == typeof(uint))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    return uint.Parse(value);
-                }
-
-                if (t == typeof(float))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    return float.Parse(value);
-                }
-
-                if (t == typeof(double))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    return double.Parse(value);
-                }
-
-                if (t == typeof(bool))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    if (value == "true") return true;
-                    if (value == "false") return false;
-                    if (value == "0") return false;
-                    if (value == "1") return true;
-                    return bool.Parse(value);
-                }
-
-                if (t == typeof(string))
-                {
-                    return value;
-                }
-
-                if (t == typeof(Vector2))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    var values = value.Split(',');
-                    if (values.Length != 2)
-                    {
-                        throw new ParseException("Vector2 definition must have two components", node);
-                    }
-
-                    return new Vector2(float.Parse(values[0]), float.Parse(values[1]));
-                }
-
-                if (t == typeof(Vector3))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    var values = value.Split(',');
-                    if (values.Length != 3)
-                    {
-                        throw new ParseException("Vector3 definition must have three components", node);
-                    }
-
-                    return new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
-                }
-
-                if (t == typeof(Vector4))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    var values = value.Split(',');
-                    if (values.Length != 4)
-                    {
-                        throw new ParseException("Vector4 definition must have four components", node);
-                    }
-
-                    return new Vector4(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
-                }
-
-                if (t == typeof(Rect))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    var values = value.Split(',');
-                    if (values.Length != 4)
-                    {
-                        throw new ParseException("Rect definition must have four components", node);
-                    }
-
-                    return new Rect(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
-                }
-
-                if (t == typeof(Color))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    var values = value.Split(',');
-                    if (values.Length != 4)
-                    {
-                        throw new ParseException("Color definition must have four components", node);
-                    }
-
-                    return new Color(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
-                }
-
-                if (t == typeof(Color32))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    var values = value.Split(',');
-                    if (values.Length != 4)
-                    {
-                        throw new ParseException("Color32 definition must have four components", node);
-                    }
-
-                    return new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
-                }
-
-                if (t == typeof (UITextureAtlas))
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
-                    }
-
-                    var atlasName = value;
-                    if (!skin.spriteAtlases.ContainsKey(atlasName))
-                    {
-                        throw new ParseException(String.Format("Invalid or unknown atlas name \"{0}\"", atlasName), node);
-                    }
-
-                    return skin.spriteAtlases[atlasName];
-                }
-
-                if (t.IsEnum)
-                {
-                    return Enum.Parse(t, value);
-                }
+                return int.Parse(value);
             }
-            catch (Exception ex)
+
+            if (t == typeof(uint))
             {
-                throw new ParseException(String.Format(
-                    "Failed to parse value \"{0}\" for type \"{1}\" - {2}", value, t, ex.Message), node);
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                return uint.Parse(value);
+            }
+
+            if (t == typeof(float))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                return float.Parse(value);
+            }
+
+            if (t == typeof(double))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                return double.Parse(value);
+            }
+
+            if (t == typeof(bool))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                if (value == "true") return true;
+                if (value == "false") return false;
+                if (value == "0") return false;
+                if (value == "1") return true;
+                return bool.Parse(value);
+            }
+
+            if (t == typeof(string))
+            {
+                return value;
+            }
+
+            if (t == typeof(Vector2))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                var values = value.Split(',');
+                if (values.Length != 2)
+                {
+                    throw new ParseException("Vector2 definition must have two components", node);
+                }
+
+                return new Vector2(float.Parse(values[0]), float.Parse(values[1]));
+            }
+
+            if (t == typeof(Vector3))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                var values = value.Split(',');
+                if (values.Length < 3 || values.Length > 4)
+                {
+                    throw new ParseException("Vector3 definition must have three components", node);
+                }
+
+                return new Vector3(float.Parse(values[0]), float.Parse(values[1]), values.Length == 3 ? float.Parse(values[2]) : 0.0f);
+            }
+
+            if (t == typeof(Vector4))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                var values = value.Split(',');
+                if (values.Length != 4)
+                {
+                    throw new ParseException("Vector4 definition must have four components", node);
+                }
+
+                return new Vector4(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+            }
+
+            if (t == typeof(Rect))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                var values = value.Split(',');
+                if (values.Length != 4)
+                {
+                    throw new ParseException("Rect definition must have four components", node);
+                }
+
+                return new Rect(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+            }
+
+            if (t == typeof(Color))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                var values = value.Split(',');
+                if (values.Length != 4)
+                {
+                    throw new ParseException("Color definition must have four components", node);
+                }
+
+                return new Color(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+            }
+
+            if (t == typeof(Color32))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                var values = value.Split(',');
+                if (values.Length != 4)
+                {
+                    throw new ParseException("Color32 definition must have four components", node);
+                }
+
+                return new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
+            }
+
+            if (t == typeof (UITextureAtlas))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                var atlasName = value;
+                if (!skin.spriteAtlases.ContainsKey(atlasName))
+                {
+                    throw new ParseException(String.Format("Invalid or unknown atlas name \"{0}\"", atlasName), node);
+                }
+
+                return skin.spriteAtlases[atlasName];
+            }
+
+            if (t.IsEnum)
+            {
+                return Enum.Parse(t, value);
             }
 
             throw new UnsupportedTypeException(t, node);

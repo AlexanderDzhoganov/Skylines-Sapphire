@@ -176,9 +176,11 @@ namespace Sapphire
                     }
 
                     currentSkin = skinCopy;
-                    currentSkin.Apply(currentModuleClass);
                     config.selectedSkinPath = currentSkin.SapphirePath;
                     SaveConfig();
+
+                    ReloadActiveSkin();
+                    currentSkin.Apply(currentModuleClass);
                 };
                 
                 skinCheckBoxes.Add(checkbox);
