@@ -1,5 +1,4 @@
 <UIView>
-	
 	<Component name="ChirperPanel">
 		<zOrder>9999</zOrder>
 	</Component>
@@ -38,7 +37,4 @@
 		<relativePosition>-5.0, 1006.0, 0.0</relativePosition>
 		<size>1920.0, 25.0</size>
 	</Component>
-	
-	
-	
 </UIView>
