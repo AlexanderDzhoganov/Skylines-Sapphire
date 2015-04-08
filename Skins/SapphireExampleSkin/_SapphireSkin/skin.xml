@@ -1,7 +1,7 @@
 <SapphireSkin name="ExampleSkin" author="nlight">
 	<Module class="MainMenu">Modules/OptionsMenu.xml</Module>
 
-	<Module class="InGame">Modules/InGamePanelsBackground.xml</Module>
+	<Module class="InGame">Modules/InGamePanels.xml</Module>
 	<Module class="InGame">Modules/InGameInfoPanel.xml</Module>
 	<Module class="InGame">Modules/InGameTSBar.xml</Module>
 	
@@ -11,6 +11,7 @@
 	
 	<Colors>
 		<Color name="White">#FFFFFF</Color>
+		<Color name="Black">#000000</Color>
 		<Color name="Green">#00FF00</Color>
 		
 		<Color name="PanelColor">#000000</Color>
