@@ -139,3 +139,7 @@ It's very painless to make changes to your skin and test them out. Start C:S and
 5.2 Publishing your skin
 
 You can publish your skin like any other code mod. Go to Content -> Mods in C:S and use the 'Share' button on your skin's entry in the list. Users who subscribe to your skin will automatically have it visible in their Sapphire skins list. If you want to update your skin, you can do it like other code mods - delete the mod's folder from AppData, subscribe to it in the workshop and then edit it from its workshop folder and use the 'Update' button in-game.
+
+### 6. Additional information
+
+- [Module reference](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/blob/master/MODULE_REFERENCE.md) - thoroughly describes the syntax of skin modules. Look here for advanced usage instructions.
