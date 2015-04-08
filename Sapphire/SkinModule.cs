@@ -31,7 +31,7 @@ namespace Sapphire
             catch (XmlNodeException ex)
             {
                 Debug.LogErrorFormat("{0} while parsing SkinModule xml ({1}) at node \"{2}\": {3}", 
-                    ex.GetType(), path, ex.Node == null ? "null" : ex.Node.ToString(), ex.ToString());
+                    ex.GetType(), path, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
             }
             catch (Exception ex)
             {
@@ -59,7 +59,7 @@ namespace Sapphire
             catch (XmlNodeException ex)
             {
                 Debug.LogErrorFormat("{0} while parsing skin xml ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.ToString(), ex.ToString());
+                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
             }
             catch (Exception ex)
             {
@@ -123,7 +123,24 @@ namespace Sapphire
                 throw new MissingComponentPropertyException(setNode.Name, component, node);
             }
 
-            rProperty.SetValue(component, GetValueForType(node, rProperty.PropertyType, setNode.InnerText), null);
+            object value = null;
+
+            if (rProperty.PropertyType == typeof (Color32))
+            {
+                var colorName = setNode.InnerText;
+                if (!skin.colorDefinitions.ContainsKey(colorName))
+                {
+                    throw new ParseException(String.Format("Invalid or undefined color name \"{0}\"", colorName), setNode);
+                }
+
+                value = skin.colorDefinitions[colorName];
+            }
+            else
+            {
+                value = GetValueForType(node, rProperty.PropertyType, setNode.InnerText);
+            }
+
+            rProperty.SetValue(component, value, null);
         }
 
         private static List<UIComponent> FindComponentsInChildren(XmlNode node, UIComponent component, string childName, bool regex, bool recursive, int depth = 0)

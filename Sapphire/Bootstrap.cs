@@ -23,6 +23,11 @@ namespace Sapphire
             go.name = "Sapphire";
             go.AddComponent<SapphireBootstrap>();
 
+            if (moduleClass != Skin.ModuleClass.MainMenu)
+            {
+                Camera.main.gameObject.AddComponent<CameraHook>();
+            }
+
             bootstrapped = true;
         }
 
@@ -34,6 +39,11 @@ namespace Sapphire
         }
 
         void Start()
+        {
+            ReloadSkins();
+        }
+
+        private void ReloadSkins()
         {
             try
             {
@@ -58,6 +68,21 @@ namespace Sapphire
 
         void DoWindow(int i)
         {
+            if (GUILayout.Button("Reload skins"))
+            {
+                ReloadSkins();
+
+                foreach (var skin in loadedSkins)
+                {
+                    if (GUILayout.Button(skin.Name))
+                    {
+                        skin.Apply(currentModuleClass);
+                    }
+                }
+            }
+
+            GUILayout.Space(8);
+
             foreach (var skin in loadedSkins)
             {
                 if (GUILayout.Button(skin.Name))

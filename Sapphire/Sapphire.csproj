@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AtlasPacker.cs" />
+    <Compile Include="CameraHook.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

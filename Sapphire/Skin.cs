@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 using ColossalFramework.UI;
@@ -31,7 +32,7 @@ namespace Sapphire
             catch (XmlNodeException ex)
             {
                 Debug.LogErrorFormat("{0} while parsing Skin xml ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.ToString(), ex.ToString());
+                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
             }
             catch (Exception ex)
             {
@@ -60,6 +61,8 @@ namespace Sapphire
         public Dictionary<string, Texture2D> spriteTextureCache = new Dictionary<string, Texture2D>();
         public Dictionary<string, UITextureAtlas> spriteAtlases = new Dictionary<string, UITextureAtlas>();
 
+        public Dictionary<string, Color32> colorDefinitions = new Dictionary<string, Color32>(); 
+
         private string sapphirePath;
 
         private XmlDocument document;
@@ -81,6 +84,7 @@ namespace Sapphire
             }
 
             LoadSprites();
+            LoadColors();
 
             name = XmlUtil.GetAttribute(root, "name").Value;
             author = XmlUtil.GetAttribute(root, "author").Value;
@@ -117,6 +121,82 @@ namespace Sapphire
             }
         }
 
+        private void LoadColors()
+        {
+            try
+            {
+                LoadColorsInternal();
+            }
+            catch (XmlNodeException ex)
+            {
+                Debug.LogErrorFormat("{0} while loading colors for skin ({1}) at node \"{2}\": {3}",
+                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("Exception while loading colors for skin ({0}): {1}", sapphirePath, ex.Message);
+            }
+        }
+
+        private void LoadColorsInternal()
+        {
+            Debug.LogWarning("Loading colors");
+
+            var rootColorsNode = document.SelectSingleNode("/SapphireSkin/Colors");
+
+            if (rootColorsNode == null)
+            {
+                Debug.LogWarning("Skin defines no colors");
+                return;
+            }
+
+            foreach (XmlNode childNode in rootColorsNode)
+            {
+                if (childNode.Name != "Color")
+                {
+                    continue;
+                }
+
+                var colorName = XmlUtil.GetAttribute(childNode, "name").Value;
+                if (colorDefinitions.ContainsKey(colorName))
+                {
+                    Debug.LogWarningFormat("Duplicate color name \"{0}\", ignoring second definition..", colorName);
+                    continue;
+                }
+
+                var text = childNode.InnerText;
+
+                if (text.Length == 0)
+                {
+                    throw new ParseException(String.Format("Empty color value for color \"{0}\"", colorName), childNode);
+                }
+
+                Color32 color = Color.black;
+
+                if (text[0] == '#')
+                {
+                    int colorHex = Int32.Parse(text.Replace("#", ""), NumberStyles.HexNumber);
+                    byte R = (byte)((colorHex >> 16) & 0xFF);
+                    byte G = (byte)((colorHex >> 8) & 0xFF);
+                    byte B = (byte)((colorHex) & 0xFF);
+                    color = new Color32(R, G, B, 255);
+                }
+                else
+                {
+                    var values = text.Split(',');
+                    if (values.Length != 4)
+                    {
+                        throw new ParseException("Color32 definition must have four components", childNode);
+                    }
+
+                    color = new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
+                }
+                
+                colorDefinitions.Add(colorName, color);
+                Debug.LogWarningFormat("Color \"{0}\" defined as \"{1}\"", colorName, color.ToString());
+            }
+        }
+
         private void LoadSprites()
         {
             try
@@ -126,7 +206,7 @@ namespace Sapphire
             catch (XmlNodeException ex)
             {
                 Debug.LogErrorFormat("{0} while loading sprites for skin ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.ToString(), ex.ToString());
+                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
             }
             catch (Exception ex)
             {
