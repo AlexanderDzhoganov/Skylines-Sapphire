@@ -113,6 +113,7 @@ Component definitions can be nested, for example:
 	<Component name="TSBar">
 		<size>1920.0, 49.0</size>
 		<relativePosition>-5.0, 1031.0, 0.0</relativePosition>
+		<color>MyPredefinedColor</color>
 		
 		<Component name="Sprite">
 			<isVisible>false</isVisible>
