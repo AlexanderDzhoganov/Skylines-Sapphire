@@ -1,0 +1,7 @@
+<UIView>
+	<Component name="(Library) OptionsPanel">
+		<isVisible>true</isVisible>
+		<atlas>BackgroundsAtlas</atlas>
+		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
+	</Component>
+</UIView>

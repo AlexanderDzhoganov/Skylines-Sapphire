@@ -1,0 +1,13 @@
+<SapphireSkin name="ExampleSkin" author="nlight">
+	<Module class="MainMenu">Modules/OptionsMenu.xml</Module>
+
+	<Module class="InGame">Modules/InGamePanelsBackground.xml</Module>
+	
+	<SpriteAtlas name="BackgroundsAtlas">
+		<Sprite name="DefaultPanelBackground" width="30" height="30">Sprites/DefaultPanelBackground.png</Sprite>
+	</SpriteAtlas>
+	
+	<Colors>
+		<Color name="PanelColor">#000000</Color>
+	</Colors>
+</SapphireSkin>

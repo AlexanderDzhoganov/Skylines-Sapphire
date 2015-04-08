@@ -100,7 +100,10 @@ namespace Sapphire
                     var recursiveAttrib = XmlUtil.TryGetAttribute(childNode, "recursive");
                     bool recursive = recursiveAttrib != null && recursiveAttrib.Value == "true";
 
-                    var childComponents = FindComponentsInChildren(node, component, nameAttrib.Value, regex, recursive);
+                    var optionalAttrib = XmlUtil.TryGetAttribute(childNode, "optional");
+                    bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
+
+                    var childComponents = FindComponentsInChildren(node, component, nameAttrib.Value, regex, recursive, optional);
 
                     foreach (var childComponent in childComponents)
                     {
@@ -143,7 +146,7 @@ namespace Sapphire
             rProperty.SetValue(component, value, null);
         }
 
-        private static List<UIComponent> FindComponentsInChildren(XmlNode node, UIComponent component, string childName, bool regex, bool recursive, int depth = 0)
+        private static List<UIComponent> FindComponentsInChildren(XmlNode node, UIComponent component, string childName, bool regex, bool recursive, bool optional, int depth = 0)
         {
             var results = new List<UIComponent>();
 
@@ -180,12 +183,12 @@ namespace Sapphire
 
                 if (recursive)
                 {
-                    var childResults = FindComponentsInChildren(node, childComponent, childName, regex, true, depth+1);
+                    var childResults = FindComponentsInChildren(node, childComponent, childName, regex, true, optional, depth+1);
                     results = results.Concat(childResults).ToList();
                 }
             }
 
-            if (depth == 0 && !results.Any())
+            if (depth == 0 && !results.Any() && !optional)
             {
                 throw new MissingUIComponentException(childName, component, node);
             }
