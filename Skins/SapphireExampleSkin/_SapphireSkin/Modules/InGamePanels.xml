@@ -1,5 +1,5 @@
 <UIView>
-	<Component name="ChirperPanel">
+	<Component name="ChirperPanel" optional="true">
 		<zOrder>9999</zOrder>
 	</Component>
 	
