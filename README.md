@@ -71,7 +71,7 @@ To define a new atlas in your `skin.xml` use the following syntax:
 
 **3.2.1** Next define any sprites that you wish to include in your atlas
 
-```
+```xml
 <Sprite name="ExampleSprite1" width="30" height="30">Sprites/Example.png</Sprite>
 ```
 *Make sure to put in the correct "width" and "height" of your PNG image.*
