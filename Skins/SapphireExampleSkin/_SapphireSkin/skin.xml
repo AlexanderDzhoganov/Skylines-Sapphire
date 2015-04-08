@@ -2,12 +2,18 @@
 	<Module class="MainMenu">Modules/OptionsMenu.xml</Module>
 
 	<Module class="InGame">Modules/InGamePanelsBackground.xml</Module>
+	<Module class="InGame">Modules/InGameInfoPanel.xml</Module>
+	<Module class="InGame">Modules/InGameTSBar.xml</Module>
 	
 	<SpriteAtlas name="BackgroundsAtlas">
 		<Sprite name="DefaultPanelBackground" width="30" height="30">Sprites/DefaultPanelBackground.png</Sprite>
 	</SpriteAtlas>
 	
 	<Colors>
+		<Color name="White">#FFFFFF</Color>
+		<Color name="Green">#00FF00</Color>
+		
 		<Color name="PanelColor">#000000</Color>
+		<Color name="TimeBackgroundColor">81, 97, 149, 255</Color>
 	</Colors>
 </SapphireSkin>

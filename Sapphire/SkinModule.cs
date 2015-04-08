@@ -128,8 +128,12 @@ namespace Sapphire
 
             object value = null;
 
-            if (rProperty.PropertyType == typeof (Color32))
+            var rawAttrib = XmlUtil.TryGetAttribute(setNode, "raw");
+            bool raw = rawAttrib != null && rawAttrib.Value == "true";
+
+            if (rProperty.PropertyType == typeof (Color32) && !raw)
             {
+                
                 var colorName = setNode.InnerText;
                 if (!skin.colorDefinitions.ContainsKey(colorName))
                 {

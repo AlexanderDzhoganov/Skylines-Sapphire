@@ -1,0 +1,61 @@
+<UIView>
+	<Component name="InfoPanel">
+		<backgroundSprite></backgroundSprite>
+		<color named="true">PanelColor</color>
+		<relativePosition>0.0, 0.0, 0.0</relativePosition>
+		
+		<Component name="Freecamera">
+			<relativePosition>1850.0, 1010.0, 0.0</relativePosition>
+			<size>64.0, 64.0</size>
+		</Component>
+		
+		<Component name="PanelTime">
+			<relativePosition>4.0, 4.0, 0.0</relativePosition>
+			
+			<Component name="Background">
+				<isVisible>false</isVisible>
+			</Component>
+			<Component name="Sprite">
+				<color>TimeBackgroundColor</color>
+				
+				<Component name="Time">
+					<textColor>White</textColor>
+				</Component>
+			</Component>
+		</Component>
+		
+		<Component name="PopulationPanel">
+			<relativePosition>8.0, 32.0, 0.0</relativePosition>
+			<normalBgSprite></normalBgSprite>
+			<textColor>Green</textColor>
+		</Component>
+		
+		<Component name="IncomePanel">
+			<relativePosition>1400.0, 1010.0, 0.0</relativePosition>
+			<size>133.0, 64.0</size>
+			
+			<Component name="ProjectedIncome">
+				<textScale>2.0</textScale>
+				<relativePosition>64.0, 14.0, 0.0</relativePosition>
+			</Component>
+		</Component>
+		
+		<Component name="DemandBack">
+			<relativePosition>1200.0, 1000.0, 0.0</relativePosition>
+			<size>210.0, 80.0</size>
+			<spriteName></spriteName>
+			
+			<Component name="Demand">
+				<Component name="ResidentialDemand">
+					
+				</Component>
+				<Component name="CommercialDemand">
+					<relativePosition>64.0, 5.47, 0.0</relativePosition>
+				</Component>
+				<Component name="IndustryOfficeDemand">
+					<relativePosition>128.0, 5.47, 0.0</relativePosition>
+				</Component>
+			</Component>
+		</Component>
+	</Component>
+</UIView>
