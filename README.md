@@ -87,3 +87,25 @@ All skin modules are contained within `<UIView>` and `</UIView>` tags. These tag
 ```
 
 So here is how this works - when this module gets applied, Sapphire will find the UIComponent called `(Library) OptionsPanel` (repesenting the Options menu in the main menu) under the UI root and change it's size to x=512, y=512 and it's position to x=16 and y=4. 
+
+Component definitions can be nested, for example:
+```
+<UIView>
+	<Component name="TSBar">
+		<size>1920.0, 49.0</size>
+		<relativePosition>-5.0, 1031.0, 0.0</relativePosition>
+		
+		<Component name="Sprite">
+			<isVisible>false</isVisible>
+		</Component>
+	</Component>
+```
+will change the size and position of `TSBar` as well as hide (isVisible = false) the `Sprite` component within it.
+
+### 5. Testing and publishing your skin
+
+5.1 Testing
+It's very painless to make changes to your skin and test them out. Start C:S and you should see your new skin in the Sapphire skins list. Enable your skin and use the 'Reload active skin' button to reload any changes live. This allows you to work on your skin without restarting the game.
+
+5.2 Publishing your skin
+You can publish your skin like any other code mod. Go to Content -> Mods in C:S and use the 'Share' button on your skin's entry in the list. Users who subscribe to your skin will automatically have it visible in their Sapphire skins list. If you want to update your skin, you can do it like other code mods - delete the mod's folder from AppData, subscribe to it in the workshop and then edit it from its workshop folder and use the 'Update' button in-game.
