@@ -7,6 +7,7 @@ This document defines the syntax of skin modules.
 - 1.1 List of common component properties
 - 1.2 List of supported component types
 - 1.3 Matching components with regular expressions
+- 1.4 Optional matching
 
 ### 1.0 Overview of a module
 
@@ -107,3 +108,26 @@ Example:
 Will match all child components recursively and set their `textScale` to 1.2.
 
 For learning regular expressions use one of the many guides on the internet or [specifically this one](http://regexone.com/).
+
+### 1.4 Optional matching
+
+It's possible to optionally match components and properties (meaning, don't produce an error if the component/ property doesn't exist, rather continue applying the skin). This is done using the `optional` attribute. Use `optional` if you're not certain if that component will actually exist in the scene (e.g. a component created by a mod that may or may not be installed/ enabled).
+
+For example:
+
+```xml
+<Component name="FooBar" optional="true">
+  <color>Black</color>
+</Component>
+```
+
+Will match component `FooBar` if it exists, and silently continue if it doesn't. The same thing is possible for properties:
+
+```xml
+<UIView>
+  <Component name=".*" name_regex="true" recursive="true">
+    <backgroundSprite>mySprite</backgroundSprite>
+  </Component>
+</UIView>
+```
+Will set the `backgroundSprite` of all components to `mySprite`, but only for components which actually have the `backgroundSprite` property to begin with.
