@@ -1,9 +1,14 @@
 <UIView>
-	<Component name="(Library) CustomContentPanel">
-		<SetProperty name="isVisible">false</SetProperty>
-	
-		<Component name=".*" name_regex="true" recursive="true">
-				<SetProperty name="color">255, 255, 255, 255</SetProperty>
+	<Component name="(Library) OptionsPanel">
+		<isVisible>true</isVisible>
+		<color>255, 255, 255, 255</color>
+		
+		<Component name="OptionsContainer">
+			<Component name="Graphics">
+				<Component name="Apply">
+					<color>255, 255, 255, 255</color>
+				</Component>
+			</Component>
 		</Component>
 	</Component>
 	

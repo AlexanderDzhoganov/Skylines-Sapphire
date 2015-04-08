@@ -8,37 +8,6 @@ namespace Sapphire
     public static class TextureAtlasUtils
     {
 
-        public class AtlasMissingTextureException : Exception
-        {
-        }
-
-        public class SpriteNotFoundException : Exception
-        {
-            private UITextureAtlas atlasInternal;
-            private string spriteNameInternal;
-
-            public UITextureAtlas Atlas
-            {
-                get { return atlasInternal; }
-            }
-
-            public string SpriteName 
-            {
-                get {  return spriteNameInternal; }
-            }
-
-            public SpriteNotFoundException(string spriteName, UITextureAtlas atlas)
-            {
-                spriteNameInternal = spriteName;
-                atlasInternal = atlas;
-            }
-
-            public override string ToString()
-            {
-                return String.Format("Failed to find sprite \"{0}\" in atlas \"{1}\"", spriteNameInternal, atlasInternal.name);
-            }
-        }
-
         public static void ReplaceSprite(UITextureAtlas atlas, string spriteName, Texture2D replacement)
         {
             var texture = atlas.material.mainTexture as Texture2D;
