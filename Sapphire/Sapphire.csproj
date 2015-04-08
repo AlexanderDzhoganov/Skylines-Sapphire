@@ -53,6 +53,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Bootstrap.cs" />
     <Compile Include="Skin.cs" />
+    <Compile Include="SkinModule.cs" />
+    <Compile Include="SkinLoader.cs" />
     <Compile Include="TextureAtlasUtils.cs" />
     <Compile Include="XmlUtil.cs" />
   </ItemGroup>

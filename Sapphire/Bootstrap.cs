@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Sapphire
@@ -7,14 +8,16 @@ namespace Sapphire
     {
 
         private static bool bootstrapped = false;
-        private Skin currentSkin = null;
+        private static Skin.ModuleClass currentModuleClass;
 
-        public static void Bootstrap()
+        public static void Bootstrap(Skin.ModuleClass moduleClass)
         {
             if (bootstrapped)
             {
                 return;
             }
+
+            currentModuleClass = moduleClass;
 
             var go = new GameObject();
             go.name = "Sapphire";
@@ -23,56 +26,45 @@ namespace Sapphire
             bootstrapped = true;
         }
 
+        private List<Skin> loadedSkins = new List<Skin>(); 
+
+        void OnDestroy()
+        {
+            bootstrapped = false;
+        }
+
+        void Start()
+        {
+            try
+            {
+                loadedSkins = new List<Skin>();
+                foreach (var sapphirePath in SkinLoader.FindAllSkins())
+                {
+                    var skin = SkinLoader.LoadSkin(sapphirePath);
+                    loadedSkins.Add(skin);
+                    Debug.LogWarningFormat("Loaded skin \"{0}\" from {1}", skin.Name, sapphirePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("Failed to load skins: {0}", ex.Message);
+            }
+        }
 
         void OnGUI()
         {
-            GUI.Window(15125, new Rect(128, 128, 100, 100), DoWindow, "Sapphire");
+            GUI.Window(15125, new Rect(128, 128, 200, 300), DoWindow, "Sapphire");
         }
 
         void DoWindow(int i)
         {
-            var path = "C:\\Users\\nlight\\Documents\\GitHub\\Skylines-Sapphire\\Skins\\Next\\mainmenu.xml";
-
-            if (GUILayout.Button("Load skin"))
+            foreach (var skin in loadedSkins)
             {
-                try
+                if (GUILayout.Button(skin.Name))
                 {
-                    currentSkin = Skin.FromXmlFile(path);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogErrorFormat("Failed to load skin \"{0}\", reason: {1}", path, ex.Message);
+                    skin.Apply(currentModuleClass);
                 }
             }
-
-            if (currentSkin != null)
-            {
-                if (GUILayout.Button("Load sprites"))
-                {
-                    try
-                    {
-                        currentSkin.LoadSprites();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogErrorFormat("Failed to load sprites for skin \"{0}\", reason: {1}", path, ex.Message);
-                    }
-                }
-
-                if (GUILayout.Button("Apply"))
-                {
-                    try
-                    {
-                        currentSkin.Apply();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogErrorFormat("Failed to apply skin \"{0}\", reason: {1}", path, ex.Message);
-                    }
-                }
-            }
-
-            
         }
 
     }

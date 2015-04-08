@@ -1,54 +1,123 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Xml;
 using ColossalFramework.UI;
 using UnityEngine;
 
 namespace Sapphire
 {
-
     public class Skin
     {
 
-        private string sourcePath;
-        private XmlDocument document;
-        private Dictionary<string, Texture2D> spriteTextureCache = new Dictionary<string, Texture2D>();
-        private Dictionary<string, UITextureAtlas> spriteAtlases = new Dictionary<string, UITextureAtlas>();
+        public enum ModuleClass
+        {
+            MainMenu = 0,
+            InGame = 1,
+            MapEditor = 2,
+            AssetEditor = 3
+        }
 
-        public static Skin FromXmlFile(string path)
+        public static Skin FromXmlFile(string sapphirePath)
         {
             Skin skin = null;
 
             try
             {
                 var document = new XmlDocument();
-                document.LoadXml(File.ReadAllText(path));
-                skin = new Skin(path, document);
+                document.LoadXml(File.ReadAllText(sapphirePath));
+                skin = new Skin(Path.GetDirectoryName(sapphirePath), document);
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while parsing skin xml ({1}) at node \"{2}\": {3}", 
-                    ex.GetType(), path, ex.Node == null ? "null" : ex.Node.ToString(), ex.ToString());
+                Debug.LogErrorFormat("{0} while parsing Skin xml ({1}) at node \"{2}\": {3}",
+                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.ToString(), ex.ToString());
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while parsing skin xml ({0}): {1}", path, ex.Message);
+                Debug.LogErrorFormat("Exception while parsing Skin xml ({0}): {1}", sapphirePath, ex.Message);
             }
 
             return skin;
         }
 
-        private Skin(string path, XmlDocument _document)
+        private Dictionary<ModuleClass, List<SkinModule>> modules = new Dictionary<ModuleClass, List<SkinModule>>();
+
+        private string name;
+        
+        public string Name
         {
-            sourcePath = path;
-            document = _document;
+            get { return name; }
         }
 
-        public void LoadSprites()
+        private string author;
+
+        public string Author
+        {
+            get { return Author; }
+        }
+
+        public Dictionary<string, Texture2D> spriteTextureCache = new Dictionary<string, Texture2D>();
+        public Dictionary<string, UITextureAtlas> spriteAtlases = new Dictionary<string, UITextureAtlas>();
+
+        private string sapphirePath;
+
+        private XmlDocument document;
+
+        public Skin(string _sapphirePath, XmlDocument _document)
+        {
+            modules[ModuleClass.MainMenu] = new List<SkinModule>();
+            modules[ModuleClass.InGame] = new List<SkinModule>();
+            modules[ModuleClass.MapEditor] = new List<SkinModule>();
+            modules[ModuleClass.AssetEditor] = new List<SkinModule>();
+
+            sapphirePath = _sapphirePath;
+            document = _document;
+
+            var root = document.SelectSingleNode("/SapphireSkin");
+            if (root == null)
+            {
+                throw new ParseException("Skin missing root SapphireSkin node at " + sapphirePath, null);
+            }
+
+            LoadSprites();
+
+            name = XmlUtil.GetAttribute(root, "name").Value;
+            author = XmlUtil.GetAttribute(root, "author").Value;
+
+            foreach (XmlNode childNode in root.ChildNodes)
+            {
+                if (childNode.Name == "Module")
+                {
+                    var modulePath = Path.Combine(sapphirePath, childNode.InnerText);
+                    var moduleClass = XmlUtil.GetAttribute(childNode, "class").Value;
+
+                    if (moduleClass == "MainMenu")
+                    {
+                        AddModuleAtPath(ModuleClass.MainMenu, modulePath);
+                    }
+                    else if (moduleClass == "InGame")
+                    {
+                        AddModuleAtPath(ModuleClass.InGame, modulePath);
+                    }
+                    else if (moduleClass == "MapEditor")
+                    {
+                        AddModuleAtPath(ModuleClass.MapEditor, modulePath);
+                    }
+                    else if (moduleClass == "AssetEditor")
+                    {
+                        AddModuleAtPath(ModuleClass.AssetEditor, modulePath);
+                    }
+                    else
+                    {
+                        throw new ParseException(String.Format
+                            ("Invalid module class \"{0}\"", moduleClass), childNode);
+                    }
+                }
+            }
+        }
+
+        private void LoadSprites()
         {
             try
             {
@@ -57,11 +126,11 @@ namespace Sapphire
             catch (XmlNodeException ex)
             {
                 Debug.LogErrorFormat("{0} while loading sprites for skin ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.ToString(), ex.ToString());
+                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.ToString(), ex.ToString());
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while loading sprites for skin ({0}): {1}", sourcePath, ex.Message);
+                Debug.LogErrorFormat("Exception while loading sprites for skin ({0}): {1}", sapphirePath, ex.Message);
             }
         }
 
@@ -69,11 +138,11 @@ namespace Sapphire
         {
             Debug.LogWarning("Loading sprites");
 
-            var rootNode = document.SelectSingleNode("/UIView");
+            var rootNode = document.SelectSingleNode("/SapphireSkin");
 
             if (rootNode == null)
             {
-                throw new Exception("Skin missing root UIView node");
+                throw new Exception("Skin missing root SapphireSkin node");
             }
 
             foreach (XmlNode childNode in rootNode)
@@ -122,7 +191,7 @@ namespace Sapphire
                         throw new MissingAttributeValueException("height", spriteNode);
                     }
 
-                    var fullPath = Path.Combine(Path.GetDirectoryName(sourcePath), path);
+                    var fullPath = Path.Combine(sapphirePath, path);
 
                     var texture = new Texture2D(width, height);
                     texture.LoadImage(File.ReadAllBytes(fullPath));
@@ -138,271 +207,25 @@ namespace Sapphire
             }
         }
 
-        public void Apply()
+        private void AddModuleAtPath(ModuleClass moduleClass, string modulePath)
         {
-            Debug.LogWarningFormat("Applying skin \"{0}\"", sourcePath);
-
-            try
+            var name = Path.GetFileNameWithoutExtension(modulePath);
+            if (name == null)
             {
-                ApplyInternal();
-            }
-            catch (XmlNodeException ex)
-            {
-                Debug.LogErrorFormat("{0} while parsing skin xml ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.ToString(), ex.ToString());
-            }
-            catch (Exception ex)
-            {
-                Debug.LogErrorFormat("Exception while applying skin xml ({0}): {1}", sourcePath, ex.Message);
+                throw new Exception(String.Format("Invalid skin module path \"{0}\"", modulePath));
             }
 
-            Debug.LogWarning("Skin successfully applied!");
+            var module = SkinModule.FromXmlFile(this, modulePath);
+            modules[moduleClass].Add(module);
         }
 
-        private void ApplyInternal()
+        public void Apply(ModuleClass moduleClass)
         {
-            var rootNode = document.SelectSingleNode("/UIView");
-            if (rootNode == null)
+            foreach (var module in modules[moduleClass])
             {
-                throw new Exception("Skin missing root UIView node");    
+                module.Apply();
             }
-
-            ApplyInternalRecursive(rootNode, null);
-        }
-
-        private void ApplyInternalRecursive(XmlNode node, UIComponent component)
-        {
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                Debug.LogWarning("childnode: " + childNode.Name);
-
-                if (childNode.Attributes == null)
-                {
-                    Debug.LogWarningFormat("Child with null attributes: \"{0}\"", childNode.Name);
-                    continue;
-                }
-
-                if (childNode.Name == "Component")
-                {
-                    var nameAttrib = XmlUtil.GetAttribute(childNode, "name");
-
-                    var regexAttrib = XmlUtil.TryGetAttribute(childNode, "name_regex");
-                    bool regex = regexAttrib != null && regexAttrib.Value == "true";
-
-                    var recursiveAttrib = XmlUtil.TryGetAttribute(childNode, "recursive");
-                    bool recursive = recursiveAttrib != null && recursiveAttrib.Value == "true";
-
-                    var childComponents = FindComponentsInChildren(node, component, nameAttrib.Value, regex, recursive);
-
-                    foreach (var childComponent in childComponents)
-                    {
-                        ApplyInternalRecursive(childNode, childComponent);
-                    }
-                }
-                else if(component != null)
-                {
-                    SetPropertyValue(childNode, node, component);
-                }
-            }
-        }
-
-        private void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component)
-        {
-            var rProperty = component.GetType().GetProperty(setNode.Name, BindingFlags.Instance | BindingFlags.Public);
-
-            if (rProperty == null)
-            {
-                throw new MissingComponentPropertyException(setNode.Name, component, node);
-            }
-
-            rProperty.SetValue(component, GetValueForType(node, rProperty.PropertyType, setNode.InnerText), null);
-        }
-
-        private static List<UIComponent> FindComponentsInChildren(XmlNode node, UIComponent component, string childName, bool regex, bool recursive, int depth = 0)
-        {
-            var results = new List<UIComponent>();
-
-            Transform parentTransform = null;
-
-            if (component == null)
-            {
-                parentTransform = GameObject.FindObjectOfType<UIView>().gameObject.transform;
-            }
-            else
-            {
-                parentTransform = component.transform;
-            }
-
-            for (int i = 0; i < parentTransform.childCount; i++)
-            {
-                var child = parentTransform.GetChild(i);
-                var childComponent = child.GetComponent<UIComponent>();
-
-                if (!regex)
-                {
-                    if (childComponent != null && childComponent.name == childName)
-                    {
-                        results.Add(childComponent);
-                    }
-                }
-                else
-                {
-                    if (childComponent != null && Regex.IsMatch(childComponent.name, childName))
-                    {
-                        results.Add(childComponent);
-                    }
-                }
-
-                if (recursive)
-                {
-                    var childResults = FindComponentsInChildren(node, childComponent, childName, regex, true, depth+1);
-                    results = results.Concat(childResults).ToList();
-                }
-            }
-
-            if (depth == 0 && !results.Any())
-            {
-                throw new MissingUIComponentException(childName, component, node);
-            }
-
-            return results;
-        }
-
-        private static UITextureAtlas GetUIAtlas()
-        {
-            var go = GameObject.Find("(Library) OptionsPanel");
-            if (go != null)
-            {
-                return go.GetComponent<UIPanel>().atlas;
-            }
-
-            return null;
-        }
-
-        private object GetValueForType(XmlNode node, Type t, string value)
-        {
-            try
-            {
-                if (t == typeof(int))
-                {
-                    return int.Parse(value);
-                }
-
-                if (t == typeof(uint))
-                {
-                    return uint.Parse(value);
-                }
-
-                if (t == typeof(float))
-                {
-                    return float.Parse(value);
-                }
-
-                if (t == typeof(double))
-                {
-                    return double.Parse(value);
-                }
-
-                if (t == typeof(bool))
-                {
-                    if (value == "true") return true;
-                    if (value == "false") return false;
-                    if (value == "0") return false;
-                    if (value == "1") return true;
-                    return bool.Parse(value);
-                }
-
-                if (t == typeof(string))
-                {
-                    return value;
-                }
-
-                if (t == typeof(Vector2))
-                {
-                    var values = value.Split(',');
-                    if (values.Length != 2)
-                    {
-                        throw new ParseException("Vector2 definition must have two components", node);
-                    }
-
-                    return new Vector2(float.Parse(values[0]), float.Parse(values[1]));
-                }
-
-                if (t == typeof(Vector3))
-                {
-                    var values = value.Split(',');
-                    if (values.Length != 3)
-                    {
-                        throw new ParseException("Vector3 definition must have three components", node);
-                    }
-
-                    return new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
-                }
-
-                if (t == typeof(Vector4))
-                {
-                    var values = value.Split(',');
-                    if (values.Length != 4)
-                    {
-                        throw new ParseException("Vector4 definition must have four components", node);
-                    }
-
-                    return new Vector4(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
-                }
-
-                if (t == typeof(Rect))
-                {
-                    var values = value.Split(',');
-                    if (values.Length != 4)
-                    {
-                        throw new ParseException("Rect definition must have four components", node);
-                    }
-
-                    return new Rect(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
-                }
-
-                if (t == typeof(Color))
-                {
-                    var values = value.Split(',');
-                    if (values.Length != 4)
-                    {
-                        throw new ParseException("Color definition must have four components", node);
-                    }
-
-                    return new Color(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
-                }
-
-                if (t == typeof(Color32))
-                {
-                    var values = value.Split(',');
-                    if (values.Length != 4)
-                    {
-                        throw new ParseException("Color32 definition must have four components", node);
-                    }
-
-                    return new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
-                }
-
-                if (t == typeof (UITextureAtlas))
-                {
-                    var atlasName = value;
-                    if (!spriteAtlases.ContainsKey(atlasName))
-                    {
-                        throw new ParseException(String.Format("Invalid or unknown atlas name \"{0}\"", atlasName), node);
-                    }
-
-                    return spriteAtlases[atlasName];
-                }
-            }
-            catch (Exception)
-            {
-                throw new ParseException(String.Format(
-                    "Failed to parse value \"{0}\" for type \"{1}\"", value, t), node);
-            }
-
-            throw new UnsupportedTypeException(t, node);
         }
 
     }
-
 }
