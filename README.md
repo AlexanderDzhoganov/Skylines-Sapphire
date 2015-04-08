@@ -10,7 +10,7 @@ ModTools a very important part of the Sapphire workflow. It allows you to inspec
 
 Making a new skin for Sapphire is a simple and straightforward process. Here is an overview of the steps neccessary to create a skin:
 
-1. Download the template skin
+1. Download the example skin and the template skin
 2. Edit SapphireSkin.cs
 3. Edit skin.xml
 3.1 Define your skin modules
@@ -19,13 +19,15 @@ Making a new skin for Sapphire is a simple and straightforward process. Here is 
 4. Write a skin module
 5. Test and publish your skin
 
-### 1. Download and extract the template skin
+### 1. Download and extract the example and template skins
 
-1.1 Download the Sapphire master archive from [here](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/archive/master.zip)
-1.2 Extract it somewhere and navigate to the `Skins/TemplateSkin` folder.
-1.3 Create a new Cities: Skylines mod by creating a new folder for it in the appropriate location e.g. for windows users that would be `C:\Users\<YourUser>\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\<YourSkinName>`
-1.4 Copy the contents of `Skins/Template` to your new folder. 
-1.5 At this point your mod's root folder should contain a folder named `Source` and a folder named `_SapphireSkin`. 
+1.1 Download and extract the Sapphire master archive from [here](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/archive/master.zip)
+1.2 Navigate to the `Skins/SapphireExampleSkin` folder. This is a fully-working Sapphire skin that you can test out and modify to learn how the system works. After you're done move to 1.3.
+
+1.3 When you're ready to make your own skin, nagivate to the `Skins/TemplateSkin` folder of the master archive.
+1.4 Create a new Cities: Skylines mod by creating a new folder for it in the appropriate location e.g. for windows users that would be `C:\Users\<YourUser>\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\<YourSkinName>`
+1.5 Copy the contents of `Skins/Template` to your new folder. 
+1.6 At this point your mod's root folder should contain a folder named `Source` and a folder named `_SapphireSkin`. 
 
 ### 2. Edit SapphireSkin.cs
 2.1 Open Source/SapphireSkin.cs and put your skin's name and description where it says `<YourSkinName>` and `<YourSkinDescription>`. Make sure *not* to remove the quotes ("") around them.
