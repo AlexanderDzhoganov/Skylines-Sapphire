@@ -60,10 +60,10 @@ Where `MyTestChild` is a child component of `MyTestPanel`.
 #### Shared by all components
 
 This is a list of properties that all components have:
-- isEnabled - bool - example: `<isEnabled>true</isVisible>`
-- isVisible - bool - example: `<isVisible>false</isVisible>`
-- size - Vector2 - example: `<size>16.0, 12.0</size>`
-- relativePosition - Vector3 - example: `<relativePosition>2.0, 2.0, 0.0</relativePosition>`
+- `isEnabled` - bool - example: `<isEnabled>true</isVisible>`
+- `isVisible` - bool - example: `<isVisible>false</isVisible>`
+- `size` - Vector2 - example: `<size>16.0, 12.0</size>`
+- `relativePosition` - Vector3 - example: `<relativePosition>2.0, 2.0, 0.0</relativePosition>`
 
 #### UIPanel
-- backgroundSprite - Sprite - example: `<backgroundSprite>mySprite</backgroundSprite>`
+- `backgroundSprite` - Sprite - example: `<backgroundSprite>mySprite</backgroundSprite>`
