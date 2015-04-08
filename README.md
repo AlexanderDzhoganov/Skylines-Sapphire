@@ -100,7 +100,11 @@ Skin modules are the core of your skin. They define the UI components and proper
 
 4.1 The <UIView> tag
 
-All skin modules are contained within `<UIView>` and `</UIView>` tags. These tags define the root of the UI hierarchy (the in-game `UIView` object). Inside these tags you will define <Component> tags with their respective properties. If it all seems confusing, here is an example:
+All skin modules are contained within `<UIView>` and `</UIView>` tags.
+
+Note: You can only have one `<UIView>` tag per module!
+
+These tags define the root of the UI hierarchy (the in-game `UIView` object). Inside these tags you will define <Component> tags with their respective properties. If it all seems confusing, here is an example:
 
 ```xml
 <UIView>
@@ -126,6 +130,7 @@ Component definitions can be nested, for example:
 			<isVisible>false</isVisible>
 		</Component>
 	</Component>
+</UIView>
 ```
 
 will change the size and position of `TSBar` as well as hide (isVisible = false) the `Sprite` component within it.
