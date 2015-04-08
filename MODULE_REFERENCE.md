@@ -84,6 +84,7 @@ So far the following types can be set through Sapphire:
 - `Vector2`, `Vector3` and `Vector4`
 - `Rect`
 - `Color` and `Color32`
+- Enums
 
 ### 1.3 Matching components with regular expressions
 
