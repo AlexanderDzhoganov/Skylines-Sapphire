@@ -55,7 +55,6 @@
     <Compile Include="Skin.cs" />
     <Compile Include="SkinModule.cs" />
     <Compile Include="SkinLoader.cs" />
-    <Compile Include="TextureAtlasUtils.cs" />
     <Compile Include="XmlUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
