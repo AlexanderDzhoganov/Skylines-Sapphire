@@ -1,7 +1,7 @@
 <UIView>
 	<Component name="InfoPanel">
 		<backgroundSprite></backgroundSprite>
-		<color named="true">PanelColor</color>
+		<color>PanelColor</color>
 		<relativePosition>0.0, 0.0, 0.0</relativePosition>
 		
 		<Component name="Freecamera">

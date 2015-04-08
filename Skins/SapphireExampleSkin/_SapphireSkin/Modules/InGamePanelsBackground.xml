@@ -7,20 +7,20 @@
 		<Component name=".*Library.*" name_regex="true">
 			<atlas>BackgroundsAtlas</atlas>
 			<backgroundSprite>DefaultPanelBackground</backgroundSprite>
-			<color named="true">PanelColor</color>
+			<color>PanelColor</color>
 		</Component>
 	</Component>
 	
 	<Component name=".*Library.*" name_regex="true">
 		<atlas>BackgroundsAtlas</atlas>
 		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
-		<color named="true">PanelColor</color>
+		<color>PanelColor</color>
 	</Component>
 	
 	<Component name="ThumbnailBar">
 		<atlas>BackgroundsAtlas</atlas>
 		<spriteName>DefaultPanelBackground</spriteName>
-		<color named="true">PanelColor</color>
+		<color>PanelColor</color>
 		<relativePosition>-5.0, 1006.0, 0.0</relativePosition>
 		<size>1200.0, 25.0</size>
 	</Component>
@@ -28,7 +28,7 @@
 	<Component name="TSBar">
 		<atlas>BackgroundsAtlas</atlas>
 		<spriteName>DefaultPanelBackground</spriteName>
-		<color named="true">PanelColor</color>
+		<color>PanelColor</color>
 		<relativePosition>-5.0, 1031.0, 0.0</relativePosition>
 		<size>1200.0, 49.0</size>
 		
@@ -56,7 +56,7 @@
 				<Component name="GTSContainer" optional="true">
 					<atlas>BackgroundsAtlas</atlas>
 					<backgroundSprite>DefaultPanelBackground</backgroundSprite>
-					<color named="true">PanelColor</color>
+					<color>PanelColor</color>
 				</Component>
 			</Component>
 		</Component>

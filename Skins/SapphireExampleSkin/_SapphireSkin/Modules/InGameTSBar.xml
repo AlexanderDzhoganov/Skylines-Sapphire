@@ -2,7 +2,7 @@
 	<Component name="TSBar">
 		<atlas>BackgroundsAtlas</atlas>
 		<spriteName>DefaultPanelBackground</spriteName>
-		<color named="true">PanelColor</color>
+		<color>PanelColor</color>
 		<size>1920.0, 49.0</size>
 		<relativePosition>-5.0, 1031.0, 0.0</relativePosition>
 		
@@ -35,7 +35,7 @@
 				<Component name="GTSContainer" optional="true">
 					<atlas>BackgroundsAtlas</atlas>
 					<backgroundSprite>DefaultPanelBackground</backgroundSprite>
-					<color named="true">PanelColor</color>
+					<color>PanelColor</color>
 				</Component>
 			</Component>
 		</Component>

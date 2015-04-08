@@ -10,13 +10,13 @@
 		<Component name=".*Panel" name_regex="true">
 			<atlas>BackgroundsAtlas</atlas>
 			<backgroundSprite>DefaultPanelBackground</backgroundSprite>
-			<color named="true">PanelColor</color>
+			<color>PanelColor</color>
 		</Component>
 	
 		<Component name=".*Library.*" name_regex="true">
 			<atlas>BackgroundsAtlas</atlas>
 			<backgroundSprite>DefaultPanelBackground</backgroundSprite>
-			<color named="true">PanelColor</color>
+			<color>PanelColor</color>
 		</Component>
 	</Component>
 	
@@ -27,13 +27,13 @@
 	<Component name=".*Library.*" name_regex="true">
 		<atlas>BackgroundsAtlas</atlas>
 		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
-		<color named="true">PanelColor</color>
+		<color>PanelColor</color>
 	</Component>
 	
 	<Component name="ThumbnailBar">
 		<atlas>BackgroundsAtlas</atlas>
 		<spriteName>DefaultPanelBackground</spriteName>
-		<color named="true">PanelColor</color>
+		<color>PanelColor</color>
 		<relativePosition>-5.0, 1006.0, 0.0</relativePosition>
 		<size>1920.0, 25.0</size>
 	</Component>
