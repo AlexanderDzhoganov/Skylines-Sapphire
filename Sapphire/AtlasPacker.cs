@@ -52,8 +52,8 @@ namespace Sapphire
 
                 float u = (float)x / atlasTexture.width;
                 float v = (float) y/atlasTexture.height;
-                float s = u + (float)(texture.width) / atlasTexture.width;
-                float t = v + (float)(texture.height) / atlasTexture.height;
+                float s = (float)(texture.width) / atlasTexture.width;
+                float t = (float)(texture.height) / atlasTexture.height;
                 
                 var sprite = new UITextureAtlas.SpriteInfo();
                 sprite.region = new Rect(u, v, s, t);

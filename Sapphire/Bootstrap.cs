@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using ColossalFramework.UI;
 using UnityEngine;
 
 namespace Sapphire
@@ -9,6 +11,8 @@ namespace Sapphire
 
         private static bool bootstrapped = false;
         private static Skin.ModuleClass currentModuleClass;
+
+        private static UIButton sapphireButton;
 
         public static void Bootstrap(Skin.ModuleClass moduleClass)
         {
@@ -28,6 +32,7 @@ namespace Sapphire
                 Camera.main.gameObject.AddComponent<CameraHook>();
             }
 
+
             bootstrapped = true;
         }
 
@@ -41,6 +46,33 @@ namespace Sapphire
         void Start()
         {
             ReloadSkins();
+
+            var uiView = FindObjectOfType<UIView>();
+            sapphireButton = uiView.AddUIComponent(typeof(UIButton)) as UIButton;
+
+            sapphireButton.name = "SapphireButton";
+            sapphireButton.gameObject.name = "SapphireButton";
+            sapphireButton.width = 32;
+            sapphireButton.height = 32;
+
+            sapphireButton.pressedBgSprite = "";
+            sapphireButton.normalBgSprite = "";
+            sapphireButton.hoveredBgSprite = "";
+            sapphireButton.disabledBgSprite = "";
+
+            sapphireButton.atlas = GetSapphireAtlas();
+            sapphireButton.normalFgSprite = "SapphireIcon";
+            sapphireButton.hoveredFgSprite = "SapphireIconHover";
+            sapphireButton.pressedBgSprite = "SapphireIconPressed";
+            sapphireButton.foregroundSpriteMode = UIForegroundSpriteMode.Scale;
+            sapphireButton.scaleFactor = 1.0f;
+
+            sapphireButton.tooltip = "Sapphire Skin Manager";
+            sapphireButton.tooltipBox = uiView.defaultTooltipBox;
+
+            sapphireButton.relativePosition = new Vector3(2.0f, 2.0f, 0.0f);
+
+            sapphireButton.eventClick += (component, param) => { };
         }
 
         private void ReloadSkins()
@@ -61,35 +93,43 @@ namespace Sapphire
             }
         }
 
-        void OnGUI()
+        private UITextureAtlas GetSapphireAtlas()
         {
-            GUI.Window(15125, new Rect(128, 128, 200, 300), DoWindow, "Sapphire");
+            var atlasPacker = new AtlasPacker();
+            atlasPacker.AddSprite("SapphireIcon", GetSapphireIcon());
+            atlasPacker.AddSprite("SapphireIconHover", GetSapphireIconHover());
+            atlasPacker.AddSprite("SapphireIconPressed", GetSapphireIconPressed());
+            return atlasPacker.GenerateAtlas();
         }
 
-        void DoWindow(int i)
+        private Texture2D GetSapphireIcon()
         {
-            if (GUILayout.Button("Reload skins"))
-            {
-                ReloadSkins();
+            var texture = new Texture2D(128, 128);
+            texture.LoadImage(GetResource("Sapphire.Resources.SapphireIcon.png"));
+            return texture;
+        }
 
-                foreach (var skin in loadedSkins)
-                {
-                    if (GUILayout.Button(skin.Name))
-                    {
-                        skin.Apply(currentModuleClass);
-                    }
-                }
-            }
+        private Texture2D GetSapphireIconHover()
+        {
+            var texture = new Texture2D(128, 128);
+            texture.LoadImage(GetResource("Sapphire.Resources.SapphireIconHover.png"));
+            return texture;
+        }
 
-            GUILayout.Space(8);
+        private Texture2D GetSapphireIconPressed()
+        {
+            var texture = new Texture2D(128, 128);
+            texture.LoadImage(GetResource("Sapphire.Resources.SapphireIconPressed.png"));
+            return texture;
+        }
 
-            foreach (var skin in loadedSkins)
-            {
-                if (GUILayout.Button(skin.Name))
-                {
-                    skin.Apply(currentModuleClass);
-                }
-            }
+        private static byte[] GetResource(string name)
+        {
+            var asm = Assembly.GetExecutingAssembly();
+            var stream = asm.GetManifestResourceStream(name);
+            byte[] data = new byte[stream.Length];
+            stream.Read(data, 0, (int)stream.Length);
+            return data;
         }
 
     }

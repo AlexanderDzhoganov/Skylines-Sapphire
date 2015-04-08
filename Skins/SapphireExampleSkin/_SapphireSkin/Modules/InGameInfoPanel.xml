@@ -9,6 +9,11 @@
 			<size>64.0, 64.0</size>
 		</Component>
 		
+		<Component name="Happiness">
+			<relativePosition>1050.0, 1024.0, 0.0</relativePosition>
+			<size>48.0, 48.0</size>
+		</Component>
+		
 		<Component name="PanelTime">
 			<relativePosition>4.0, 4.0, 0.0</relativePosition>
 			
@@ -30,9 +35,14 @@
 			<textColor>Green</textColor>
 		</Component>
 		
+		<Component name="Name">
+			<relativePosition>40.0, 970.0, 0.0</relativePosition>
+		</Component>
+		
 		<Component name="IncomePanel">
 			<relativePosition>1400.0, 1010.0, 0.0</relativePosition>
 			<size>133.0, 64.0</size>
+			<normalBgSprite></normalBgSprite>
 			
 			<Component name="ProjectedIncome">
 				<textScale>2.0</textScale>

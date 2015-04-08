@@ -24,7 +24,7 @@
 		</Component>
 		
 		<Component name="TSContainer">
-			<relativePosition>120.0, -160.0, 0.0</relativePosition>
+			<relativePosition>340.0, -140.0, 0.0</relativePosition>
 		
 			<Component name=".*" name_regex="true">
 				<Component name="GTSContainer" optional="true">
