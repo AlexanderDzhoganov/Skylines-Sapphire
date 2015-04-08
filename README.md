@@ -145,6 +145,8 @@ It's very painless to make changes to your skin and test them out. Start C:S and
 
 **5.2** Publishing your skin
 
+**Warning: Do not bundle Sapphire.dll with your mod! You must put a link to Sapphire in your mod's description and tell your users to subscribe to it. This ensures all users get bug fixes and updates without you having to update your skin.
+
 You can publish your skin like any other code mod. Go to Content -> Mods in C:S and use the 'Share' button on your skin's entry in the list. Users who subscribe to your skin will automatically have it visible in their Sapphire skins list. If you want to update your skin, you can do it like other code mods - delete the mod's folder from AppData, subscribe to it in the workshop and then edit it from its workshop folder and use the 'Update' button in-game.
 
 ### 6. Additional information
