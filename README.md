@@ -11,6 +11,8 @@ ModTools a vital part of the Sapphire workflow. It allows you to inspect the UI 
 ## Contact me
 Find me as `nlight` at `#skylines-modders` at `irc.esper.net` or message me on reddit `/u/nlight` if you have any questions, suggestions, feedback, want to show me what you've done, found bugs, feeling happy, feeling sad.. you get the idea :)
 
+## This document is Work in Progress and will be updated with time.
+
 ## Creating a new skin for Sapphire
 
 Making a new skin for Sapphire is a simple and straightforward process. Here is an overview of the steps neccessary to create a skin:
@@ -127,6 +129,10 @@ Component definitions can be nested, for example:
 ```
 
 will change the size and position of `TSBar` as well as hide (isVisible = false) the `Sprite` component within it.
+
+4.2 Matching several components using regular expressions
+
+[TODO]
 
 ### 5. Testing and publishing your skin
 
