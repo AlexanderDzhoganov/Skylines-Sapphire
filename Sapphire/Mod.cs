@@ -1,4 +1,6 @@
-﻿using ICities;
+﻿using System;
+using ICities;
+using UnityEngine;
 
 namespace Sapphire
 {
@@ -10,7 +12,16 @@ namespace Sapphire
         {
             get
             {
-                SapphireBootstrap.Bootstrap(Skin.ModuleClass.MainMenu); return "Sapphire";
+                try
+                {
+                    SapphireBootstrap.Bootstrap(Skin.ModuleClass.MainMenu);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogException(ex);
+                }
+
+                return "Sapphire";
             }
         }
 
@@ -26,23 +37,25 @@ namespace Sapphire
 
         public override void OnLevelLoaded(LoadMode mode)
         {
-            if (mode == LoadMode.NewGame || mode == LoadMode.LoadGame)
+            try
             {
-                SapphireBootstrap.Bootstrap(Skin.ModuleClass.InGame);
+                if (mode == LoadMode.NewGame || mode == LoadMode.LoadGame)
+                {
+                    SapphireBootstrap.Bootstrap(Skin.ModuleClass.InGame);
+                }
+                else if (mode == LoadMode.NewMap || mode == LoadMode.LoadMap)
+                {
+                    SapphireBootstrap.Bootstrap(Skin.ModuleClass.MapEditor);
+                }
+                else if (mode == LoadMode.NewAsset || mode == LoadMode.LoadAsset)
+                {
+                    SapphireBootstrap.Bootstrap(Skin.ModuleClass.AssetEditor);
+                }
             }
-            else if (mode == LoadMode.NewMap || mode == LoadMode.LoadMap)
+            catch (Exception ex)
             {
-                SapphireBootstrap.Bootstrap(Skin.ModuleClass.MapEditor);
+                Debug.LogException(ex);
             }
-            else if (mode == LoadMode.NewAsset || mode == LoadMode.LoadAsset)
-            {
-                SapphireBootstrap.Bootstrap(Skin.ModuleClass.AssetEditor);
-            }
-        }
-
-        public override void OnLevelUnloading()
-        {
-            SapphireBootstrap.Unload();
         }
     }
 

@@ -12,7 +12,6 @@ namespace Sapphire
 
         private static bool bootstrapped = false;
         private static Skin.ModuleClass currentModuleClass;
-        private static GameObject sapphireGameObject;
 
         public static void Bootstrap(Skin.ModuleClass moduleClass)
         {
@@ -23,21 +22,8 @@ namespace Sapphire
 
             currentModuleClass = moduleClass;
 
-            sapphireGameObject = new GameObject();
-            sapphireGameObject.name = "Sapphire";
-            sapphireGameObject.AddComponent<SapphireBootstrap>();
-
-            if (moduleClass != Skin.ModuleClass.MainMenu)
-            {
-                Camera.main.gameObject.AddComponent<CameraHook>();
-            }
-            
+            FindObjectOfType<UIView>().gameObject.AddComponent<SapphireBootstrap>();
             bootstrapped = true;
-        }
-
-        public static void Unload()
-        {
-            Destroy(sapphireGameObject);
         }
 
         private List<Skin> loadedSkins = new List<Skin>();
@@ -46,6 +32,10 @@ namespace Sapphire
         private Configuration config = new Configuration();
 
         private Skin currentSkin = null;
+
+        private List<UICheckBox> skinCheckBoxes = new List<UICheckBox>();
+
+        private static CameraHook hook;
 
         private void LoadConfig()
         {
@@ -64,9 +54,17 @@ namespace Sapphire
 
         void OnDestroy()
         {
+            if (hook != null)
+            {
+                Destroy(hook);
+            }
+
+            currentSkin = null;
+            config = null;
+            loadedSkins = null;
             bootstrapped = false;
         }
-
+        
         void Awake()
         {
             LoadConfig();
@@ -89,9 +87,19 @@ namespace Sapphire
             var sapphirePanel = CreateSapphirePanel();
             var sapphireButton = CreateSapphireButton();
             sapphireButton.eventClick += (component, param) => { sapphirePanel.isVisible = !sapphirePanel.isVisible; };
-        }
 
-        private List<UICheckBox> skinCheckBoxes = new List<UICheckBox>(); 
+            if (currentModuleClass != Skin.ModuleClass.MainMenu)
+            {
+                try
+                {
+                    hook = Camera.main.gameObject.AddComponent<CameraHook>();
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogException(ex);
+                }
+            }
+        }
 
         private UIPanel CreateSapphirePanel()
         {
@@ -136,6 +144,8 @@ namespace Sapphire
             skinsList.backgroundSprite = "SubcategoriesPanel";
             skinsList.autoLayout = true;
             skinsList.scrollPosition = new Vector2(0.0f, 0.0f);
+            skinsList.autoLayout = true;
+            skinsList.autoLayoutDirection = LayoutDirection.Vertical;
 
             int i = 0;
             foreach (var skin in loadedSkins)
