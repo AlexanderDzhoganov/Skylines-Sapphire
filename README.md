@@ -2,7 +2,7 @@
 
 Sapphire is a UI reskin framework/ mod for Cities: Skylines. It enables authors to create their own skins for the game using straight-forward XML syntax and publish them as mods on the workshop. 
 
-### Sapphire on [Steam Workshop](http://steamcommunity.com/sharedfiles/filedetails/?id=421770876)
+### Subscribe to Sapphire on [Steam Workshop](http://steamcommunity.com/sharedfiles/filedetails/?id=421770876)
 
 ## Before starting, install ModTools
 ### Download ModTools from - http://steamcommunity.com/sharedfiles/filedetails/?id=409520576
