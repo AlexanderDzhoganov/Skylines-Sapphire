@@ -6,7 +6,10 @@ Sapphire is a UI reskin framework/ mod for Cities: Skylines. It enables authors 
 
 ## Before starting, install ModTools
 ### Download ModTools from - http://steamcommunity.com/sharedfiles/filedetails/?id=409520576
-ModTools a very important part of the Sapphire workflow. It allows you to inspect the UI components in the scene and modify all their properties in real-time. Most of the time you will be looking up stuff in ModTools before adding it to your skin. For UI development it's best to turn off the 'Fields' checkbox in SceneExplorer's expanded menu. All UI objects are under the root `UIView` object.
+ModTools a vital part of the Sapphire workflow. It allows you to inspect the UI components in the scene and modify all their properties in real-time. Most of the time you will be looking up stuff in ModTools before adding it to your skin. For UI development it's best to turn off the 'Fields' checkbox in SceneExplorer's expanded menu. All UI objects are under the root `UIView` object.
+
+## Contact me
+Find me as `nlight` at `#skylines-modders` at `irc.esper.net` or message me on reddit `/u/nlight` if you have any questions, suggestions, feedback, want to show me what you've done, found bugs, feeling happy, feeling sad.. you get the idea :)
 
 ## Creating a new skin for Sapphire
 
