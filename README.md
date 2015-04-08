@@ -130,10 +130,6 @@ Component definitions can be nested, for example:
 
 will change the size and position of `TSBar` as well as hide (isVisible = false) the `Sprite` component within it.
 
-4.2 Matching several components using regular expressions
-
-[TODO]
-
 ### 5. Testing and publishing your skin
 
 5.1 Testing
