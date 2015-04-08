@@ -43,7 +43,7 @@ namespace Sapphire
                 var name = item.Key;
                 var texture = item.Value;
 
-                if (x + texture.width <= atlasTexture.width)
+                if (x + texture.width >= atlasTexture.width)
                 {
                     x = 0;
                     y += maxY;

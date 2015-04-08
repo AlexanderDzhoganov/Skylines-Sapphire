@@ -55,7 +55,7 @@ namespace Sapphire
 
         public string Author
         {
-            get { return Author; }
+            get { return author; }
         }
 
         public Dictionary<string, Texture2D> spriteTextureCache = new Dictionary<string, Texture2D>();
@@ -64,6 +64,11 @@ namespace Sapphire
         public Dictionary<string, Color32> colorDefinitions = new Dictionary<string, Color32>(); 
 
         private string sapphirePath;
+
+        public string SapphirePath
+        {
+            get { return sapphirePath; }
+        }
 
         private XmlDocument document;
 
