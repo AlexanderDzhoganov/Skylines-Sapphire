@@ -6,6 +6,7 @@ This document defines the syntax of skin modules.
 - 1.0 Overview of a module
 - 1.1 List of common component properties
 - 1.2 List of supported component types
+- 1.3 Matching components with regular expressions
 
 ### 1.0 Overview of a module
 
@@ -82,3 +83,27 @@ So far the following types can be set through Sapphire:
 - `Vector2`, `Vector3` and `Vector4`
 - `Rect`
 - `Color` and `Color32`
+
+### 1.3 Matching components with regular expressions
+
+It's possible to match several components at once using regular expressions. Here is an example
+
+```xml
+<Component name=".*" name_regex="true">
+  <textScale optional="true">1.2</textScale>
+</Component>
+```
+
+This will match a component with any name (and hence all components at the specific hierarchy level) and set it's `textScale` property (if it exists, note the `optional` attribute).
+ 
+It is also possible to recursively match components at all hierarchy level with the `recursive` attribute.
+Example:
+```xml
+<Component name=".*" name_regex="true" recursive="true">
+  <textScale optional="true">1.2</textScale>
+</Component>
+```
+
+Will match all child components recursively and set their `textScale` to 1.2.
+
+For learning regular expressions use one of the many guides on the internet or [specifically this one](http://regexone.com/).
