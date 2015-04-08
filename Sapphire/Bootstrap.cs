@@ -61,7 +61,7 @@ namespace Sapphire
             bootstrapped = false;
         }
 
-        void Start()
+        void Awake()
         {
             LoadConfig();
 
@@ -89,7 +89,13 @@ namespace Sapphire
 
         private UIPanel CreateSapphirePanel()
         {
-            var uiView = FindObjectOfType<UIView>();
+            var uiView = GameObject.Find("UIView").GetComponent<UIView>();
+            if (uiView == null)
+            {
+                Debug.LogError("UIView is null!");
+                return null;
+            }
+
             var panel = uiView.AddUIComponent(typeof(UIPanel)) as UIPanel;
 
             panel.size = new Vector2(300, 400);
@@ -174,7 +180,13 @@ namespace Sapphire
 
         private UIButton CreateSapphireButton()
         {
-            var uiView = FindObjectOfType<UIView>();
+            var uiView = GameObject.Find("UIView").GetComponent<UIView>();
+            if (uiView == null)
+            {
+                Debug.LogError("UIView is null!");
+                return null;
+            }
+
             var button = uiView.AddUIComponent(typeof(UIButton)) as UIButton;
 
             button.name = "SapphireButton";
