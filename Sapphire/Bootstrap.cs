@@ -30,7 +30,7 @@ namespace Sapphire
             {
                 Camera.main.gameObject.AddComponent<CameraHook>();
             }
-
+            
             bootstrapped = true;
         }
 

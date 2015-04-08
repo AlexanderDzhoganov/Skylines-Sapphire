@@ -10,13 +10,13 @@ namespace SapphireSkin
         {
             get
             {
-                return "ExampleSapphireSkin";
+                return "<YourSkinName>";
             }
         }
 
         public string Description
         {
-            get { return "An example Sapphire skin"; }
+            get { return "<YourSkinDescription>"; }
         }
 
     }
