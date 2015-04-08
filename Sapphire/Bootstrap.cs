@@ -12,6 +12,7 @@ namespace Sapphire
 
         private static bool bootstrapped = false;
         private static Skin.ModuleClass currentModuleClass;
+        private static GameObject sapphireGameObject;
 
         public static void Bootstrap(Skin.ModuleClass moduleClass)
         {
@@ -22,9 +23,9 @@ namespace Sapphire
 
             currentModuleClass = moduleClass;
 
-            var go = new GameObject();
-            go.name = "Sapphire";
-            go.AddComponent<SapphireBootstrap>();
+            sapphireGameObject = new GameObject();
+            sapphireGameObject.name = "Sapphire";
+            sapphireGameObject.AddComponent<SapphireBootstrap>();
 
             if (moduleClass != Skin.ModuleClass.MainMenu)
             {
@@ -32,6 +33,11 @@ namespace Sapphire
             }
             
             bootstrapped = true;
+        }
+
+        public static void Unload()
+        {
+            Destroy(sapphireGameObject);
         }
 
         private List<Skin> loadedSkins = new List<Skin>();

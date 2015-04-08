@@ -42,6 +42,7 @@ namespace Sapphire
 
         public override void OnLevelUnloading()
         {
+            SapphireBootstrap.Unload();
         }
     }
 
