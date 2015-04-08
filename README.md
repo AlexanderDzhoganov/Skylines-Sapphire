@@ -17,14 +17,14 @@ Find me as `nlight` at `#skylines-modders` at `irc.esper.net` or message me on r
 
 Making a new skin for Sapphire is a straight-forward process. Here is an overview of the steps neccessary to create a skin:
 
-1. Download the example skin and the template skin
-2. Edit SapphireSkin.cs
-3. Edit skin.xml
-3.1 Define your skin modules
-3.2 Define your skin sprites
-3.3 Define your skin colors
-4. Write a skin module
-5. Test and publish your skin
+- 1. Download the example skin and the template skin
+- 2. Edit SapphireSkin.cs
+- 3. Edit skin.xml
+  - 3.1 Define your skin modules
+  - 3.2 Define your skin sprites
+  - 3.3 Define your skin colors
+- 4. Write a skin module
+- 5. Test and publish your skin
 
 ### 1. Download and extract the example and template skins
 
