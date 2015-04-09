@@ -18,6 +18,15 @@ namespace Sapphire
         private XmlDocument document;
         private Skin skin;
 
+        struct StickyProperty
+        {
+            public XmlNode childNode;
+            public XmlNode node;
+            public UIComponent component;
+        }
+
+        private List<StickyProperty> stickyProperties = new List<StickyProperty>(); 
+
         public static SkinModule FromXmlFile(Skin skin, string path)
         {
             SkinModule skinModule = null;
@@ -48,9 +57,41 @@ namespace Sapphire
             document = _document;
         }
 
+        public void ApplyStickyProperties()
+        {
+            try
+            {
+                ApplyStickyPropertiesInternal();
+            }
+            catch (ParseException ex)
+            {
+                Debug.LogErrorFormat("Error while applying sticky properties for skin xml ({1}) at node \"{2}\": {3}",
+                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+            }
+            catch (XmlNodeException ex)
+            {
+                Debug.LogErrorFormat("{0} while applying sticky properties for skin xml ({1}) at node \"{2}\": {3}",
+                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("Exception while applying sticky properties for skin xml ({0}): {1}", sourcePath, ex.Message);
+            }
+        }
+
+        private void ApplyStickyPropertiesInternal()
+        {
+            foreach (var property in stickyProperties)
+            {
+                SetPropertyValue(property.childNode, property.node, property.component, true);
+            }
+        }
+
         public void Apply()
         {
             Debug.LogWarningFormat("Applying skin \"{0}\"", sourcePath);
+
+            stickyProperties = new List<StickyProperty>();
 
             try
             {
@@ -120,6 +161,19 @@ namespace Sapphire
                     var optionalAttrib = XmlUtil.TryGetAttribute(childNode, "optional");
                     bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
 
+                    var stickyAttrib = XmlUtil.TryGetAttribute(childNode, "sticky");
+                    bool sticky = stickyAttrib != null && stickyAttrib.Value == "true";
+
+                    if (sticky)
+                    {
+                        stickyProperties.Add(new StickyProperty
+                        {
+                            childNode = childNode,
+                            component = component,
+                            node = node
+                        });
+                    }
+
                     SetPropertyValue(childNode, node, component, optional);
                 }
             }
@@ -146,7 +200,6 @@ namespace Sapphire
 
             if (rProperty.PropertyType == typeof (Color32) && !raw)
             {
-                
                 var colorName = setNode.InnerText;
                 if (!skin.colorDefinitions.ContainsKey(colorName))
                 {

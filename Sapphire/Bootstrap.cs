@@ -35,8 +35,6 @@ namespace Sapphire
 
         private List<UICheckBox> skinCheckBoxes = new List<UICheckBox>();
 
-        private static CameraHook hook;
-
         private void LoadConfig()
         {
             config = Configuration.Deserialize(configPath);
@@ -54,11 +52,6 @@ namespace Sapphire
 
         void OnDestroy()
         {
-            if (hook != null)
-            {
-                Destroy(hook);
-            }
-
             currentSkin = null;
             config = null;
             loadedSkins = null;
@@ -121,6 +114,14 @@ namespace Sapphire
                 {
                     Debug.LogException(ex);
                 }
+            }
+        }
+
+        void Update()
+        {
+            if (currentSkin != null)
+            {
+                currentSkin.ApplyStickyProperties(currentModuleClass);
             }
         }
 

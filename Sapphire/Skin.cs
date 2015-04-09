@@ -304,6 +304,14 @@ namespace Sapphire
             modules[moduleClass].Add(module);
         }
 
+        public void ApplyStickyProperties(ModuleClass moduleClass)
+        {
+            foreach (var module in modules[moduleClass])
+            {
+                module.ApplyStickyProperties();
+            }
+        }
+
         public void Apply(ModuleClass moduleClass)
         {
             foreach (var module in modules[moduleClass])
