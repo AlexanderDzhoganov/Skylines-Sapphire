@@ -44,7 +44,7 @@ After you're done with the example skin go to 1.3.
 
 ### 2. Edit SapphireSkin.cs
 
-**2.1** Open Source/SapphireSkin.cs and put your skin's name and description where it says `<YourSkinName>` and `<YourSkinDescription>`. Make sure to remove the `<` and `>` and *not* remove the quotes `"` around them.
+**2.1** Open Source/SapphireSkin.cs and put your skin's name and description where it says `YourSkinName` and `YourSkinDescription`. Make sure to *not* remove the quotes `"` around them.
 
 ### 3. Edit skin.xml
 
