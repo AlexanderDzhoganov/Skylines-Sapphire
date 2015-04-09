@@ -74,10 +74,25 @@ This is a list of properties that all components have:
 - `isVisible` - bool - example: `<isVisible>false</isVisible>`
 - `size` - Vector2 - example: `<size>16.0, 12.0</size>`
 - `relativePosition` - Vector3 - example: `<relativePosition>2.0, 2.0, 0.0</relativePosition>`
+- `color`
+- `textColor`
+- `textScale`
+- `textPadding`
 
 #### UIPanel
 - `backgroundSprite` - Sprite - example: `<backgroundSprite>mySprite</backgroundSprite>`
+- `autoLayout`
+- `autoLayoutDirection` - `Horizontal` or `Vertical`
+- `autoSize`
 
+### UIButton
+- `normalBgSprite`, `hoveredBgSprite`, `focusedBgSprite`, `pressedBgSprite`, `disabledBgSprite`
+- `normalFgSprite`, `hoveredFgSprite`, `focusedFgSprite`, `pressedFgSprite`, `disabledFgSprite`
+
+### UIMultiStateButton
+- See `1.7 Working with UIMultiStateButtons`
+
+and many more. You can look up properties using ModTools or by opening `C:\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\ColossalManaged.dll` with [ILSpy](http://ilspy.net/) and looking at the list of `ColossalManaged.UI` classes and their properties.
 
 ### 1.2 List of supported component types
 
