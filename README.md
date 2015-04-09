@@ -30,7 +30,7 @@ Making a new skin for Sapphire is a straight-forward process. Here is an overvie
 
 **1.1** Download and extract [the Sapphire master archive](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/archive/master.zip)
 
-**1.2** Navigate to the `Skins/Emerald` folder. ***This is a fully-working Sapphire skin that you can test out and modify to learn how the system works.***. Copy the contents of the folder to your C:S mods folder (e.g. `C:\Users\nlight\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\SapphireExampleSkin`). After that the skin should be visible in the Sapphire skins list in-game.
+**1.2** Navigate to the `Skins/Emerald` folder. ***This is a fully-working Sapphire skin that you can test out and modify to learn how the system works.***. Copy the contents of the folder to your C:S mods folder (e.g. `C:\Users\nlight\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\Emerald`). After that the skin should be visible in the Sapphire skins list in-game.
 
 After you're done with the example skin go to 1.3.
 
@@ -64,6 +64,7 @@ to your skin definition.
 The `class` attribute specifies which part of the game's UI your module modifies. Possible values are `MainMenu`, `InGame`, `MapEditor` and `AssetEditor`. Make sure to change it accordingly. The value inside the Module definition is the relative path to your module XML.
 
 **3.2** Next you're going to define the sprites your skin uses. You only need to define new sprites if you want to replace any of the game's default ones. Sprites exist inside atlasses. You can define any amount of atlasses you want. Each atlass is 2048x2048 pixels in size, so you will need to create separate atlasses if you have many sprites.
+*Note that each UI component can only have one atlass assigned at a time, which means that sprites used for the same component must be in the same atlas.*
 
 To define a new atlas in your `skin.xml` use the following syntax:
 
