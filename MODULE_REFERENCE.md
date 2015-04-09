@@ -254,7 +254,7 @@ There are several UI components which use the `UIMultiStateButton` class. This t
 <Component name="Play"> <!-- note: "Play" is assumed to be a UIMultiStateButton -->
 	<atlas>PlayButtonAtlas</atlas>
 	
-<!-- Use the </SpriteState> tag to define the sprites used for a specific state.
+<!-- Use the <SpriteState> tag to define the sprites used for a specific state.
 Index is the zero- based index of the state. Type is one of "foreground" or "background" -->
 	<SpriteState index="0" type="foreground">
 		<normal>ButtonPlay</normal>
