@@ -99,7 +99,7 @@ It's possible to select several components at once using regular expressions. He
 
 This will select all components whose names match `.*` (i.e. all components) and set their `textScale` property (if it exists, note the `optional` attribute).
  
-It is also possible to recursively match components at all hierarchy level with the `recursive` attribute.
+It is also possible to recursively match components at all hierarchy levels with the `recursive` attribute.
 Example:
 ```xml
 <Component name=".*" name_regex="true" recursive="true">
