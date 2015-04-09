@@ -62,9 +62,19 @@ namespace Sapphire
             currentSkin = null;
             config = null;
             loadedSkins = null;
+
+            if (cameraControllerRedirected)
+            {
+                RedirectionHelper.RevertRedirect(typeof(CameraController).GetMethod("UpdateFreeCamera",
+                        BindingFlags.Instance | BindingFlags.NonPublic), cameraControllerRedirect);
+            }
+
             bootstrapped = false;
         }
-        
+
+        private RedirectCallsState cameraControllerRedirect;
+        private bool cameraControllerRedirected = false;
+
         void Awake()
         {
             LoadConfig();
@@ -84,6 +94,18 @@ namespace Sapphire
                 }
             }
 
+            var cameraController = FindObjectOfType<CameraController>();
+            if (cameraController != null)
+            {
+                cameraControllerRedirect = RedirectionHelper.RedirectCalls(
+                    typeof (CameraController).GetMethod("UpdateFreeCamera",
+                        BindingFlags.Instance | BindingFlags.NonPublic),
+                    typeof (SapphireBootstrap).GetMethod("UpdateFreeCamera",
+                        BindingFlags.Instance | BindingFlags.NonPublic));
+
+                cameraControllerRedirected = true;
+            }
+
             var sapphirePanel = CreateSapphirePanel();
             var sapphireButton = CreateSapphireButton();
             sapphireButton.eventClick += (component, param) => { sapphirePanel.isVisible = !sapphirePanel.isVisible; };
@@ -92,13 +114,45 @@ namespace Sapphire
             {
                 try
                 {
-                    hook = Camera.main.gameObject.AddComponent<CameraHook>();
+                    Camera.main.pixelRect = new Rect(0, 0, Screen.width, Screen.height);
+                    GameObject.Find("Underground View").GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width, Screen.height);
                 }
                 catch (Exception ex)
                 {
                     Debug.LogException(ex);
                 }
             }
+        }
+
+        private void UpdateFreeCamera()
+        {
+            var cameraController = FindObjectOfType<CameraController>();
+
+            if (cameraController == null)
+            {
+                return;
+            }
+
+            var cachedFreeCameraField = typeof(CameraController).GetField("m_cachedFreeCamera", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (cachedFreeCameraField == null)
+            {
+                return;
+            }
+
+            var camera = cameraController.GetComponent<Camera>();
+
+            if (cameraController.m_freeCamera != (bool)cachedFreeCameraField.GetValue(cameraController))
+            {
+                cachedFreeCameraField.SetValue(cameraController, cameraController.m_freeCamera);
+                UIView.Show(!cameraController.m_freeCamera);
+                Singleton<NotificationManager>.instance.NotificationsVisible = !cameraController.m_freeCamera;
+                Singleton<GameAreaManager>.instance.BordersVisible = !cameraController.m_freeCamera;
+                Singleton<DistrictManager>.instance.NamesVisible = !cameraController.m_freeCamera;
+                Singleton<PropManager>.instance.MarkersVisible = !cameraController.m_freeCamera;
+                Singleton<GuideManager>.instance.TutorialDisabled = cameraController.m_freeCamera;
+            }
+
+            camera.rect = new Rect(0, 0, 1, 1);
         }
 
         private UIPanel CreateSapphirePanel()

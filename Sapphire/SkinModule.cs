@@ -157,7 +157,7 @@ namespace Sapphire
             }
             else
             {
-                value = GetValueForType(node, rProperty.PropertyType, setNode.InnerText);
+                value = GetValueForType(setNode, rProperty.PropertyType, setNode.InnerText);
             }
 
             rProperty.SetValue(component, value, null);
@@ -309,9 +309,9 @@ namespace Sapphire
                 }
 
                 var values = value.Split(',');
-                if (values.Length < 3 || values.Length > 4)
+                if (values.Length < 2 || values.Length > 4)
                 {
-                    throw new ParseException("Vector3 definition must have three components", node);
+                    throw new ParseException("Vector3 definition must have two or three components", node);
                 }
 
                 return new Vector3(float.Parse(values[0]), float.Parse(values[1]), values.Length == 3 ? float.Parse(values[2]) : 0.0f);
@@ -347,6 +347,22 @@ namespace Sapphire
                 }
 
                 return new Rect(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+            }
+
+            if (t == typeof(RectOffset))
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
+                }
+
+                var values = value.Split(',');
+                if (values.Length != 4)
+                {
+                    throw new ParseException("RectOffset definition must have four components", node);
+                }
+
+                return new RectOffset(int.Parse(values[0]), int.Parse(values[1]), int.Parse(values[2]), int.Parse(values[3]));
             }
 
             if (t == typeof(Color))
@@ -400,7 +416,7 @@ namespace Sapphire
             if (t.IsEnum)
             {
                 return Enum.Parse(t, value);
-            }
+            }   
 
             throw new UnsupportedTypeException(t, node);
         }
