@@ -85,15 +85,11 @@ This is a list of properties that all components have:
 - `limits`
 - `size` - Vector2 - example: `<size>16.0, 12.0</size>`
 - `relativePosition` - Vector3 - example: `<relativePosition>2.0, 2.0, 0.0</relativePosition>`
-- `absolutePosition`
-- `transformPosition`
 - `pivot`
 - `arbitraryPivotOffset`
 - `zOrder`
-- `width`
-- `height`
-- `minimumSize`
-- `maximumSize`
+- `width`, `height`
+- `minimumSize`, `maximumSize`
 - `tooltipAnchor`
 - `bringTooltipToFront`
 - `tooltip`
@@ -104,8 +100,7 @@ This is a list of properties that all components have:
 - `backgroundSprite` - Sprite - example: `<backgroundSprite>mySprite</backgroundSprite>`
 - `padding`
 - `autoLayout`
-- `autoFitChildrenHorizontally`
-- `autoFitChildrenVertically`
+- `autoFitChildrenHorizontally`, `autoFitChildrenVertically`
 - `wrapLayout`
 - `autoLayoutDirection`
 - `autoLayoutStart`
@@ -120,17 +115,11 @@ This is a list of properties that all components have:
 - `disabledBottomColor`
 - `tabStrip`
 - `autoSize`
-- `horizontalAlignment`
-- `verticalAlignment`
-- `textHorizontalAlignment`
-- `textVerticalAlignment`
+- `horizontalAlignment`, `verticalAlignment`
+- `textHorizontalAlignment`, `textVerticalAlignment`
 - `textPadding`
-- `hoveredTextColor`
-- `pressedTextColor`
-- `focusedTextColor`
-- `hoveredColor`
-- `pressedColor`
-- `focusedColor`
+- `textColor`, `hoveredTextColor`, `pressedTextColor`, `focusedTextColor`
+- `color`, `hoveredColor`, `pressedColor`, `focusedColor`
 
 ### UILabel
 - `atlas`
@@ -138,6 +127,7 @@ This is a list of properties that all components have:
 - `prefix`
 - `suffix`
 - `text`
+- `textColor`
 - `autoSize`
 - `autoHeight`
 - `wordWrap`
