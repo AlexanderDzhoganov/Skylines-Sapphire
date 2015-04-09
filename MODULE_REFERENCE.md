@@ -8,6 +8,7 @@ This document defines the syntax of skin modules.
 - 1.2 List of supported component types
 - 1.3 Matching components with regular expressions
 - 1.4 Optional matching
+- 1.5 Sticky properties
 
 ### 1.0 Overview of a module
 
@@ -132,3 +133,16 @@ Will match component `FooBar` if it exists, and silently continue if it doesn't.
 </UIView>
 ```
 Will set the `backgroundSprite` of all components to `mySprite`, but only for components which actually have the `backgroundSprite` property to begin with.
+
+### 1.5 Sticky properties
+
+Sometimes you want some component property to "stick". Meaning that you want to keep the property at a certin value even if some code changes it after your skin is applied. This is very useful for `<zOrder>` where some menu operations may leave your UI components in a badly ordered state. In these cases you can use the `sticky` attribute to have to property reset every frame by the framework.
+Example:
+
+```xml
+<Component name="MyComponent">
+  <zOrder sticky="true">9999</zOrder>
+</Component>
+```
+
+Forces `MyComponent` to be on top of all other components.
