@@ -67,6 +67,8 @@ Where `MyTestChild` is a child component of `MyTestPanel`.
 
 ### 1.1 List of common component properties
 
+#### WORK IN PROGRESS - A LOT OF INFO FROM THIS SECTION IS STILL MISSING
+
 #### Shared by all components
 
 This is a list of properties that all components have:
