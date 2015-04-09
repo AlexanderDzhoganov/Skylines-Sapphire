@@ -72,13 +72,15 @@ To define a new atlas in your `skin.xml` use the following syntax:
 <SpriteAtlas name="ExampleAtlas1">
 ```
 
-**3.2.1** Next define any sprites that you wish to include in your atlas
+**3.2.1** Next define any sprites that you wish to include in your atlas. 
 
 ```xml
 <Sprite name="ExampleSprite1">Sprites/Example.png</Sprite>
 ```
 
-**3.2.2** And close the tag
+Here, `ExampleSprite1` is the name of the sprite which you'll use to refer to it from skin modules and `Sprites/Example.png` is the path to the .png image relative to the location of skin.xml.
+
+**3.2.2** Don't forget to close the tag
 
 ```xml
 </SpriteAtlas>
