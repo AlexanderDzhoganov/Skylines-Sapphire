@@ -136,7 +136,7 @@ Will set the `backgroundSprite` of all components to `mySprite`, but only for co
 
 ### 1.5 Sticky properties
 
-Sometimes you want some component property to "stick". Meaning that you want to keep the property at a certain value even if any code changes it after your skin is applied. This is very useful for `<zOrder>` where some menu operations may leave your UI components in a badly ordered state. In these cases you can use the `sticky` attribute to have to property reset every frame by the framework.
+Sometimes you want some component property to "stick". Meaning that you want to keep the property at a certain value even if any code changes it after your skin is applied. This is very useful for `<zOrder>` where some menu operations may leave your UI components in a badly ordered state. In these cases you can use the `sticky` attribute to have the property get re-set every frame by the framework.
 Example:
 
 ```xml
