@@ -164,9 +164,8 @@ and many more. You can look up properties using ModTools or by opening `C:\Progr
 
 So far the following types can be set through Sapphire:
 - All built-in types - `int`, `uint`, `float`, `string`, `bool`, etc
-- `UITextureAtlas`
 - `Vector2`, `Vector3` and `Vector4`
-- `Rect`
+- `Rect` and `RectOffset`
 - `Color` and `Color32`
 - Enums
 
