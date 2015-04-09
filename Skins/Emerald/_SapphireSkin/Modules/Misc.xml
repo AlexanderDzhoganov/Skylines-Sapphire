@@ -36,7 +36,7 @@
 	</Component>
 	
 	<Component name="BulldozerBar">
-		<zOrder sticky="true">-10</zOrder>
+		<zOrder sticky="true">-999</zOrder>
 	</Component>
 	
 </UIView>

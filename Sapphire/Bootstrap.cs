@@ -420,6 +420,11 @@ namespace Sapphire
                 foreach (var sapphirePath in SkinLoader.FindAllSkins())
                 {
                     var skin = SkinLoader.LoadSkin(sapphirePath);
+                    if (skin == null)
+                    {
+                        break;
+                    }
+
                     loadedSkins.Add(skin);
                     Debug.LogWarningFormat("Loaded skin \"{0}\" from {1}", skin.Name, sapphirePath);
                 }

@@ -54,7 +54,7 @@
 					
 					<Component name=".*" name_regex="true" optional="true" recursive="true">
 						<Component name="ScrollablePanel" optional="true">
-							<size>1100.0, 109.0</size>
+							<size sticky="true">1702.0, 109.0</size>
 						</Component>
 					</Component>
 				</Component>

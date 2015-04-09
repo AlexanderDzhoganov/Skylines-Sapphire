@@ -12,7 +12,8 @@ Author: nlight
 	<Module class="InGame">Modules/InfoPanel.xml</Module>
 	<Module class="InGame">Modules/FullscreenContainer.xml</Module>
 	<Module class="InGame">Modules/InfoViewPanels.xml</Module>
-	
+	<Module class="InGame">Modules/ModCompatibility.xml</Module>
+
 	<SpriteAtlas name="BackgroundsAtlas">
 		<Sprite name="DefaultPanelBackground">Sprites/DefaultPanelBackground.png</Sprite>
 		<Sprite name="RoundBack">Sprites/RoundBack.png</Sprite>
