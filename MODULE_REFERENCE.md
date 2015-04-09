@@ -97,7 +97,7 @@ It's possible to select several components at once using regular expressions. He
 </Component>
 ```
 
-This will select all components whose names match ".*) (i.e. all components) and set their `textScale` property (if it exists, note the `optional` attribute).
+This will select all components whose names match `.*` (i.e. all components) and set their `textScale` property (if it exists, note the `optional` attribute).
  
 It is also possible to recursively match components at all hierarchy level with the `recursive` attribute.
 Example:
