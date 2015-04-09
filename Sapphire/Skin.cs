@@ -251,7 +251,7 @@ namespace Sapphire
                 int count = 0;
                 foreach (XmlNode spriteNode in childNode.ChildNodes)
                 {
-                    var path = childNode.InnerText;
+                    var path = spriteNode.InnerText;
                     var name = XmlUtil.GetAttribute(spriteNode, "name").Value;
                     Debug.LogWarningFormat("Packing sprite \"{0}\" in atlas", name);
 
@@ -260,25 +260,14 @@ namespace Sapphire
                         continue;
                     }
 
-                    var widthAttribute = XmlUtil.GetAttribute(spriteNode, "width");
-                    var heightAttribute = XmlUtil.GetAttribute(spriteNode, "height");
-
-                    int width = -1;
-                    int height = -1;
-
-                    if (!int.TryParse(widthAttribute.Value, out width))
-                    {
-                        throw new MissingAttributeValueException("width", spriteNode);
-                    }
-
-                    if (!int.TryParse(heightAttribute.Value, out height))
-                    {
-                        throw new MissingAttributeValueException("height", spriteNode);
-                    }
-
                     var fullPath = Path.Combine(sapphirePath, path);
 
-                    var texture = new Texture2D(width, height);
+                    if (!File.Exists(fullPath))
+                    {
+                        throw new FileNotFoundException(String.Format("Sprite \"{0}\" not found!", fullPath), fullPath);
+                    }
+
+                    var texture = new Texture2D(0, 0);
                     texture.LoadImage(File.ReadAllBytes(fullPath));
                     spriteTextureCache.Add(path, texture);
 
