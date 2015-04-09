@@ -113,7 +113,7 @@ For learning regular expressions use one of the many guides on the internet or [
 
 ### 1.4 Optional matching
 
-It's possible to optionally match components and properties (meaning, don't produce an error if the component/ property doesn't exist, rather continue applying the skin). This is done using the `optional` attribute. Use `optional` if you're not certain if that component will actually exist in the scene (e.g. a component created by a mod that may or may not be installed/ enabled).
+It's possible to optionally match components and properties (meaning, don't produce an error if the component/ property doesn't exist, rather continue applying the skin). This is done using the `optional` attribute. Use `optional` if you are not certain that the component you are selecting will actually exist in the scene (e.g. a component created by a mod that may or may not be installed/ enabled).
 
 For example:
 
