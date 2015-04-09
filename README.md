@@ -63,8 +63,8 @@ to your skin definition.
 
 The `class` attribute specifies which part of the game's UI your module modifies. Possible values are `MainMenu`, `InGame`, `MapEditor` and `AssetEditor`. Make sure to change it accordingly. The value inside the Module definition is the relative path to your module XML.
 
-**3.2** Next you're going to define the sprites your skin uses. You only need to define new sprites if you want to replace any of the game's default ones. Sprites exist inside atlasses. You can define any amount of atlasses you want. Each atlass is 2048x2048 pixels in size, so you will need to create separate atlasses if you have many sprites.
-*Note that each UI component can only have one atlass assigned at a time, which means that sprites used for the same component must be in the same atlas.*
+**3.2** Next you're going to define the sprites your skin uses. You only need to define new sprites if you want to replace any of the game's default ones. Sprites exist inside atlases. You can define any amount of atlases you want. Each atlas is 2048x2048 pixels in size, so you will need to create separate atlases if you have many sprites.
+*Note that each UI component can only have one atlas assigned at a time, which means that sprites used for the same component must be in the same atlas.*
 
 To define a new atlas in your `skin.xml` use the following syntax:
 
