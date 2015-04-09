@@ -74,86 +74,88 @@ Where `MyTestChild` is a child component of `MyTestPanel`.
 This is a list of properties that all components have:
 - `isEnabled` - bool - example: `<isEnabled>true</isVisible>`
 - `isVisible` - bool - example: `<isVisible>false</isVisible>`
-- `isInteractive`
-- `autoSize`
-- `clipChildren`
-- `anchor` 
-- `opacity`
-- `color`
-- `disabledColor`
-- `area`
+- `isInteractive` - bool
+- `autoSize` - bool
+- `clipChildren` - bool
+- `anchor`
+- `opacity` - float
+- `color` - Color32
+- `disabledColor` - Color32
+- `area` - Rect
 - `limits`
 - `size` - Vector2 - example: `<size>16.0, 12.0</size>`
 - `relativePosition` - Vector3 - example: `<relativePosition>2.0, 2.0, 0.0</relativePosition>`
 - `pivot`
 - `arbitraryPivotOffset`
-- `zOrder`
-- `width`, `height`
-- `minimumSize`, `maximumSize`
+- `zOrder` - int
+- `width`, `height` - float
+- `minimumSize`, `maximumSize` - Vector2
 - `tooltipAnchor`
-- `bringTooltipToFront`
-- `tooltip`
+- `bringTooltipToFront` - bool
+- `tooltip` - string
 
 #### UIPanel
-- `atlas`
-- `flip`
+- `atlas` - SpriteAtlas
+- `flip` - bool
 - `backgroundSprite` - Sprite - example: `<backgroundSprite>mySprite</backgroundSprite>`
-- `padding`
-- `autoLayout`
-- `autoFitChildrenHorizontally`, `autoFitChildrenVertically`
-- `wrapLayout`
+- `padding` - RectOffset
+- `autoLayout` - bool
+- `autoFitChildrenHorizontally`, `autoFitChildrenVertically` - bool
+- `wrapLayout` - bool
 - `autoLayoutDirection`
 - `autoLayoutStart`
-- `useCenter`
+- `useCenter` - bool
 - `autoLayoutPadding`
 
 ### UIButton
-- `buttonState`
-- `wordWrap`
-- `normalBgSprite`, `hoveredBgSprite`, `focusedBgSprite`, `pressedBgSprite`, `disabledBgSprite`
-- `normalFgSprite`, `hoveredFgSprite`, `focusedFgSprite`, `pressedFgSprite`, `disabledFgSprite`
-- `disabledBottomColor`
+- `buttonState` - `Normal`, `Hovered`, `Disabled`, `Pressed`, `Focused`
+- `wordWrap` - bool
+- `normalBgSprite`, `hoveredBgSprite`, `focusedBgSprite`, `pressedBgSprite`, `disabledBgSprite` - string
+- `normalFgSprite`, `hoveredFgSprite`, `focusedFgSprite`, `pressedFgSprite`, `disabledFgSprite` - string
+- `disabledBottomColor` - Color32
 - `tabStrip`
-- `autoSize`
-- `horizontalAlignment`, `verticalAlignment`
-- `textHorizontalAlignment`, `textVerticalAlignment`
-- `textPadding`
-- `textColor`, `hoveredTextColor`, `pressedTextColor`, `focusedTextColor`
-- `color`, `hoveredColor`, `pressedColor`, `focusedColor`
+- `autoSize` - bool
+- `horizontalAlignment` - `Left`, `Center`, `Right`
+- `verticalAlignment` - `Top`, `Middle`, `Bottom`
+- `textHorizontalAlignment` - `Left`, `Center`, `Right`
+- `textVerticalAlignment` - `Top`, `Middle`, `Bottom`
+- `textPadding` - RectOffset
+- `textColor`, `hoveredTextColor`, `pressedTextColor`, `focusedTextColor` - Color32
+- `color`, `hoveredColor`, `pressedColor`, `focusedColor` - Color32
 
 ### UILabel
-- `atlas`
-- `backgroundSprite`
-- `prefix`
-- `suffix`
-- `text`
-- `textColor`
-- `autoSize`
-- `autoHeight`
-- `wordWrap`
-- `textAlignment`
-- `verticalAlignment`
-- `padding`
+- `atlas` - SpriteAtlas
+- `backgroundSprite` - string
+- `prefix` - string
+- `suffix` - string
+- `text` - string
+- `textColor` - Color32
+- `autoSize` - bool
+- `autoHeight` - bool
+- `wordWrap` - bool
+- `textAlignment` - `Left`, `Center`, `Right`
+- `verticalAlignment` - `Top`, `Middle`, `Bottom`
+- `padding` - RectOffset
 - `tabSize`
 
 ### UIScrollablePanel
-- `useScrollMomentum`
-- `useTouchMouseScroll`
-- `scrollWithArrowKeys`
-- `freeScroll`
-- `atlas`
-- `backgroundSprite`
-- `autoReset`
-- `scrollPadding`
-- `autoLayout`
-- `wrapLayout`
-- `autoLayoutDirection`
-- `autoLayoutStart`
-- `useCenter`
-- `autoLayoutPadding`
-- `scrollPosition`
-- `scrollWheelAmount`
-- `scrollWheelDirection`
+- `useScrollMomentum` - bool
+- `useTouchMouseScroll` - bool
+- `scrollWithArrowKeys` - bool
+- `freeScroll` - bool
+- `atlas` - SpriteAtlas
+- `backgroundSprite` - string
+- `autoReset` - bool
+- `scrollPadding` - RectOffset
+- `autoLayout` - bool
+- `wrapLayout` - bool
+- `autoLayoutDirection` - `Horizontal`, `Vertical`
+- `autoLayoutStart` - `TopLeft`, `BottomLeft`, `TopRight`, `BottomRight`
+- `useCenter` - bool
+- `autoLayoutPadding` - RectOffset
+- `scrollPosition` - float
+- `scrollWheelAmount` - float
+- `scrollWheelDirection` - `Horizontal`, `Vertical`
 
 ### UIMultiStateButton
 - See `1.7 Working with UIMultiStateButtons`
