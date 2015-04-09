@@ -9,6 +9,8 @@ This document defines the syntax of skin modules.
 - 1.3 Matching components with regular expressions
 - 1.4 Optional matching
 - 1.5 Sticky properties
+- 1.6 Raw colors
+- 1.7 Working with UIMultiStateButtons
 
 ### 1.0 Overview of a module
 
@@ -148,3 +150,54 @@ Example:
 Forces `MyComponent` to be on top of all other components.
 
 Note that while you can make each and every property `sticky` - it would be a **very bad idea** to do so. Sticky properties have a non-trivial performance- cost per frame, so use them sparingly!
+
+### 1.6 Raw colors
+
+It is possible to assign a color property directly without having to define a named colors.
+Use the "raw" attribute to tell the parser the you are passing raw color values. Only the RGBA format is supported
+
+Example
+```xml
+<Component name="FooBar">
+  <textColor raw="true">255, 0, 255, 255</textColor>
+</Component>
+```
+will set `FooBar`'s `textColor` to magenta.
+
+### 1.7 Working with UIMultiStateButtons
+
+There are many UI components which use the UIMultiStateButton class. This type of control represents a button with several different states - and therefore different normal, hovered, pressed, etc. sprites for each state. It is not possible to set these button's sprites the usual way (e.g. by setting <normalBgSprite> or <hoveredFgSprite>). Here is an example of how to work with multi-state buttons:
+
+```xml
+<Component name="Play"> <!-- note: "Play" is assumed to be a UIMultiStateButton -->
+	<atlas>PlayButtonAtlas</atlas>
+	
+	<SpriteState index="0" type="foreground"> <!-- We use the </SpriteState> tag to define the sprites used for a specific state. Index is the zero- based index of the state. Type is one of "foreground" or "background" -->
+		<normal>ButtonPlay</normal>
+		<hovered>ButtonPlayHovered</hovered>
+		<focused>ButtonPlayFocused</focused>
+		<pressed>ButtonPlayPressed</pressed>
+	</SpriteState>
+	
+	<SpriteState index="0" type="background">
+		<normal>ButtonTimeLeft</normal>
+		<hovered>ButtonTimeLeftHovered</hovered>
+		<focused>ButtonTimeLeft</focused>
+		<pressed>ButtonTimeLeftPressed</pressed>
+	</SpriteState>
+	
+	<SpriteState index="1" type="foreground">
+		<normal>ButtonPause</normal>
+		<hovered>ButtonPauseHovered</hovered>
+		<focused>ButtonPauseFocused</focused>
+		<pressed>ButtonPausePressed</pressed>
+	</SpriteState>
+	
+	<SpriteState index="1" type="background">
+		<normal>ButtonTimeLeft</normal>
+		<hovered>ButtonTimeLeftHovered</hovered>
+		<focused>ButtonTimeLeft</focused>
+		<pressed>ButtonTimeLeftPressed</pressed>
+	</SpriteState>
+</Component>
+```
