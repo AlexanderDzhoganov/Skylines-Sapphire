@@ -128,7 +128,7 @@ Will match component `FooBar` if it exists, and silently continue if it doesn't.
 ```xml
 <UIView>
   <Component name=".*" name_regex="true" recursive="true">
-    <backgroundSprite>mySprite</backgroundSprite>
+    <backgroundSprite optional="true">mySprite</backgroundSprite>
   </Component>
 </UIView>
 ```
