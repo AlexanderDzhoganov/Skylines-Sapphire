@@ -3,7 +3,7 @@
 	<Module class="InGame">Modules/InGame.xml</Module>
 	
 	<SpriteAtlas name="ExampleAtlas1">
-		<Sprite name="ExampleSprite1" width="30" height="30">Sprites/Example.png</Sprite>
+		<Sprite name="ExampleSprite1">Sprites/Example.png</Sprite>
 	</SpriteAtlas>
 	
 	<Colors>

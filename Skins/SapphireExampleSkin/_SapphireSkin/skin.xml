@@ -6,7 +6,7 @@
 	<Module class="InGame">Modules/InGameTSBar.xml</Module>
 	
 	<SpriteAtlas name="BackgroundsAtlas">
-		<Sprite name="DefaultPanelBackground" width="30" height="30">Sprites/DefaultPanelBackground.png</Sprite>
+		<Sprite name="DefaultPanelBackground">Sprites/DefaultPanelBackground.png</Sprite>
 	</SpriteAtlas>
 	
 	<Colors>
