@@ -23,8 +23,8 @@ Making a new skin for Sapphire is a straight-forward process. Here is an overvie
   - 3.1 Define your skin modules
   - 3.2 Define your skin sprites
   - 3.3 Define your skin colors
-- 4. Write a skin module
-- 5. Test and publish your skin
+- 4. Writing your first skin module
+- 5. Testing and publishing your skin
 
 ### 1. Download and extract the example and template skins
 
