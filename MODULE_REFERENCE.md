@@ -166,7 +166,7 @@ will set `FooBar`'s `textColor` to magenta.
 
 ### 1.7 Working with UIMultiStateButtons
 
-There are many UI components which use the UIMultiStateButton class. This type of control represents a button with several different states - and therefore different normal, hovered, pressed, etc. sprites for each state. It is not possible to set these button's sprites the usual way (e.g. by setting <normalBgSprite> or <hoveredFgSprite>). Here is an example of how to work with multi-state buttons:
+There are several UI components which use the UIMultiStateButton class. This type of control represents a button with several different states - and therefore different normal, hovered, pressed, etc. sprites for each state. It is not possible to set these button's sprites the usual way (e.g. by setting <normalBgSprite> or <hoveredFgSprite>). Here is an example of how to work with multi-state buttons:
 
 ```xml
 <Component name="Play"> <!-- note: "Play" is assumed to be a UIMultiStateButton -->
