@@ -97,14 +97,71 @@ This is a list of properties that all components have:
 - `tooltip`
 
 #### UIPanel
+- `atlas`
+- `flip`
 - `backgroundSprite` - Sprite - example: `<backgroundSprite>mySprite</backgroundSprite>`
+- `padding`
 - `autoLayout`
-- `autoLayoutDirection` - `Horizontal` or `Vertical`
-- `autoSize`
+- `autoFitChildrenHorizontally`
+- `autoFitChildrenVertically`
+- `wrapLayout`
+- `autoLayoutDirection`
+- `autoLayoutStart`
+- `useCenter`
+- `autoLayoutPadding`
 
 ### UIButton
+- `buttonState`
+- `wordWrap`
 - `normalBgSprite`, `hoveredBgSprite`, `focusedBgSprite`, `pressedBgSprite`, `disabledBgSprite`
 - `normalFgSprite`, `hoveredFgSprite`, `focusedFgSprite`, `pressedFgSprite`, `disabledFgSprite`
+- `disabledBottomColor`
+- `tabStrip`
+- `autoSize`
+- `horizontalAlignment`
+- `verticalAlignment`
+- `textHorizontalAlignment`
+- `textVerticalAlignment`
+- `textPadding`
+- `hoveredTextColor`
+- `pressedTextColor`
+- `focusedTextColor`
+- `hoveredColor`
+- `pressedColor`
+- `focusedColor`
+
+### UILabel
+- `atlas`
+- `backgroundSprite`
+- `prefix`
+- `suffix`
+- `text`
+- `autoSize`
+- `autoHeight`
+- `wordWrap`
+- `textAlignment`
+- `verticalAlignment`
+- `padding`
+- `tabSize`
+
+### UIScrollablePanel
+- `useScrollMomentum`
+- `useTouchMouseScroll`
+- `scrollWithArrowKeys`
+- `freeScroll`
+- `atlas`
+- `backgroundSprite`
+- `autoReset`
+- `scrollPadding`
+- `autoLayout`
+- `wrapLayout`
+- `autoLayoutDirection`
+- `autoLayoutStart`
+- `useCenter`
+- `autoLayoutPadding`
+- `scrollPosition`
+- `scrollWheelAmount`
+- `scrollWheelDirection`
 
 ### UIMultiStateButton
 - See `1.7 Working with UIMultiStateButtons`
