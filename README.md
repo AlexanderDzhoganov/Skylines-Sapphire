@@ -24,7 +24,7 @@ Making a new skin for Sapphire is a straight-forward process. Here is an overvie
   - 3.2 Define your skin sprites
   - 3.3 Define your skin colors
 - 4. Writing your first skin module
-- 5. Testing and publishing your skin
+- 5. Testing and publishing your skin on Steam Workshop
 
 ### 1. Download and extract the example and template skins
 
@@ -108,9 +108,9 @@ Skin modules are the core of your skin. They define the UI components and proper
 
 All skin modules are contained within `<UIView>` and `</UIView>` tags.
 
-Note: You can only have one `<UIView>` tag per module!
+Note: You can only have one `<UIView>` tag per module, but as many `<Component>` selectors as you wish.
 
-These tags define the root of the UI hierarchy (the in-game `UIView` object). Inside these tags you will define <Component> tags with their respective properties. If it all seems confusing, here is an example:
+The UIView tag defines the root of the UI hierarchy (the in-game `UIView` object). Inside it you will define <Component> selectors and set their respective properties. This all sounds very confusing at first so here is an example:
 
 ```xml
 <UIView>
@@ -121,9 +121,11 @@ These tags define the root of the UI hierarchy (the in-game `UIView` object). In
 </UIView>
 ```
 
-So here is how this works - when this module gets applied, Sapphire will find the UIComponent called `(Library) OptionsPanel` (repesenting the Options menu in the main menu) under the UI root and change it's size to x=512, y=512 and it's position to x=16 and y=4. 
+Here is how this works - when this skin module gets applied, Sapphire will find the UIComponent called `(Library) OptionsPanel` (repesenting the Options menu in the main menu) under the UIView root and change its size to x=512, y=512 and its position to x=16 and y=4. 
 
-Component definitions can be nested, for example:
+We call `<Component name="Foo">` a selector. Selectors allow you to "grab" a specific component in the UI and modify its properties. There are several different kinds of selectors in Sapphire, refer to the skin module guide for more information.
+
+Due to the hierachical nature of the UI, Sapphire allows you to nest Component selectors:
 
 ```xml
 <UIView>
@@ -139,13 +141,17 @@ Component definitions can be nested, for example:
 </UIView>
 ```
 
-will change the size and position of `TSBar` as well as hide (isVisible = false) the `Sprite` component within it.
+Assuming that the component named `TSBar` exists and it has a child component named `Sprite` the module above will change the size and position of `TSBar` as well as hide (isVisible = false) its `Sprite` child.
 
 ### 5. Testing and publishing your skin
 
 **5.1** Testing
 
-It's very painless to make changes to your skin and test them out. Start C:S and you should see your new skin in the Sapphire skins list. Enable your skin and use the 'Reload active skin' button to reload any changes live. This allows you to work on your skin without restarting the game. 
+Sapphire is designed so that it is very easy and painless to make changes to your skin and test them out live.
+- Start C:S and you should see your new skin in the Sapphire skins list.
+- Enable your skin and use the 'Reload active skin' button to reload any changes live.
+
+This method allows you to work on your skin without restarting the game. Using the reload button will reload any and all XML and PNG files associated with your skin.
 
 **The ModTools console (opened by pressing F7) is very useful in pinpointing any errors in your XML, as it will print out descriptive error messages when you try to re-load your skin. Make sure that "Use ModTools Console", "Hook Unity's logging" and "Log exceptions to console" are all checked in the ModTools main menu (Ctrl+Q).**
 
@@ -153,7 +159,7 @@ It's very painless to make changes to your skin and test them out. Start C:S and
 
 **Warning: Do not bundle Sapphire.dll with your mod! You must put a link to Sapphire in your mod's description and tell your users to subscribe to it. This ensures all users get bug fixes and updates without you having to update your skin.**
 
-You can publish your skin like any other code mod. Go to Content -> Mods in C:S and use the 'Share' button on your skin's entry in the list. Users who subscribe to your skin will automatically have it visible in their Sapphire skins list. If you want to update your skin, you can do it like other code mods - delete the mod's folder from AppData, subscribe to it in the workshop and then edit it from its workshop folder and use the 'Update' button in-game.
+You can publish your skin on Steam's Workshop like any other code mod. Go to Content -> Mods in C:S and use the 'Share' button on your skin's entry in the list. Users who subscribe to your skin will automatically have it visible in their Sapphire skins list. If you want to update your skin, you can do it like other code mods - delete the mod's folder from AppData, subscribe to it in the workshop and then edit it from its workshop folder and use the 'Update' button in-game.
 
 ### 6. Additional information
 
