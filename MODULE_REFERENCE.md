@@ -147,4 +147,4 @@ Example:
 
 Forces `MyComponent` to be on top of all other components.
 
-Note that while you can make any and every property `sticky` it's a bad idea to so for many properties as sticky properties have a non-trivial performance- cost per frame.
+Note that while you can make each and every property `sticky` it would be a **very bad idea** to so. Stick properties have a non-trivial performance- cost per frame, so use them sparingly.
