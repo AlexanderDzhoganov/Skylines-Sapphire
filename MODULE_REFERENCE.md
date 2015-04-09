@@ -22,9 +22,9 @@ e.g.
 </UIView>
 ```
 
-At the root of every module are one or more `<Component>` definitions. A `<Component>` can reference any UI component
+At the root of every module are one or more `<Component>` selectors. A `<Component>` selector can reference any UI component
 such as panels, labels, sliders, scrollviews etc. Components are uniquely identified by their name and their place in the hierarchy.
-For example, to define a `<Component>` with name `MyTestPanel` we'll do something like:
+For example, to define a `<Component>` selector with name `MyTestPanel` we'll do something like:
 ```
 <UIView>
   <Component name="MyTestPanel">
@@ -33,7 +33,7 @@ For example, to define a `<Component>` with name `MyTestPanel` we'll do somethin
 </UIView>
 ```
 
-Inside each `<Component>` tag you can specify one or more component properties to be changed. A descriptive list of the properties
+Inside each `<Component>` selector you can specify one or more component properties to be changed. A descriptive list of the properties
 of each component can be found by decompiling `ColossalManaged.dll` or by using ModTools. 
 
 Component properties are defined like this:
@@ -89,7 +89,7 @@ So far the following types can be set through Sapphire:
 
 ### 1.3 Matching components with regular expressions
 
-It's possible to match several components at once using regular expressions. Here is an example
+It's possible to select several components at once using regular expressions. Here is an example
 
 ```xml
 <Component name=".*" name_regex="true">
@@ -97,7 +97,7 @@ It's possible to match several components at once using regular expressions. Her
 </Component>
 ```
 
-This will match a component with any name (and hence all components at the specific hierarchy level) and set it's `textScale` property (if it exists, note the `optional` attribute).
+This will select all components whose names match ".*) (i.e. all components) and set their `textScale` property (if it exists, note the `optional` attribute).
  
 It is also possible to recursively match components at all hierarchy level with the `recursive` attribute.
 Example:
