@@ -269,6 +269,7 @@ namespace Sapphire
 
                     var texture = new Texture2D(0, 0);
                     texture.LoadImage(File.ReadAllBytes(fullPath));
+                    texture.filterMode = FilterMode.Bilinear;
                     spriteTextureCache.Add(path, texture);
 
                     atlasPacker.AddSprite(name, texture);

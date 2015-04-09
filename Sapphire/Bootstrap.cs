@@ -399,6 +399,23 @@ namespace Sapphire
         {
             try
             {
+                foreach (var loadedSkin in loadedSkins)
+                {
+                    foreach (var atlas in loadedSkin.spriteAtlases)
+                    {
+                        Destroy(atlas.Value.material.mainTexture);
+                        ScriptableObject.Destroy(atlas.Value);
+                    }
+
+                    foreach (var texture in loadedSkin.spriteTextureCache)
+                    {
+                        ScriptableObject.Destroy(texture.Value);
+                    }
+
+                    loadedSkin.spriteAtlases.Clear();
+                    loadedSkin.spriteTextureCache.Clear();
+                }
+
                 loadedSkins = new List<Skin>();
                 foreach (var sapphirePath in SkinLoader.FindAllSkins())
                 {

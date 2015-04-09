@@ -26,16 +26,17 @@ namespace Sapphire
             var atlasTexture = new Texture2D(2048, 2048);
             atlas.material.mainTexture = atlasTexture;
 
+            var transparent = new Color(0, 0, 0, 0);
             for (int _x = 0; _x < atlasTexture.width; _x++)
             {
                 for (int _y = 0; _y < atlasTexture.height; _y++)
                 {
-                    atlasTexture.SetPixel(_x, _y, Color.black);
+                    atlasTexture.SetPixel(_x, _y, transparent);
                 }
             }
 
-            int x = 0;
-            int y = 0;
+            int x = 2;
+            int y = 2;
             int maxY = 0;
 
             foreach (var item in rawSprites)
@@ -46,7 +47,7 @@ namespace Sapphire
                 if (x + texture.width >= atlasTexture.width)
                 {
                     x = 0;
-                    y += maxY;
+                    y += maxY + 2;
                     maxY = 0;
                 }
 
@@ -54,7 +55,7 @@ namespace Sapphire
                 float v = (float) y/atlasTexture.height;
                 float s = (float)(texture.width) / atlasTexture.width;
                 float t = (float)(texture.height) / atlasTexture.height;
-                
+
                 var sprite = new UITextureAtlas.SpriteInfo();
                 sprite.region = new Rect(u, v, s, t);
                 sprite.name = name;
@@ -69,7 +70,7 @@ namespace Sapphire
                     }
                 }
 
-                x += texture.width;
+                x += texture.width + 2;
                 maxY = Mathf.Max(maxY, texture.height);
             }
 
@@ -84,7 +85,7 @@ namespace Sapphire
             {
                 var areaA = a.Value.width*a.Value.height;
                 var areaB = b.Value.width*b.Value.height;
-                return areaA.CompareTo(areaB);
+                return areaB.CompareTo(areaA);
             });
         }
 

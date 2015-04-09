@@ -158,23 +158,92 @@ namespace Sapphire
                 }
                 else if(component != null)
                 {
-                    var optionalAttrib = XmlUtil.TryGetAttribute(childNode, "optional");
-                    bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
-
-                    var stickyAttrib = XmlUtil.TryGetAttribute(childNode, "sticky");
-                    bool sticky = stickyAttrib != null && stickyAttrib.Value == "true";
-
-                    if (sticky)
+                    if (component.GetType() == typeof(UIMultiStateButton) && childNode.Name == "SpriteState")
                     {
-                        stickyProperties.Add(new StickyProperty
+                        var indexAttrib = XmlUtil.GetAttribute(childNode, "index");
+                        int index;
+                        if (!int.TryParse(indexAttrib.Value, out index))
                         {
-                            childNode = childNode,
-                            component = component,
-                            node = node
-                        });
-                    }
+                            throw new ParseException(String.Format("Invalid value for SpriteState attribute \"index\" - \"{0}\"", indexAttrib.Value), childNode);
+                        }
 
-                    SetPropertyValue(childNode, node, component, optional);
+                        var typeAttrib = XmlUtil.GetAttribute(childNode, "type");
+                        if (typeAttrib.Value != "background" && typeAttrib.Value != "foreground")
+                        {
+                            throw new ParseException(String.Format
+                                ("Invalid value for SpriteState attribute \"type\" (only \"foreground\" and \"background\" are allowed - \"{0}\"",
+                                    indexAttrib.Value), childNode);
+                        }
+
+                        var button = component as UIMultiStateButton;
+                        UIMultiStateButton.SpriteSetState sprites = null;
+
+                        if (typeAttrib.Value == "background")
+                        {
+                            sprites = button.backgroundSprites;
+                        }
+                        else
+                        {
+                            sprites = button.foregroundSprites;
+                        }
+
+                        if (index >= sprites.Count)
+                        {
+                            throw new ParseException(String.Format
+                            ("Invalid value for SpriteState attribute \"index\", object has only \"{1}\" states - \"{0}\"",
+                                indexAttrib.Value, sprites.Count), childNode);
+                        }
+
+                        foreach (XmlNode stateNode in childNode.ChildNodes)
+                        {
+                            if (stateNode.Name == "normal")
+                            {
+                                sprites[index].normal = stateNode.InnerText;
+                            }
+                            else if (stateNode.Name == "hovered")
+                            {
+                                sprites[index].hovered = stateNode.InnerText;
+                            }
+                            else if (stateNode.Name == "focused")
+                            {
+                                sprites[index].focused = stateNode.InnerText;
+                            }
+                            else if (stateNode.Name == "pressed")
+                            {
+                                sprites[index].pressed = stateNode.InnerText;
+                            }
+                            else if (stateNode.Name == "disabled")
+                            {
+                                sprites[index].disabled = stateNode.InnerText;
+                            }
+                            else
+                            {
+                                throw new ParseException(String.Format
+                                    ("Invalid property \"{0}\" for SpriteState, allowed are \"normal\", \"hovered\", \"focused\", \"pressed\", \"disabled\",",
+                                        stateNode.InnerText), childNode);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var optionalAttrib = XmlUtil.TryGetAttribute(childNode, "optional");
+                        bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
+
+                        var stickyAttrib = XmlUtil.TryGetAttribute(childNode, "sticky");
+                        bool sticky = stickyAttrib != null && stickyAttrib.Value == "true";
+
+                        if (sticky)
+                        {
+                            stickyProperties.Add(new StickyProperty
+                            {
+                                childNode = childNode,
+                                component = component,
+                                node = node
+                            });
+                        }
+
+                        SetPropertyValue(childNode, node, component, optional);
+                    }
                 }
             }
         }
@@ -286,7 +355,13 @@ namespace Sapphire
                     throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
                 }
 
-                return int.Parse(value);
+                int result;
+                if(!int.TryParse(value, out result))
+                {
+                    throw new ParseException("Incorrect format for integer value", node);
+                }
+
+                return result;
             }
 
             if (t == typeof(uint))
@@ -296,7 +371,13 @@ namespace Sapphire
                     throw new ParseException(String.Format("Empty value for type \"{0}\" is not allowed", t), node);
                 }
 
-                return uint.Parse(value);
+                uint result;
+                if (!uint.TryParse(value, out result))
+                {
+                    throw new ParseException("Incorrect format for integer value", node);
+                }
+
+                return result;
             }
 
             if (t == typeof(float))
@@ -330,7 +411,14 @@ namespace Sapphire
                 if (value == "false") return false;
                 if (value == "0") return false;
                 if (value == "1") return true;
-                return bool.Parse(value);
+
+                bool result;
+                if (!bool.TryParse(value, out result))
+                {
+                    throw new ParseException("Incorrect format for boolean value", node);
+                }
+
+                return result;
             }
 
             if (t == typeof(string))
@@ -415,7 +503,18 @@ namespace Sapphire
                     throw new ParseException("RectOffset definition must have four components", node);
                 }
 
-                return new RectOffset(int.Parse(values[0]), int.Parse(values[1]), int.Parse(values[2]), int.Parse(values[3]));
+                RectOffset result;
+
+                try
+                {
+                    result = new RectOffset(int.Parse(values[0]), int.Parse(values[1]), int.Parse(values[2]), int.Parse(values[3]));
+                }
+                catch (Exception)
+                {
+                    throw new ParseException("RectOffset can contain only integer values", node);
+                }
+
+                return result;
             }
 
             if (t == typeof(Color))
@@ -447,7 +546,17 @@ namespace Sapphire
                     throw new ParseException("Color32 definition must have four components", node);
                 }
 
-                return new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
+                Color32 result;
+                try
+                {
+                    result = new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
+                }
+                catch (Exception)
+                {
+                    throw new ParseException("Color32 can contain only byte values", node);
+                }
+
+                return result;
             }
 
             if (t == typeof (UITextureAtlas))
