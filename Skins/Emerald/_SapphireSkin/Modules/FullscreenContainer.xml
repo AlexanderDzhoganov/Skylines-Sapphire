@@ -1,0 +1,219 @@
+<UIView>
+	<Component name="FullScreenContainer">
+		<size>1920.0, 1010.0</size>
+		<zOrder>999</zOrder>
+		
+		<Component name=".*Library.*" name_regex="true">
+			<atlas>BackgroundsAtlas</atlas>
+			<backgroundSprite>DefaultPanelBackground</backgroundSprite>
+			<color>PanelColor</color>
+			
+			<Component name="Caption" optional="true">
+				<Component name=".*Name" name_regex="true" optional="true">
+					<normalBgSprite optional="true">TextFieldPanelHovered</normalBgSprite>
+					<textColor optional="true">Black</textColor>
+				</Component>
+			</Component>
+		</Component>
+	
+		<Component name="PoliciesTooltip">
+		</Component>
+		
+		<Component name="PoliciesPanel">
+			<atlas>BackgroundsAtlas</atlas>
+			<backgroundSprite>DefaultPanelBackground</backgroundSprite>
+			<color>White</color>
+			
+			<Component name="Caption">
+				<textColor>Black</textColor>
+			</Component>
+		</Component>
+		
+		<Component name="PauseOutline">
+			<size>1920.0, 1080.0</size>
+			<zOrder>9999</zOrder>
+		</Component>
+		
+		<Component name="GenericTutorialHelper">
+		</Component>
+		
+		<Component name="EconomyPanel">
+			<atlas>BackgroundsAtlas</atlas>
+			<backgroundSprite>DefaultPanelBackground</backgroundSprite>
+			<color>White</color>
+			
+			<Component name="Title">
+				<textColor>Black</textColor>
+			</Component>
+		</Component>
+		
+		<Component name="TutorialAdvisorPanel">
+			<Component name="Caption">
+				<Component name="Label">
+					<textColor>Black</textColor>	
+				</Component>
+			</Component>
+		</Component>
+		
+		<Component name="(Library) ZonedBuildingWorldInfoPanel">
+			<Component name="InfoGroupPanel">
+				<Component name="Type">
+					<textColor>Black</textColor>
+				</Component>
+				
+				<Component name="Status">
+					<textColor>DarkGreen</textColor>
+				</Component>
+			</Component>
+		
+			<Component name="ZoneTypeInfo">
+				<Component name=".*Info" name_regex="true">
+					<Component name="PieLegend" recursive="true" optional="true">
+						<Component name="Label" recursive="true" optional="true">
+							<textColor>Black</textColor>
+						</Component>
+					</Component>
+					
+					<Component name="EducationPanel">
+						<Component name="WorkSituation" optional="true">
+							<textColor>Black</textColor>
+						</Component>
+						<Component name="OverWorkSituation" optional="true">
+							<textColor>Black</textColor>
+						</Component>
+					</Component>
+				</Component>
+			</Component>
+		</Component>
+		
+		<Component name="(Library) CityServiceWorldInfoPanel">
+			<Component name="Caption">
+				<Component name="On/Off">
+					<Component name="OnOff">
+						<textColor>Black</textColor>
+					</Component>
+				</Component>
+			</Component>
+			
+			<Component name="InfoGroupPanel">
+				<Component name="Upkeep">
+					<textColor>DarkRed</textColor>
+				</Component>
+				
+				<Component name="Status">
+					<textColor>DarkishGreen</textColor>
+				</Component>
+				
+				<Component name="Type">
+					<textColor>Black</textColor>
+				</Component>
+			</Component>
+			
+			<Component name="StatsPanel">
+				<Component name="Info">
+					<textColor>Black</textColor>
+				</Component>
+			</Component>
+			
+			<Component name="DescPanel">
+				<Component name="Desc">
+					<textColor>Black</textColor>
+				</Component>
+			</Component>
+		</Component>
+		
+		<Component name="(Library) PublicTransportWorldInfoPanel">
+			<Component name=".*" name_regex="true" recursive="true" optional="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+		
+		<Component name="(Library) DistrictWorldInfoPanel">
+			<Component name="Specialization">
+				<textColor>Black</textColor>
+			</Component>
+			
+			<Component name="AgePanel">
+				<Component name=".*" name_regex="true" recursive="true" optional="true">
+					<textColor optional="true">Black</textColor>
+				</Component>
+			</Component>
+			
+			<Component name="ZonePanel">
+				<Component name=".*" name_regex="true" recursive="true" optional="true">
+					<textColor optional="true">Black</textColor>
+				</Component>
+			</Component>
+			
+			<Component name="LandValue">
+				<Component name=".*" name_regex="true" recursive="true" optional="true">
+					<textColor optional="true">Black</textColor>
+				</Component>
+			</Component>
+		</Component>
+		
+		<Component name="(Library) CitizenWorldInfoPanel">
+			<Component name=".*" name_regex="true" recursive="true" optional="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+		
+		<Component name="(Library) TouristWorldInfoPanel">
+			<Component name=".*" name_regex="true" recursive="true" optional="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+		
+		<Component name="(Library) AnimalWorldInfoPanel">
+			<Component name=".*" name_regex="true" recursive="true" optional="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+		
+		<Component name=".*VehicleWorldInfoPanel" name_regex="true">
+		</Component>
+		
+		<Component name="(Library) CitizenVehicleWorldInfoPanel">
+			<Component name=".*" name_regex="true" recursive="true" optional="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+		
+		<Component name="(Library) TouristVehicleWorldInfoPanel">
+			<Component name=".*" name_regex="true" recursive="true" optional="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+	
+		<Component name="(Library) CityServiceVehicleWorldInfoPanel">
+			<Component name=".*" name_regex="true" recursive="true" optional="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+
+		<Component name="(Library) PublicTransportVehicleWorldInfoPanel">
+			<Component name=".*" name_regex="true" recursive="true" optional="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+		
+		<Component name="(Library) GameAreaInfoPanel">
+			<Component name=".*" name_regex="true" recursive="true" optional="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+			
+			<Component name="PurchasePanel">
+				<Component name="Purchase">
+					<textColor optional="true">White</textColor>
+				</Component>
+			</Component>
+		</Component>
+		
+		<Component name="(Library) ServicePersonWorldInfoPanel">
+			<Component name=".*" name_regex="true" recursive="true" optional="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+		
+	</Component>
+</UIView>

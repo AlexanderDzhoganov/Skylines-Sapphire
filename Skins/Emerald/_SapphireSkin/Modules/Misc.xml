@@ -1,0 +1,42 @@
+<UIView>
+	<Component name="ChirperPanel" optional="true">
+		<zOrder sticky="true">9999</zOrder>
+	</Component>
+	
+	<Component name="Esc">
+		<zOrder sticky="true">9999</zOrder>
+		<atlas>BackgroundsAtlas</atlas>
+		<normalBgSprite>RoundBack</normalBgSprite>
+		<hoveredBgSprite>RoundBackHovered</hoveredBgSprite>
+		<pressedBgSprite>RoundBackPressed</pressedBgSprite>
+		<normalFgSprite>Options</normalFgSprite>
+	</Component>
+	
+	<Component name="UnlockingPanel">
+		<atlas>BackgroundsAtlas</atlas>
+		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
+		<color>PanelColor</color>
+	</Component>
+	
+	<Component name=".*Library.*" name_regex="true">
+		<atlas>BackgroundsAtlas</atlas>
+		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
+		<color>PanelColor</color>
+	</Component>
+	
+	<Component name="(Library) TutorialPanel">
+		<backgroundSprite></backgroundSprite>
+		<color>PanelColor</color>
+	</Component>
+	
+	<Component name="ThumbnailBar">
+		<spriteName></spriteName>
+		<relativePosition>0.0, 1010.0</relativePosition>
+		<size>1920.0, 25.0</size>
+	</Component>
+	
+	<Component name="BulldozerBar">
+		<zOrder sticky="true">-10</zOrder>
+	</Component>
+	
+</UIView>

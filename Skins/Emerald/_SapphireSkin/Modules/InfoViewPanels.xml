@@ -1,0 +1,177 @@
+<UIView>
+
+	<Component name="(Library).*" name_regex="true">
+		<Component name="Caption" optional="true">
+			<textColor optional="true">Black</textColor>
+			<Component name="Label" optional="true">
+				<textColor>Black</textColor>
+			</Component>
+		</Component>
+		
+		<Component name="Panel" optional="true">
+			<Component name="Message" optional="true">
+				<textColor>Black</textColor>
+			</Component>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) CityInfoPanel">	
+		<relativePosition sticky="true">58.0, 80.0</relativePosition>
+		
+		<Component name="Caption">
+			<Component name="CityName">
+				<textColor>Black</textColor>
+			</Component>
+		</Component>
+		
+		<Component name="LandValue">
+			<Component name="AverageLandValue">
+				<textColor>Black</textColor>
+			</Component>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) ElectricityInfoViewPanel">
+		<Component name="Caption">
+			<Component name="Label">
+				<textColor>Black</textColor>
+			</Component>
+		</Component>
+		<Component name="ElectricityAvailability">
+			<textColor>Black</textColor>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) WaterInfoViewPanel">
+		<Component name=".*Availability" name_regex="true">
+			<textColor>Black</textColor>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) GarbageInfoViewPanel">
+		<Component name="LandfillUsage" name_regex="true">
+			<textColor>Black</textColor>
+		</Component>
+		<Component name="IncinerationStatus" name_regex="true">
+			<textColor>Black</textColor>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) EducationInfoViewPanel">
+		<Component name="TabContainer">
+			<Component name=".*" name_regex="true" recursive="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+
+		<Component name="EducationPanel">
+			<Component name=".*" name_regex="true" recursive="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) HappinessInfoViewPanel">
+		<Component name=".*Group" name_regex="true">
+			<Component name=".*Label" name_regex="true">
+				<textColor>Black</textColor>
+			</Component>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) HealthInfoViewPanel">
+		<Component name="TabContainer">
+			<Component name=".*" name_regex="true" recursive="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) LevelsInfoViewPanel">
+		<Component name="Panel">
+			<Component name=".*" name_regex="true" recursive="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) PollutionInfoViewPanel">
+		<Component name=".*Label" name_regex="true">
+			<textColor optional="true">Black</textColor>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) NoisePollutionInfoViewPanel">
+		<Component name="NoisePollutionLabel">
+			<textColor optional="true">Black</textColor>
+		</Component>
+		<Component name="Low">
+			<textColor optional="true">Black</textColor>
+		</Component>
+		<Component name="High">
+			<textColor optional="true">Black</textColor>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) FireSafetyInfoViewPanel">
+		<Component name="SafetyLabel">
+			<textColor optional="true">Black</textColor>
+		</Component>
+		<Component name="Safe">
+			<textColor optional="true">Black</textColor>
+		</Component>
+		<Component name="Unsafe">
+			<textColor optional="true">Black</textColor>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) CrimeInfoViewPanel">
+		<Component name="SafetyLabel">
+			<textColor optional="true">Black</textColor>
+		</Component>
+		<Component name="Safe">
+			<textColor optional="true">Black</textColor>
+		</Component>
+		<Component name="Unsafe">
+			<textColor optional="true">Black</textColor>
+		</Component>
+	</Component>
+
+	<Component name="(Library) PopulationInfoViewPanel">
+		<Component name="Panel">
+			<Component name=".*" name_regex="true" recursive="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) OutsideConnectionsInfoViewPanel">
+		<Component name="TabContainer">
+			<Component name=".*" name_regex="true" recursive="true">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) LandValueInfoViewPanel">
+		<Component name="AvgLandValue">
+			<textColor>Black</textColor>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) NaturalResourcesInfoViewPanel">
+		<Component name="Panel">
+			<Component name="Available">
+				<textColor optional="true">Black</textColor>
+			</Component>
+			<Component name="Used">
+				<textColor optional="true">Black</textColor>
+			</Component>
+		</Component>
+	</Component>
+	
+	<Component name="(Library) OptionsPanel">
+		<color raw="true">180, 180, 180, 255</color>
+	</Component>
+
+</UIView>

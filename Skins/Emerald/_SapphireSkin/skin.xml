@@ -1,0 +1,71 @@
+<!--
+
+Emerald skin for Sapphire
+Author: nlight
+
+-->
+<SapphireSkin name="Emerald" author="nlight">
+	<Module class="MainMenu">Modules/MainMenu.xml</Module>
+	
+	<Module class="InGame">Modules/Misc.xml</Module>
+	<Module class="InGame">Modules/TSBar.xml</Module>
+	<Module class="InGame">Modules/InfoPanel.xml</Module>
+	<Module class="InGame">Modules/FullscreenContainer.xml</Module>
+	<Module class="InGame">Modules/InfoViewPanels.xml</Module>
+	
+	<SpriteAtlas name="BackgroundsAtlas">
+		<Sprite name="DefaultPanelBackground">Sprites/DefaultPanelBackground.png</Sprite>
+		<Sprite name="RoundBack">Sprites/RoundBack.png</Sprite>
+		<Sprite name="RoundBackHovered">Sprites/RoundBackHovered.png</Sprite>
+		<Sprite name="RoundBackPressed">Sprites/RoundBackClicked.png</Sprite>
+		<Sprite name="Options">Sprites/Options.png</Sprite>
+		<Sprite name="Camera">Sprites/Camera.png</Sprite>
+		
+		<Sprite name="ButtonTimeLeft">Sprites/ButtonTimeLeft.png</Sprite>
+		<Sprite name="ButtonTimeLeftHovered">Sprites/ButtonTimeLeftHovered.png</Sprite>
+		<Sprite name="ButtonTimeLeftPressed">Sprites/ButtonTimeLeftClicked.png</Sprite>
+		
+		<Sprite name="ButtonTimeRight">Sprites/ButtonTimeRight.png</Sprite>
+		<Sprite name="ButtonTimeRightHovered">Sprites/ButtonTimeRightHovered.png</Sprite>
+		<Sprite name="ButtonTimeRightPressed">Sprites/ButtonTimeRightClicked.png</Sprite>
+		
+		<Sprite name="ButtonPlay">Sprites/ButtonPlay.png</Sprite>
+		<Sprite name="ButtonPlayHovered">Sprites/ButtonPlayHovered.png</Sprite>
+		<Sprite name="ButtonPlayFocused">Sprites/ButtonPlayFocused.png</Sprite>
+		<Sprite name="ButtonPlayPressed">Sprites/ButtonPlayPressed.png</Sprite>
+		
+		<Sprite name="ButtonPause">Sprites/ButtonPause.png</Sprite>
+		<Sprite name="ButtonPauseHovered">Sprites/ButtonPauseHovered.png</Sprite>
+		<Sprite name="ButtonPauseFocused">Sprites/ButtonPauseFocused.png</Sprite>
+		<Sprite name="ButtonPausePressed">Sprites/ButtonPausePressed.png</Sprite>
+		
+		<Sprite name="IconSpeed1Normal">Sprites/IconSpeed1Normal.png</Sprite>
+		<Sprite name="IconSpeed1Hover">Sprites/IconSpeed1Hover.png</Sprite>
+		<Sprite name="IconSpeed2Normal">Sprites/IconSpeed2Normal.png</Sprite>
+		<Sprite name="IconSpeed2Hover">Sprites/IconSpeed2Hover.png</Sprite>
+		<Sprite name="IconSpeed3Normal">Sprites/IconSpeed3Normal.png</Sprite>
+		<Sprite name="IconSpeed3Hover">Sprites/IconSpeed3Hover.png</Sprite>
+		
+		<Sprite name="CityInfo">Sprites/CityInfo.png</Sprite>
+		<Sprite name="CityInfoHovered">Sprites/CityInfoHovered.png</Sprite>
+		<Sprite name="CityInfoPressed">Sprites/CityInfoPressed.png</Sprite>
+		<Sprite name="CityInfoDisabled">Sprites/CityInfoDisabled.png</Sprite>
+		<Sprite name="CityInfoFocused">Sprites/CityInfoFocused.png</Sprite>
+		
+		<Sprite name="InfoPanelIconInfo">Sprites/InfoPanelIconInfo.png</Sprite>
+	</SpriteAtlas>
+	
+	<Colors>
+		<Color name="White">#FFFFFF</Color>
+		<Color name="Black">#000000</Color>
+		<Color name="Green">#00FF00</Color>
+		
+		<Color name="DarkRed">#BB0000</Color>
+		<Color name="DarkGreen">#033500</Color>
+		<Color name="DarkishGreen">#008800</Color>
+		<Color name="DarkOrange">#c65102</Color>
+		
+		<Color name="PanelColor">#FFFFFF</Color>
+		<Color name="TimeBackgroundColor">#000000</Color>
+	</Colors>
+</SapphireSkin>
