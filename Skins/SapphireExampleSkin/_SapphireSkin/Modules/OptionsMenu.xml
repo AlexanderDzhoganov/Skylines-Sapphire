@@ -1,7 +1,0 @@
-<UIView>
-	<Component name=".*Library.*" name_regex="true">
-		<atlas>BackgroundsAtlas</atlas>
-		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
-		<color>PanelColor</color>
-	</Component>
-</UIView>
