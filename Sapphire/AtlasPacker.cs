@@ -51,13 +51,15 @@ namespace Sapphire
                     maxY = 0;
                 }
 
-                float u = (float)x / atlasTexture.width;
-                float v = (float) y/atlasTexture.height;
+                float u = (float)x/atlasTexture.width;
+                float v = (float)y/atlasTexture.height;
                 float s = (float)(texture.width) / atlasTexture.width;
                 float t = (float)(texture.height) / atlasTexture.height;
 
+                float pixelSize = 1.0f/atlasTexture.width;
+
                 var sprite = new UITextureAtlas.SpriteInfo();
-                sprite.region = new Rect(u, v, s, t);
+                sprite.region = new Rect(u + pixelSize, v + pixelSize, s - pixelSize * 2.0f, t - pixelSize * 2.0f);
                 sprite.name = name;
                 sprite.texture = texture;
                 atlas.AddSprite(sprite);
