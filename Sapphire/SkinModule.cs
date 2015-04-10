@@ -109,6 +109,8 @@ namespace Sapphire
 
         private void RollbackInternal()
         {
+            rollbackStack.Reverse();
+
             foreach (var action in rollbackStack)
             {
                 action();
