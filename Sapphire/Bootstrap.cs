@@ -205,6 +205,7 @@ namespace Sapphire
                         currentSkin.Dispose(currentModuleClass);
                     }
 
+                    currentSkin = null;
                     return;
                 }
 

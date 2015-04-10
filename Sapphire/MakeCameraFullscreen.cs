@@ -39,6 +39,8 @@ namespace Sapphire
                 RedirectionHelper.RevertRedirect(typeof(CameraController).GetMethod("UpdateFreeCamera",
                         BindingFlags.Instance | BindingFlags.NonPublic), cameraControllerRedirect);
             }
+
+            cameraControllerRedirected = false;
         }
 
         private void UpdateFreeCamera()
