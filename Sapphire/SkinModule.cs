@@ -565,7 +565,23 @@ namespace Sapphire
 
             if (t.IsEnum)
             {
-                return Enum.Parse(t, value);
+                if (t.GetCustomAttributes(typeof (FlagsAttribute), false).Length > 0 && value.Contains("|"))
+                {
+                    var values = value.Split('|');
+                    int result = 0;
+
+                    foreach (var item in values)
+                    {
+                        var realValue = Enum.Parse(t, item);
+                        result |= (int)realValue;
+                    }
+
+                    return result;
+                }
+                else
+                {
+                    return Enum.Parse(t, value);
+                }
             }   
 
             throw new UnsupportedTypeException(t, node);
