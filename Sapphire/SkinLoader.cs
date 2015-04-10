@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Sapphire
 {
-    
+
+  
     public class SkinLoader
     {
 
@@ -20,9 +21,9 @@ namespace Sapphire
             return Skin.FromXmlFile(Path.Combine(sapphirePath, "skin.xml"));
         }
 
-        public static List<string> FindAllSkins()
+        public static List<SkinMetadata> FindAllSkins()
         {
-            List<string> skinPaths = new List<string>();
+            List<SkinMetadata> skins = new List<SkinMetadata>();
 
             var plugins = PluginManager.instance.GetPluginsInfo();
             foreach (var plugin in plugins)
@@ -35,10 +36,14 @@ namespace Sapphire
                     continue;
                 }
 
-                skinPaths.Add(sapphirePath);
+                var metadata = Skin.MetadataFromXmlFile(sapphirePath);
+                if (metadata != null)
+                {
+                    skins.Add(metadata);
+                }
             }
 
-            return skinPaths;
+            return skins;
         }
 
     }

@@ -63,6 +63,16 @@ namespace Sapphire {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DefaultPanelBackground {
+            get {
+                object obj = ResourceManager.GetObject("DefaultPanelBackground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SapphireIcon {
             get {
                 object obj = ResourceManager.GetObject("SapphireIcon", resourceCulture);

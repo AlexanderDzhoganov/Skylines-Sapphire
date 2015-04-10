@@ -8,6 +8,15 @@ using UnityEngine;
 
 namespace Sapphire
 {
+
+    public class SkinMetadata
+    {
+        public string name;
+        public string author;
+        public string sapphirePath;
+    }
+
+
     public class Skin
     {
 
@@ -40,6 +49,38 @@ namespace Sapphire
             }
 
             return skin;
+        }
+
+        public static SkinMetadata MetadataFromXmlFile(string sapphirePath)
+        {
+            SkinMetadata metadata = null;
+
+            try
+            {
+                var document = new XmlDocument();
+                document.LoadXml(File.ReadAllText(Path.Combine(sapphirePath, "skin.xml")));
+
+                var root = document.SelectSingleNode("/SapphireSkin");
+                if (root == null)
+                {
+                    throw new ParseException("Skin missing root SapphireSkin node at " + sapphirePath, null);
+                }
+
+                var name = XmlUtil.GetStringAttribute(root, "name");
+                var author = XmlUtil.GetStringAttribute(root, "author");
+                metadata = new SkinMetadata {name = name, author = author, sapphirePath = sapphirePath};
+            }
+            catch (XmlNodeException ex)
+            {
+                Debug.LogErrorFormat("{0} while parsing Skin xml ({1}) at node \"{2}\": {3}",
+                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("Exception while parsing Skin xml ({0}): {1}", sapphirePath, ex.Message);
+            }
+
+            return metadata;
         }
 
         private Dictionary<ModuleClass, List<SkinModule>> modules = new Dictionary<ModuleClass, List<SkinModule>>();
@@ -124,6 +165,23 @@ namespace Sapphire
                     }
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            foreach (var atlas in spriteAtlases)
+            {
+                GameObject.Destroy(atlas.Value.material.mainTexture);
+                GameObject.Destroy(atlas.Value);
+            }
+
+            foreach (var texture in spriteTextureCache)
+            {
+                GameObject.Destroy(texture.Value);
+            }
+
+            spriteAtlases.Clear();
+            spriteTextureCache.Clear();
         }
 
         private void LoadColors()

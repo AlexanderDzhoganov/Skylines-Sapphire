@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using ColossalFramework;
 using ColossalFramework.UI;
@@ -26,7 +27,7 @@ namespace Sapphire
             bootstrapped = true;
         }
 
-        private List<Skin> loadedSkins = new List<Skin>();
+        private List<SkinMetadata> availableSkins;
 
         private static readonly string configPath = "SapphireConfig.xml";
         private Configuration config = new Configuration();
@@ -54,53 +55,50 @@ namespace Sapphire
         {
             currentSkin = null;
             config = null;
-            loadedSkins = null;
 
-            if (cameraControllerRedirected)
-            {
-                RedirectionHelper.RevertRedirect(typeof(CameraController).GetMethod("UpdateFreeCamera",
-                        BindingFlags.Instance | BindingFlags.NonPublic), cameraControllerRedirect);
-            }
+            MakeCameraFullscreen.Deinitialize();
 
             bootstrapped = false;
         }
 
-        private RedirectCallsState cameraControllerRedirect;
-        private bool cameraControllerRedirected = false;
-
         void Awake()
         {
+            MakeCameraFullscreen.Initialize();
+
             LoadConfig();
 
-            ReloadSkins();
-
+            availableSkins = SkinLoader.FindAllSkins();
+            
             if (!string.IsNullOrEmpty(config.selectedSkinPath) && config.applySkinOnStartup)
             {
-                foreach (var skin in loadedSkins)
+                foreach (var metadata in availableSkins)
                 {
-                    if (skin.SapphirePath == config.selectedSkinPath)
+                    if (metadata.sapphirePath == config.selectedSkinPath)
                     {
-                        currentSkin = skin;
-                        skin.Apply(currentModuleClass);
+                        currentSkin = Skin.FromXmlFile(Path.Combine(metadata.sapphirePath, "skin.xml"));
+                        currentSkin.Apply(currentModuleClass);
                         break;
                     }
                 }
             }
+            
+            CreateUI();
+        }
 
-            var cameraController = FindObjectOfType<CameraController>();
-            if (cameraController != null)
+        void Update()
+        {
+            if (currentSkin != null)
             {
-                cameraControllerRedirect = RedirectionHelper.RedirectCalls(
-                    typeof (CameraController).GetMethod("UpdateFreeCamera",
-                        BindingFlags.Instance | BindingFlags.NonPublic),
-                    typeof (SapphireBootstrap).GetMethod("UpdateFreeCamera",
-                        BindingFlags.Instance | BindingFlags.NonPublic));
-
-                cameraControllerRedirected = true;
+                currentSkin.ApplyStickyProperties(currentModuleClass);
             }
+        }
 
-            var sapphirePanel = CreateSapphirePanel();
-            var sapphireButton = CreateSapphireButton();
+        private void CreateUI()
+        {
+            var atlas = GetSapphireAtlas();;
+            var sapphirePanel = CreateSapphirePanel(atlas);
+            var sapphireButton = CreateSapphireButton(atlas);
+
             sapphireButton.eventClick += (component, param) => { sapphirePanel.isVisible = !sapphirePanel.isVisible; };
 
             if (currentModuleClass != Skin.ModuleClass.MainMenu)
@@ -117,46 +115,7 @@ namespace Sapphire
             }
         }
 
-        void Update()
-        {
-            if (currentSkin != null)
-            {
-                currentSkin.ApplyStickyProperties(currentModuleClass);
-            }
-        }
-
-        private void UpdateFreeCamera()
-        {
-            var cameraController = FindObjectOfType<CameraController>();
-
-            if (cameraController == null)
-            {
-                return;
-            }
-
-            var cachedFreeCameraField = typeof(CameraController).GetField("m_cachedFreeCamera", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (cachedFreeCameraField == null)
-            {
-                return;
-            }
-
-            var camera = cameraController.GetComponent<Camera>();
-
-            if (cameraController.m_freeCamera != (bool)cachedFreeCameraField.GetValue(cameraController))
-            {
-                cachedFreeCameraField.SetValue(cameraController, cameraController.m_freeCamera);
-                UIView.Show(!cameraController.m_freeCamera);
-                Singleton<NotificationManager>.instance.NotificationsVisible = !cameraController.m_freeCamera;
-                Singleton<GameAreaManager>.instance.BordersVisible = !cameraController.m_freeCamera;
-                Singleton<DistrictManager>.instance.NamesVisible = !cameraController.m_freeCamera;
-                Singleton<PropManager>.instance.MarkersVisible = !cameraController.m_freeCamera;
-                Singleton<GuideManager>.instance.TutorialDisabled = cameraController.m_freeCamera;
-            }
-
-            camera.rect = new Rect(0, 0, 1, 1);
-        }
-
-        private UIPanel CreateSapphirePanel()
+        private UIPanel CreateSapphirePanel(UITextureAtlas atlas)
         {
             var uiView = GameObject.Find("UIView").GetComponent<UIView>();
             if (uiView == null)
@@ -167,9 +126,10 @@ namespace Sapphire
 
             var panel = uiView.AddUIComponent(typeof(UIPanel)) as UIPanel;
 
-            panel.size = new Vector2(300, 400);
+            panel.size = new Vector2(300, 180);
             panel.isVisible = false;
-            panel.backgroundSprite = "UnlockingPanel2";
+            panel.atlas = atlas;
+            panel.backgroundSprite = "DefaultPanelBackground";
 
             if (currentModuleClass == Skin.ModuleClass.MainMenu)
             {
@@ -185,6 +145,7 @@ namespace Sapphire
             var title = panel.AddUIComponent<UILabel>();
             title.relativePosition = new Vector3(2.0f, 2.0f);
             title.text = "Sapphire Skin Manager";
+            title.textColor = Color.black;
 
             MakeCheckbox(panel, "AutoApplySkin", "Apply skin on start-up", 48.0f, config.applySkinOnStartup, value =>
             {
@@ -192,56 +153,92 @@ namespace Sapphire
                 SaveConfig();
             });
 
-            var skinsList = panel.AddUIComponent<UIScrollablePanel>();
-            skinsList.name = "SkinsList";
-            skinsList.relativePosition = new Vector3(2.0f, 80.0f);
-            skinsList.size = new Vector2(panel.size.x - 4.0f, panel.size.y - 64.0f - 2.0f);
-            skinsList.backgroundSprite = "SubcategoriesPanel";
-            skinsList.autoLayout = true;
-            skinsList.scrollPosition = new Vector2(0.0f, 0.0f);
-            skinsList.autoLayout = true;
-            skinsList.autoLayoutDirection = LayoutDirection.Vertical;
+            var skinsDropdown = panel.AddUIComponent<UIDropDown>();
 
-            int i = 0;
-            foreach (var skin in loadedSkins)
+            skinsDropdown.AddItem("No skin selected");
+            foreach (var skin in availableSkins)
             {
-                var skinPanel = skinsList.AddUIComponent<UIPanel>();
-                skinPanel.size = new Vector2(skinsList.size.x, 24.0f);
-                skinPanel.relativePosition = new Vector3(0.0f, 0.0f);
-
-                var isActive = currentSkin == skin;
-                
-                var checkbox = MakeCheckbox(skinPanel, "Skin" + i, String.Format("{0} (by {1})", skin.Name, skin.Author),
-                    64.0f, isActive, null);
-
-                var skinCopy = skin;
-                checkbox.eventCheckChanged += (component, value) =>
-                {
-                    if (value == false)
-                    {
-                        return;
-                    }
-
-                    foreach (var cb in skinCheckBoxes)
-                    {
-                        if (cb != checkbox)
-                        {
-                            cb.isChecked = false;
-                        }
-                    }
-
-                    currentSkin = skinCopy;
-                    config.selectedSkinPath = currentSkin.SapphirePath;
-                    SaveConfig();
-
-                    ReloadActiveSkin();
-                    currentSkin.Apply(currentModuleClass);
-                };
-                
-                skinCheckBoxes.Add(checkbox);
-
-                i++;
+                skinsDropdown.AddItem(String.Format("{0} (by {1})", skin.name, skin.author));
             }
+
+            skinsDropdown.size = new Vector2(296.0f, 32.0f);
+            skinsDropdown.relativePosition = new Vector3(2.0f, 72.0f);
+            skinsDropdown.listBackground = "GenericPanelLight";
+            skinsDropdown.itemHeight = 32;
+            skinsDropdown.itemHover = "ListItemHover";
+            skinsDropdown.itemHighlight = "ListItemHighlight";
+            skinsDropdown.normalBgSprite = "ButtonMenu";
+            skinsDropdown.listWidth = 300;
+            skinsDropdown.listHeight = 500;
+            skinsDropdown.foregroundSpriteMode = UIForegroundSpriteMode.Stretch;
+            skinsDropdown.popupColor = new Color32(45, 52, 61, 255);
+            skinsDropdown.popupTextColor = new Color32(170, 170, 170, 255);
+            skinsDropdown.zOrder = 1;
+            skinsDropdown.textScale = 0.8f;
+            skinsDropdown.verticalAlignment = UIVerticalAlignment.Middle;
+            skinsDropdown.horizontalAlignment = UIHorizontalAlignment.Center;
+            skinsDropdown.textFieldPadding = new RectOffset(8, 0, 8, 0);
+            skinsDropdown.itemPadding = new RectOffset(8, 0, 2, 0);
+
+            skinsDropdown.selectedIndex = 0;
+
+            if(currentSkin != null)
+            {
+                int i = 1;
+                foreach (var skin in availableSkins)
+                {
+                    if (skin.sapphirePath == currentSkin.SapphirePath)
+                    {
+                        skinsDropdown.selectedIndex = i;
+                    }
+
+                    i++;
+                }
+            }
+
+            skinsDropdown.eventSelectedIndexChanged += (component, index) =>
+            {
+                if (index == 0)
+                {
+                    return;
+                }
+
+                var skin = availableSkins[index-1];
+                if (currentSkin != null && currentSkin.SapphirePath == skin.sapphirePath)
+                {
+                    return;
+                }
+
+                if (currentSkin != null)
+                {
+                    currentSkin.Dispose();
+                }
+
+                currentSkin = Skin.FromXmlFile(Path.Combine(skin.sapphirePath, "skin.xml"));
+                currentSkin.Apply(currentModuleClass);
+                
+                config.selectedSkinPath = currentSkin.SapphirePath;
+                SaveConfig();
+            };
+                        
+            var skinsDropdownButton = skinsDropdown.AddUIComponent<UIButton>();
+            skinsDropdown.triggerButton = skinsDropdownButton;
+
+            skinsDropdownButton.text = "";
+            skinsDropdownButton.size = skinsDropdown.size;
+            skinsDropdownButton.relativePosition = new Vector3(0.0f, 0.0f);
+            skinsDropdownButton.textVerticalAlignment = UIVerticalAlignment.Middle;
+            skinsDropdownButton.textHorizontalAlignment = UIHorizontalAlignment.Center;
+            skinsDropdownButton.normalFgSprite = "IconDownArrow";
+            skinsDropdownButton.hoveredFgSprite = "IconDownArrowHovered";
+            skinsDropdownButton.pressedFgSprite = "IconDownArrowPressed";
+            skinsDropdownButton.focusedFgSprite = "IconDownArrowFocused";
+            skinsDropdownButton.disabledFgSprite = "IconDownArrowDisabled";
+            skinsDropdownButton.foregroundSpriteMode = UIForegroundSpriteMode.Fill;
+            skinsDropdownButton.horizontalAlignment = UIHorizontalAlignment.Right;
+            skinsDropdownButton.verticalAlignment = UIVerticalAlignment.Middle;
+            skinsDropdownButton.zOrder = 0;
+            skinsDropdownButton.textScale = 0.8f;
 
             MakeButton(panel, "ReloadSkin", "Reload active skin", panel.size.y - 32.0f, () =>
             {
@@ -251,7 +248,7 @@ namespace Sapphire
             return panel;
         }
 
-        private UIButton CreateSapphireButton()
+        private UIButton CreateSapphireButton(UITextureAtlas atlas)
         {
             var uiView = GameObject.Find("UIView").GetComponent<UIView>();
             if (uiView == null)
@@ -272,7 +269,7 @@ namespace Sapphire
             button.hoveredBgSprite = "";
             button.disabledBgSprite = "";
 
-            button.atlas = GetSapphireAtlas();
+            button.atlas = atlas;
             button.normalFgSprite = "SapphireIcon";
             button.hoveredFgSprite = "SapphireIconHover";
             button.pressedFgSprite = "SapphireIconPressed";
@@ -284,12 +281,13 @@ namespace Sapphire
 
             if (currentModuleClass == Skin.ModuleClass.MainMenu)
             {
-                button.relativePosition = new Vector3(2.0f, 2.0f, 0.0f);
+                button.relativePosition = new Vector3(4.0f, 2.0f, 0.0f);
             }
             else
             {
-                button.relativePosition = new Vector3(2.0f, 64.0f, 0.0f);
+                button.relativePosition = new Vector3(4.0f, 64.0f, 0.0f);
             }
+
             return button;
         }
 
@@ -326,6 +324,7 @@ namespace Sapphire
             label.text = text;
             label.relativePosition = new Vector3(4.0f, y);
             label.textScale = 0.8f;
+            label.textColor = Color.black;
 
             var checkbox = panel.AddUIComponent<UICheckBox>();
             checkbox.AlignTo(label, UIAlignAnchor.TopLeft);
@@ -368,70 +367,14 @@ namespace Sapphire
                     return;
                 }
 
-                var currentPath = currentSkin.SapphirePath;
-                currentSkin = null;
-
-                ReloadSkins();
-
-                foreach (var skin in loadedSkins)
-                {
-                    if (skin.SapphirePath == currentPath)
-                    {
-                        currentSkin = skin;
-                        break;
-                    }
-                }
-
-                if (currentSkin != null)
-                {
-                    currentSkin.Apply(currentModuleClass);
-                    config.selectedSkinPath = currentSkin.SapphirePath;
-                    SaveConfig();
-                }
+                var path = currentSkin.SapphirePath;
+                currentSkin.Dispose();
+                currentSkin = Skin.FromXmlFile(Path.Combine(path, "skin.xml"));
+                currentSkin.Apply(currentModuleClass);
             }
             catch (Exception ex)
             {
                 Debug.LogErrorFormat("Failed to load skin: {0}", ex.Message);
-            }
-        }
-
-        private void ReloadSkins()
-        {
-            try
-            {
-                foreach (var loadedSkin in loadedSkins)
-                {
-                    foreach (var atlas in loadedSkin.spriteAtlases)
-                    {
-                        Destroy(atlas.Value.material.mainTexture);
-                        ScriptableObject.Destroy(atlas.Value);
-                    }
-
-                    foreach (var texture in loadedSkin.spriteTextureCache)
-                    {
-                        ScriptableObject.Destroy(texture.Value);
-                    }
-
-                    loadedSkin.spriteAtlases.Clear();
-                    loadedSkin.spriteTextureCache.Clear();
-                }
-
-                loadedSkins = new List<Skin>();
-                foreach (var sapphirePath in SkinLoader.FindAllSkins())
-                {
-                    var skin = SkinLoader.LoadSkin(sapphirePath);
-                    if (skin == null)
-                    {
-                        break;
-                    }
-
-                    loadedSkins.Add(skin);
-                    Debug.LogWarningFormat("Loaded skin \"{0}\" from {1}", skin.Name, sapphirePath);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogErrorFormat("Failed to load skins: {0}", ex.Message);
             }
         }
 
@@ -441,6 +384,7 @@ namespace Sapphire
             atlasPacker.AddSprite("SapphireIcon", GetSapphireIcon());
             atlasPacker.AddSprite("SapphireIconHover", GetSapphireIconHover());
             atlasPacker.AddSprite("SapphireIconPressed", GetSapphireIconPressed());
+            atlasPacker.AddSprite("DefaultPanelBackground", GetSapphireBackground());
             return atlasPacker.GenerateAtlas("SapphireIconsAtlas");
         }
 
@@ -462,6 +406,13 @@ namespace Sapphire
         {
             var texture = new Texture2D(128, 128);
             texture.LoadImage(GetResource("Sapphire.Resources.SapphireIconPressed.png"));
+            return texture;
+        }
+
+        private Texture2D GetSapphireBackground()
+        {
+            var texture = new Texture2D(128, 128);
+            texture.LoadImage(GetResource("Sapphire.Resources.DefaultPanelBackground.png"));
             return texture;
         }
 
