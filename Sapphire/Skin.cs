@@ -28,56 +28,68 @@ namespace Sapphire
             AssetEditor = 3
         }
 
-        public static Skin FromXmlFile(string sapphirePath)
+        public static Skin FromXmlFile(string skinXmlPath)
         {
             Skin skin = null;
 
             try
             {
                 var document = new XmlDocument();
-                document.LoadXml(File.ReadAllText(sapphirePath));
-                skin = new Skin(Path.GetDirectoryName(sapphirePath), document);
+                document.LoadXml(File.ReadAllText(skinXmlPath));
+                skin = new Skin(Path.GetDirectoryName(skinXmlPath), document);
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while parsing Skin xml ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                Debug.LogErrorFormat("{0} while parsing XML at {1} at node \"{2}\": {3}",
+                    ex.GetType(), skinXmlPath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+            }
+            catch (XmlException ex)
+            {
+                Debug.LogErrorFormat("XmlException while parsing XML \"{0}\" at line {1}, col {2}: {3}",
+                    skinXmlPath, ex.LineNumber, ex.LinePosition, ex.Message);
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while parsing Skin xml ({0}): {1}", sapphirePath, ex.Message);
+                Debug.LogErrorFormat("Exception while parsing XML \"{0}\": {1}",
+                    skinXmlPath, ex.ToString());
             }
 
             return skin;
         }
 
-        public static SkinMetadata MetadataFromXmlFile(string sapphirePath)
+        public static SkinMetadata MetadataFromXmlFile(string skinXmlPath)
         {
             SkinMetadata metadata = null;
 
             try
             {
                 var document = new XmlDocument();
-                document.LoadXml(File.ReadAllText(Path.Combine(sapphirePath, "skin.xml")));
+                document.LoadXml(File.ReadAllText(Path.Combine(skinXmlPath, "skin.xml")));
 
                 var root = document.SelectSingleNode("/SapphireSkin");
                 if (root == null)
                 {
-                    throw new ParseException("Skin missing root SapphireSkin node at " + sapphirePath, null);
+                    throw new ParseException("Skin missing root SapphireSkin node at " + skinXmlPath, null);
                 }
 
                 var name = XmlUtil.GetStringAttribute(root, "name");
                 var author = XmlUtil.GetStringAttribute(root, "author");
-                metadata = new SkinMetadata {name = name, author = author, sapphirePath = sapphirePath};
+                metadata = new SkinMetadata {name = name, author = author, sapphirePath = skinXmlPath};
             }
             catch (XmlNodeException ex)
             {
                 Debug.LogErrorFormat("{0} while parsing Skin xml ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                    ex.GetType(), skinXmlPath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+            }
+            catch (XmlException ex)
+            {
+                Debug.LogErrorFormat("XmlException while parsing XML \"{0}\" at line {1}, col {2}: {3}",
+                    skinXmlPath, ex.LineNumber, ex.LinePosition, ex.Message);
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while parsing Skin xml ({0}): {1}", sapphirePath, ex.Message);
+                Debug.LogErrorFormat("Exception while parsing XML \"{0}\": {1}",
+                    skinXmlPath, ex.ToString());
             }
 
             return metadata;

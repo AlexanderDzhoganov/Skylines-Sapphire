@@ -44,11 +44,17 @@ namespace Sapphire
                 Debug.LogErrorFormat("{0} while parsing SkinModule xml ({1}) at node \"{2}\": {3}", 
                     ex.GetType(), path, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
             }
+            catch (XmlException ex)
+            {
+                Debug.LogErrorFormat("XmlException while parsing XML \"{0}\" at line {1}, col {2}: {3}",
+                    path, ex.LineNumber, ex.LinePosition, ex.Message);
+            }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while parsing SkinModule xml ({0}): {1}", path, ex.Message);
+                Debug.LogErrorFormat("Exception while parsing XML \"{0}\": {1}",
+                    path, ex.ToString());
             }
-
+           
             return skinModule;
         }
 
