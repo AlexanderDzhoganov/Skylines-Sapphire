@@ -441,7 +441,7 @@ namespace Sapphire
             atlasPacker.AddSprite("SapphireIcon", GetSapphireIcon());
             atlasPacker.AddSprite("SapphireIconHover", GetSapphireIconHover());
             atlasPacker.AddSprite("SapphireIconPressed", GetSapphireIconPressed());
-            return atlasPacker.GenerateAtlas();
+            return atlasPacker.GenerateAtlas("SapphireIconsAtlas");
         }
 
         private Texture2D GetSapphireIcon()

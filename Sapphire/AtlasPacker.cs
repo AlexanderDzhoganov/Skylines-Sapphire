@@ -9,14 +9,18 @@ namespace Sapphire
     public class AtlasPacker
     {
 
-        private List<KeyValuePair<string, Texture2D>> rawSprites = new List<KeyValuePair<string, Texture2D>>();
+        public class TooManySprites : Exception
+        {
+        }
+
+        private readonly List<KeyValuePair<string, Texture2D>> rawSprites = new List<KeyValuePair<string, Texture2D>>();
 
         public void AddSprite(string name, Texture2D texture)
         {
             rawSprites.Add(new KeyValuePair<string, Texture2D>(name, texture));
         }
 
-        public UITextureAtlas GenerateAtlas()
+        public UITextureAtlas GenerateAtlas(string atlasName)
         {
             SortSprites();
 
@@ -49,6 +53,11 @@ namespace Sapphire
                     x = 0;
                     y += maxY + 2;
                     maxY = 0;
+
+                    if (y >= atlasTexture.height)
+                    {
+                        throw new TooManySprites();
+                    }
                 }
 
                 float u = (float)x/atlasTexture.width;

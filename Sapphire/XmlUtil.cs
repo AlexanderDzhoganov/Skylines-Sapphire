@@ -6,6 +6,81 @@ namespace Sapphire
     public static class XmlUtil
     {
 
+        public static bool GetBoolAttribute(XmlNode node, string attributeName)
+        {
+            XmlAttribute attribute = GetAttribute(node, attributeName);
+            if (attribute.Value == "true")
+            {
+                return true;
+            }
+            
+            if (attribute.Value == "false")
+            {
+                return false;
+            }
+
+            throw new ParseException(String.Format
+                ("\"{0}\" is not a valid value for boolean attribute \"{1}\", expected \"true\" or \"false\"",
+                attribute.Value, attributeName), node);
+        }
+
+        public static bool TryGetBoolAttribute(XmlNode node, string attributeName, bool defaultValue = false)
+        {
+            XmlAttribute attribute = TryGetAttribute(node, attributeName);
+            if (attribute == null)
+            {
+                return defaultValue;
+            }
+
+            if (attribute.Value == "true")
+            {
+                return true;
+            }
+
+            if (attribute.Value == "false")
+            {
+                return false;
+            }
+
+            throw new ParseException(String.Format
+                ("\"{0}\" is not a valid value for boolean attribute \"{1}\", expected \"true\" or \"false\"",
+                attribute.Value, attributeName), node);
+        }
+
+        public static int GetIntAttribute(XmlNode node, string attributeName)
+        {
+            XmlAttribute attribute = GetAttribute(node, attributeName);
+
+            int result;
+            if (!int.TryParse(attribute.Value, out result))
+            {
+                throw new ParseException(String.Format
+                    ("\"{0}\" is not a valid value for integer attribute \"{1}\", expected an integer",
+                        attribute.Value, attributeName), node);
+            }
+
+            return result;
+        }
+
+        public static int TryGetIntAttribute(XmlNode node, string attributeName, int defaultValue = 0)
+        {
+            XmlAttribute attribute = TryGetAttribute(node, attributeName);
+            if (attribute == null)
+            {
+                return defaultValue;
+            }
+
+            int result;
+            if (!int.TryParse(attribute.Value, out result))
+            {
+                throw new ParseException(String.Format
+                    ("\"{0}\" is not a valid value for integer attribute \"{1}\", expected an integer",
+                        attribute.Value, attributeName), node);
+            }
+
+            return result;
+        }
+
         public static XmlAttribute GetAttribute(XmlNode node, string attributeName)
         {
             XmlAttribute attribute = null;

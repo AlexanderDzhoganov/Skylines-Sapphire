@@ -181,10 +181,10 @@ namespace Sapphire
                 if (text[0] == '#')
                 {
                     int colorHex = Int32.Parse(text.Replace("#", ""), NumberStyles.HexNumber);
-                    byte R = (byte)((colorHex >> 16) & 0xFF);
-                    byte G = (byte)((colorHex >> 8) & 0xFF);
-                    byte B = (byte)((colorHex) & 0xFF);
-                    color = new Color32(R, G, B, 255);
+                    byte r = (byte)((colorHex >> 16) & 0xFF);
+                    byte g = (byte)((colorHex >> 8) & 0xFF);
+                    byte b = (byte)((colorHex) & 0xFF);
+                    color = new Color32(r, g, b, 255);
                 }
                 else
                 {
@@ -277,7 +277,17 @@ namespace Sapphire
                 }
 
                 Debug.LogWarningFormat("Added {0} sprites..", count);
-                spriteAtlases[atlasName] = atlasPacker.GenerateAtlas();
+                
+                try
+                {
+                    spriteAtlases[atlasName] = atlasPacker.GenerateAtlas(atlasName);
+                }
+                catch (AtlasPacker.TooManySprites)
+                {
+                    Debug.LogError("Too many sprites in atlas \"" + atlasName + "\", move some sprites to a new atlas!");
+                    break;
+                }
+
                 Debug.LogWarningFormat("Atlas \"{0}\" generated", atlasName);
             }
         }

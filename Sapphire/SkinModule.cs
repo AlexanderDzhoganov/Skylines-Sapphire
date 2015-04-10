@@ -138,114 +138,133 @@ namespace Sapphire
 
                 if (childNode.Name == "Component")
                 {
-                    var nameAttrib = XmlUtil.GetAttribute(childNode, "name");
-
-                    var regexAttrib = XmlUtil.TryGetAttribute(childNode, "name_regex");
-                    bool regex = regexAttrib != null && regexAttrib.Value == "true";
-
-                    var recursiveAttrib = XmlUtil.TryGetAttribute(childNode, "recursive");
-                    bool recursive = recursiveAttrib != null && recursiveAttrib.Value == "true";
-
-                    var optionalAttrib = XmlUtil.TryGetAttribute(childNode, "optional");
-                    bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
-
-                    var childComponents = FindComponentsInChildren(node, component, nameAttrib.Value, regex, recursive, optional);
-
-                    foreach (var childComponent in childComponents)
-                    {
-                        ApplyInternalRecursive(childNode, childComponent);
-                    }
+                    ApplyComponentSelector(node, component);
                 }
                 else if(component != null)
                 {
                     if (component.GetType() == typeof(UIMultiStateButton) && childNode.Name == "SpriteState")
                     {
-                        var indexAttrib = XmlUtil.GetAttribute(childNode, "index");
-                        int index;
-                        if (!int.TryParse(indexAttrib.Value, out index))
-                        {
-                            throw new ParseException(String.Format("Invalid value for SpriteState attribute \"index\" - \"{0}\"", indexAttrib.Value), childNode);
-                        }
-
-                        var typeAttrib = XmlUtil.GetAttribute(childNode, "type");
-                        if (typeAttrib.Value != "background" && typeAttrib.Value != "foreground")
-                        {
-                            throw new ParseException(String.Format
-                                ("Invalid value for SpriteState attribute \"type\" (only \"foreground\" and \"background\" are allowed - \"{0}\"",
-                                    indexAttrib.Value), childNode);
-                        }
-
-                        var button = component as UIMultiStateButton;
-                        UIMultiStateButton.SpriteSetState sprites = null;
-
-                        if (typeAttrib.Value == "background")
-                        {
-                            sprites = button.backgroundSprites;
-                        }
-                        else
-                        {
-                            sprites = button.foregroundSprites;
-                        }
-
-                        if (index >= sprites.Count)
-                        {
-                            throw new ParseException(String.Format
-                            ("Invalid value for SpriteState attribute \"index\", object has only \"{1}\" states - \"{0}\"",
-                                indexAttrib.Value, sprites.Count), childNode);
-                        }
-
-                        foreach (XmlNode stateNode in childNode.ChildNodes)
-                        {
-                            if (stateNode.Name == "normal")
-                            {
-                                sprites[index].normal = stateNode.InnerText;
-                            }
-                            else if (stateNode.Name == "hovered")
-                            {
-                                sprites[index].hovered = stateNode.InnerText;
-                            }
-                            else if (stateNode.Name == "focused")
-                            {
-                                sprites[index].focused = stateNode.InnerText;
-                            }
-                            else if (stateNode.Name == "pressed")
-                            {
-                                sprites[index].pressed = stateNode.InnerText;
-                            }
-                            else if (stateNode.Name == "disabled")
-                            {
-                                sprites[index].disabled = stateNode.InnerText;
-                            }
-                            else
-                            {
-                                throw new ParseException(String.Format
-                                    ("Invalid property \"{0}\" for SpriteState, allowed are \"normal\", \"hovered\", \"focused\", \"pressed\", \"disabled\",",
-                                        stateNode.InnerText), childNode);
-                            }
-                        }
+                        ApplyUIMultiStateButtonSpriteStateProperty(childNode, component);
                     }
                     else
                     {
-                        var optionalAttrib = XmlUtil.TryGetAttribute(childNode, "optional");
-                        bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
-
-                        var stickyAttrib = XmlUtil.TryGetAttribute(childNode, "sticky");
-                        bool sticky = stickyAttrib != null && stickyAttrib.Value == "true";
-
-                        if (sticky)
-                        {
-                            stickyProperties.Add(new StickyProperty
-                            {
-                                childNode = childNode,
-                                component = component,
-                                node = node
-                            });
-                        }
-
-                        SetPropertyValue(childNode, node, component, optional);
+                        ApplyGenericProperty(childNode, component);
                     }
                 }
+                else
+                {
+                    throw new ParseException("Setting properties on the UIView object is not allowed!", childNode);
+                }
             }
+        }
+
+        void ApplyComponentSelector(XmlNode node, UIComponent component)
+        {
+            var nameAttrib = XmlUtil.GetAttribute(node, "name");
+
+            var regexAttrib = XmlUtil.TryGetAttribute(node, "name_regex");
+            bool regex = regexAttrib != null && regexAttrib.Value == "true";
+
+            var recursiveAttrib = XmlUtil.TryGetAttribute(node, "recursive");
+            bool recursive = recursiveAttrib != null && recursiveAttrib.Value == "true";
+
+            var optionalAttrib = XmlUtil.TryGetAttribute(node, "optional");
+            bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
+
+            var childComponents = FindComponentsInChildren(node, component, nameAttrib.Value, regex, recursive, optional);
+
+            foreach (var childComponent in childComponents)
+            {
+                ApplyInternalRecursive(node, childComponent);
+            }
+        }
+
+        void ApplyUIMultiStateButtonSpriteStateProperty(XmlNode node, UIComponent component)
+        {
+            var indexAttrib = XmlUtil.GetAttribute(node, "index");
+            int index;
+            if (!int.TryParse(indexAttrib.Value, out index))
+            {
+                throw new ParseException(String.Format("Invalid value for SpriteState attribute \"index\" - \"{0}\"", indexAttrib.Value), node);
+            }
+
+            var typeAttrib = XmlUtil.GetAttribute(node, "type");
+            if (typeAttrib.Value != "background" && typeAttrib.Value != "foreground")
+            {
+                throw new ParseException(String.Format
+                    ("Invalid value for SpriteState attribute \"type\" (only \"foreground\" and \"background\" are allowed - \"{0}\"",
+                        indexAttrib.Value), node);
+            }
+
+            var button = component as UIMultiStateButton;
+            UIMultiStateButton.SpriteSetState sprites = null;
+
+            if (typeAttrib.Value == "background")
+            {
+                sprites = button.backgroundSprites;
+            }
+            else
+            {
+                sprites = button.foregroundSprites;
+            }
+
+            if (index >= sprites.Count)
+            {
+                throw new ParseException(String.Format
+                ("Invalid value for SpriteState attribute \"index\", object has only \"{1}\" states - \"{0}\"",
+                    indexAttrib.Value, sprites.Count), node);
+            }
+
+            foreach (XmlNode stateNode in node.ChildNodes)
+            {
+                if (stateNode.Name == "normal")
+                {
+                    sprites[index].normal = stateNode.InnerText;
+                }
+                else if (stateNode.Name == "hovered")
+                {
+                    sprites[index].hovered = stateNode.InnerText;
+                }
+                else if (stateNode.Name == "focused")
+                {
+                    sprites[index].focused = stateNode.InnerText;
+                }
+                else if (stateNode.Name == "pressed")
+                {
+                    sprites[index].pressed = stateNode.InnerText;
+                }
+                else if (stateNode.Name == "disabled")
+                {
+                    sprites[index].disabled = stateNode.InnerText;
+                }
+                else
+                {
+                    throw new ParseException(String.Format
+                        ("Invalid property \"{0}\" for SpriteState, allowed are \"normal\", \"hovered\", \"focused\", \"pressed\", \"disabled\",",
+                            stateNode.InnerText), node);
+                }
+            }
+        }
+
+        void ApplyGenericProperty(XmlNode node, UIComponent component)
+        {
+            var optionalAttrib = XmlUtil.TryGetAttribute(node, "optional");
+            bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
+
+            var stickyAttrib = XmlUtil.TryGetAttribute(node, "sticky");
+            bool sticky = stickyAttrib != null && stickyAttrib.Value == "true";
+
+            if (sticky)
+            {
+                stickyProperties.Add(new StickyProperty
+                {
+                    childNode = node,
+                    component = component,
+                    node = node
+                });
+            }
+
+            SetPropertyValue(node, node, component, optional);
         }
 
         private void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component, bool optional)
