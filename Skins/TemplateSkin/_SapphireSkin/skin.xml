@@ -1,4 +1,4 @@
-<SapphireSkin name="<YOUR SKIN NAME HERE>" author="<YOUR NAME HERE>">
+<SapphireSkin name="YOUR SKIN NAME HERE" author="YOUR NAME HERE">
 	<Module class="MainMenu">Modules/MainMenu.xml</Module>
 	<Module class="InGame">Modules/InGame.xml</Module>
 	
