@@ -1,5 +1,67 @@
 <UIView>
 
+	<!-- Change lanes mod -->
+	<Component name="LaneUIToggle" optional="true">
+		<relativePosition>4.0, 700.0</relativePosition>
+	</Component>
 
+	<!-- Extended road upgrade -->
+	<Component name="TSBar">
+		<Component name="OptionsBar">
+			<Component name="RoadsOptionPanel(RoadsPanel)" optional="true">
+				<Component name="ExtendedRoadUpgradePanel" optional="true">
+					<relativePosition>222.0, 0.0</relativePosition>
+
+					<Component name="ExtendedRoadUpgradeButtonTwoWay">
+						<size>36.0, 36.0</size>
+					</Component>
+					<Component name="ExtendedRoadUpgradeButtonOneWay">
+						<size>36.0, 36.0</size>
+					</Component>d
+				</Component>
+			</Component>
+		</Component>
+	</Component>
+
+	<!-- Extended building info -->
+	<Component name="FullScreenContainer">
+		<Component name="(Library) ZonedBuildingWorldInfoPanel">
+			<Component name="buildingWindowObject" optional="true">
+				<atlas>BackgroundsAtlas</atlas>
+				<backgroundSprite>DefaultPanelBackground</backgroundSprite>
+				<color>White</color>
+
+				<Component name=".*" name_regex="true">
+					<textColor optional="true">Black</textColor>
+				</Component>
+			</Component>
+		</Component>
+	</Component>
+
+	<!-- City vitals -->
+	<Component name="CityVitalsWatchButton" optional="true">
+		<size>32.0, 32.0</size>
+		<relativePosition>1300.0, 1030.0</relativePosition>
+	</Component>
+
+	<Component name="CityVitalsWatchPanel" optional="true">
+		<atlas>BackgroundsAtlas</atlas>
+		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
+		<color>White</color>
+
+		<Component name=".*" name_regex="true" recursive="true">
+			<textColor optional="true">Black</textColor>
+		</Component>
+	</Component>
+
+	<Component name="CityVitalsWatchSettingsPanel" optional="true">
+		<atlas>BackgroundsAtlas</atlas>
+		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
+		<color>White</color>
+
+		<Component name=".*" name_regex="true" recursive="true">
+			<textColor optional="true">Black</textColor>
+		</Component>
+	</Component>
 
 </UIView>

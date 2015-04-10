@@ -35,11 +35,14 @@
 			<hoveredBgSprite>RoundBackHovered</hoveredBgSprite>
 			<pressedBgSprite>RoundBackPressed</pressedBgSprite>
 			<normalFgSprite>Camera</normalFgSprite>
+
+			<anchor>Bottom|Right</anchor>
 			<size>36.0, 36.0</size>
 			<relativePosition>1864.0, 1028.0</relativePosition>
 		</Component>
 		
 		<Component name="Happiness">
+			<anchor>Bottom|Left</anchor>
 			<size>36.0, 36.0</size>
 			<relativePosition>224.0, 1028.0</relativePosition>
 			<zOrder>999</zOrder>
@@ -145,13 +148,13 @@
 		
 		<Component name="PopulationPanel">
 			<Component name="ProjectedChange">
-				<anchor>Right</anchor>
 				<textScale>1.2</textScale>
-				<relativePosition>102.0, 5.0</relativePosition>
+				<relativePosition>242.0, 5.0</relativePosition>
 			</Component>
-		
+			
+			<anchor>Bottom|Left</anchor>
 			<size>120.0, 32.0</size>
-			<relativePosition>280.0, 1029.0</relativePosition>
+			<relativePosition>260.0, 1029.0</relativePosition>
 			<color raw="true">100, 100, 100, 255</color>
 			<textColor>Black</textColor>
 			<textScale>1.4</textScale>
@@ -169,7 +172,8 @@
 				<size>24.0, 24.0</size>
 				<relativePosition>0.0, 6.0</relativePosition>
 			</Component>
-		
+			
+			<anchor>Top|Left</anchor>
 			<size>200.0, 30.0</size>
 			<relativePosition>4.0, 32.0</relativePosition>
 			<backgroundSprite></backgroundSprite>
@@ -181,18 +185,20 @@
 			<Component name="ProjectedIncome">
 				<anchor>Right</anchor>
 				<textScale>1.0</textScale>
-				<relativePosition>184.0, 16.0</relativePosition>
+				<relativePosition>148.0, 16.0</relativePosition>
 			</Component>
 				
 			<textColor>White</textColor>
 			<size>250.0, 48.0</size>
-			<relativePosition>1564.0, 1020.0</relativePosition>
+			<anchor>Bottom|Right</anchor>
+			<relativePosition>1440.0, 1020.0</relativePosition>
 			<textScale>1.4</textScale>
 			<textPadding>8, 0, 0, 0</textPadding>
 			<normalFgSprite></normalFgSprite>
 		</Component>
 		
 		<Component name="DemandBack">
+			<anchor>Bottom|Left</anchor>
 			<size>75.0, 60.0</size>
 			<relativePosition>140.0, 1014.0, 0.0</relativePosition>
 			

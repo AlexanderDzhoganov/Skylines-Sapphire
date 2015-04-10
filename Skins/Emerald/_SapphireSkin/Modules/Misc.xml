@@ -10,6 +10,7 @@
 		<hoveredBgSprite>RoundBackHovered</hoveredBgSprite>
 		<pressedBgSprite>RoundBackPressed</pressedBgSprite>
 		<normalFgSprite>Options</normalFgSprite>
+		<anchor>Top|Right</anchor>
 	</Component>
 	
 	<Component name="UnlockingPanel">
