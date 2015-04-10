@@ -155,7 +155,7 @@ namespace Sapphire
 
             var skinsDropdown = panel.AddUIComponent<UIDropDown>();
 
-            skinsDropdown.AddItem("No skin selected");
+            skinsDropdown.AddItem("Vanilla (by Colossal Order)");
             foreach (var skin in availableSkins)
             {
                 skinsDropdown.AddItem(String.Format("{0} (by {1})", skin.name, skin.author));
@@ -200,6 +200,11 @@ namespace Sapphire
             {
                 if (index == 0)
                 {
+                    if (currentSkin != null)
+                    {
+                        currentSkin.Dispose(currentModuleClass);
+                    }
+
                     return;
                 }
 
@@ -211,7 +216,7 @@ namespace Sapphire
 
                 if (currentSkin != null)
                 {
-                    currentSkin.Dispose();
+                    currentSkin.Dispose(currentModuleClass);
                 }
 
                 currentSkin = Skin.FromXmlFile(Path.Combine(skin.sapphirePath, "skin.xml"));
@@ -368,7 +373,7 @@ namespace Sapphire
                 }
 
                 var path = currentSkin.SapphirePath;
-                currentSkin.Dispose();
+                currentSkin.Dispose(currentModuleClass);
                 currentSkin = Skin.FromXmlFile(Path.Combine(path, "skin.xml"));
                 currentSkin.Apply(currentModuleClass);
             }

@@ -23,7 +23,11 @@ namespace Sapphire
             public UIComponent component;
         }
 
-        private List<StickyProperty> stickyProperties = new List<StickyProperty>(); 
+        private List<StickyProperty> stickyProperties = new List<StickyProperty>();
+
+        private delegate void RollbackAction();
+
+        private List<RollbackAction> rollbackStack = new List<RollbackAction>(); 
 
         public static SkinModule FromXmlFile(Skin skin, string path)
         {
@@ -83,6 +87,34 @@ namespace Sapphire
             {
                 SetPropertyValue(property.childNode, property.node, property.component, true);
             }
+        }
+
+        public void Rollback()
+        {
+            Debug.LogWarningFormat("Rolling back changes from skin \"{0}\"", sourcePath);
+
+            stickyProperties = new List<StickyProperty>();
+
+            try
+            {
+                RollbackInternal();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("Exception during skin rollback ({0}): {1}", sourcePath, ex.Message);
+            }
+
+            Debug.LogWarning("SkinModule successfully applied!");
+        }
+
+        private void RollbackInternal()
+        {
+            foreach (var action in rollbackStack)
+            {
+                action();
+            }
+
+            rollbackStack.Clear();
         }
 
         public void Apply()
@@ -254,9 +286,9 @@ namespace Sapphire
 
         private void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component, bool optional)
         {
-            var rProperty = component.GetType().GetProperty(setNode.Name, BindingFlags.Instance | BindingFlags.Public);
+            var property = component.GetType().GetProperty(setNode.Name, BindingFlags.Instance | BindingFlags.Public);
 
-            if (rProperty == null)
+            if (property == null)
             {
                 if (optional)
                 {
@@ -270,7 +302,7 @@ namespace Sapphire
 
             bool raw = XmlUtil.TryGetBoolAttribute(setNode, "raw");
 
-            if (rProperty.PropertyType == typeof (Color32) && !raw)
+            if (property.PropertyType == typeof (Color32) && !raw)
             {
                 var colorName = setNode.InnerText;
                 if (!skin.colorDefinitions.ContainsKey(colorName))
@@ -282,11 +314,24 @@ namespace Sapphire
             }
             else
             {
-                value = GetValueForType(setNode, rProperty.PropertyType, setNode.InnerText);
+                value = GetValueForType(setNode, property.PropertyType, setNode.InnerText);
             }
 
-            rProperty.SetValue(component, value, null);
+            SetPropertyValueWithRollback(component, property, value);
         }
+
+        private void SetPropertyValueWithRollback(UIComponent component, PropertyInfo property, object value)
+        {
+            var originalValue = property.GetValue(component, null);
+
+            rollbackStack.Add(() =>
+            {
+                property.SetValue(component, originalValue, null);
+            });
+
+            property.SetValue(component, value, null);
+        }
+
         private object GetValueForType(XmlNode node, Type t, string value)
         {
             if (t == typeof(int))

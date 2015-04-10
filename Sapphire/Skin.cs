@@ -167,8 +167,10 @@ namespace Sapphire
             }
         }
 
-        public void Dispose()
+        public void Dispose(ModuleClass moduleClass)
         {
+            Rollback(moduleClass);
+
             foreach (var atlas in spriteAtlases)
             {
                 GameObject.Destroy(atlas.Value.material.mainTexture);
@@ -375,6 +377,14 @@ namespace Sapphire
             foreach (var module in modules[moduleClass])
             {
                 module.Apply();
+            }
+        }
+
+        public void Rollback(ModuleClass moduleClass)
+        {
+            foreach (var module in modules[moduleClass])
+            {
+                module.Rollback();
             }
         }
 
