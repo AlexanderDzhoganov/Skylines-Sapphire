@@ -91,15 +91,15 @@ namespace Sapphire
             LoadSprites();
             LoadColors();
 
-            name = XmlUtil.GetAttribute(root, "name").Value;
-            author = XmlUtil.GetAttribute(root, "author").Value;
+            name = XmlUtil.GetStringAttribute(root, "name");
+            author = XmlUtil.GetStringAttribute(root, "author");
 
             foreach (XmlNode childNode in root.ChildNodes)
             {
                 if (childNode.Name == "Module")
                 {
                     var modulePath = Path.Combine(sapphirePath, childNode.InnerText);
-                    var moduleClass = XmlUtil.GetAttribute(childNode, "class").Value;
+                    var moduleClass = XmlUtil.GetStringAttribute(childNode, "class");
 
                     if (moduleClass == "MainMenu")
                     {
@@ -162,7 +162,7 @@ namespace Sapphire
                     continue;
                 }
 
-                var colorName = XmlUtil.GetAttribute(childNode, "name").Value;
+                var colorName = XmlUtil.GetStringAttribute(childNode, "name");
                 if (colorDefinitions.ContainsKey(colorName))
                 {
                     Debug.LogWarningFormat("Duplicate color name \"{0}\", ignoring second definition..", colorName);
@@ -237,7 +237,7 @@ namespace Sapphire
                     continue;
                 }
 
-                var atlasName = XmlUtil.GetAttribute(childNode, "name").Value;
+                var atlasName = XmlUtil.GetStringAttribute(childNode, "name");
                 if (spriteAtlases.ContainsKey(atlasName))
                 {
                     Debug.LogWarningFormat("Duplicate atlas name \"{0}\", ignoring second definition..", atlasName);
@@ -252,7 +252,7 @@ namespace Sapphire
                 foreach (XmlNode spriteNode in childNode.ChildNodes)
                 {
                     var path = spriteNode.InnerText;
-                    var name = XmlUtil.GetAttribute(spriteNode, "name").Value;
+                    var name = XmlUtil.GetStringAttribute(spriteNode, "name");
                     Debug.LogWarningFormat("Packing sprite \"{0}\" in atlas", name);
 
                     if (spriteTextureCache.ContainsKey(path))

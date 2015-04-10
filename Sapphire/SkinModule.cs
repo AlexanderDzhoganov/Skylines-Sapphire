@@ -136,7 +136,7 @@ namespace Sapphire
 
                 if (childNode.Name == "Component")
                 {
-                    ApplyComponentSelector(node, component);
+                    ApplyComponentSelector(childNode, component);
                 }
                 else if(component != null)
                 {
@@ -158,18 +158,13 @@ namespace Sapphire
 
         void ApplyComponentSelector(XmlNode node, UIComponent component)
         {
-            var nameAttrib = XmlUtil.GetAttribute(node, "name");
+            var name = XmlUtil.GetStringAttribute(node, "name");
 
-            var regexAttrib = XmlUtil.TryGetAttribute(node, "name_regex");
-            bool regex = regexAttrib != null && regexAttrib.Value == "true";
+            bool regex = XmlUtil.TryGetBoolAttribute(node, "name_regex");
+            bool recursive = XmlUtil.TryGetBoolAttribute(node, "recursive");
+            bool optional = XmlUtil.TryGetBoolAttribute(node, "optional");
 
-            var recursiveAttrib = XmlUtil.TryGetAttribute(node, "recursive");
-            bool recursive = recursiveAttrib != null && recursiveAttrib.Value == "true";
-
-            var optionalAttrib = XmlUtil.TryGetAttribute(node, "optional");
-            bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
-
-            var childComponents = Util.FindComponentsInChildren(node, component, nameAttrib.Value, regex, recursive, optional);
+            var childComponents = Util.FindComponentsInChildren(node, component, name, regex, recursive, optional);
 
             foreach (var childComponent in childComponents)
             {
@@ -179,25 +174,20 @@ namespace Sapphire
 
         void ApplyUIMultiStateButtonSpriteStateProperty(XmlNode node, UIComponent component)
         {
-            var indexAttrib = XmlUtil.GetAttribute(node, "index");
-            int index;
-            if (!int.TryParse(indexAttrib.Value, out index))
-            {
-                throw new ParseException(String.Format("Invalid value for SpriteState attribute \"index\" - \"{0}\"", indexAttrib.Value), node);
-            }
+            var index = XmlUtil.GetIntAttribute(node, "index");
 
-            var typeAttrib = XmlUtil.GetAttribute(node, "type");
-            if (typeAttrib.Value != "background" && typeAttrib.Value != "foreground")
+            var type = XmlUtil.GetStringAttribute(node, "type");
+            if (type != "background" && type != "foreground")
             {
                 throw new ParseException(String.Format
                     ("Invalid value for SpriteState attribute \"type\" (only \"foreground\" and \"background\" are allowed - \"{0}\"",
-                        indexAttrib.Value), node);
+                        index), node);
             }
 
             var button = component as UIMultiStateButton;
             UIMultiStateButton.SpriteSetState sprites = null;
 
-            if (typeAttrib.Value == "background")
+            if (type == "background")
             {
                 sprites = button.backgroundSprites;
             }
@@ -210,7 +200,7 @@ namespace Sapphire
             {
                 throw new ParseException(String.Format
                 ("Invalid value for SpriteState attribute \"index\", object has only \"{1}\" states - \"{0}\"",
-                    indexAttrib.Value, sprites.Count), node);
+                   index, sprites.Count), node);
             }
 
             foreach (XmlNode stateNode in node.ChildNodes)
@@ -246,11 +236,8 @@ namespace Sapphire
 
         void ApplyGenericProperty(XmlNode node, UIComponent component)
         {
-            var optionalAttrib = XmlUtil.TryGetAttribute(node, "optional");
-            bool optional = optionalAttrib != null && optionalAttrib.Value == "true";
-
-            var stickyAttrib = XmlUtil.TryGetAttribute(node, "sticky");
-            bool sticky = stickyAttrib != null && stickyAttrib.Value == "true";
+            bool optional = XmlUtil.TryGetBoolAttribute(node, "optional");
+            bool sticky = XmlUtil.TryGetBoolAttribute(node, "sticky");
 
             if (sticky)
             {
@@ -281,8 +268,7 @@ namespace Sapphire
 
             object value = null;
 
-            var rawAttrib = XmlUtil.TryGetAttribute(setNode, "raw");
-            bool raw = rawAttrib != null && rawAttrib.Value == "true";
+            bool raw = XmlUtil.TryGetBoolAttribute(setNode, "raw");
 
             if (rProperty.PropertyType == typeof (Color32) && !raw)
             {

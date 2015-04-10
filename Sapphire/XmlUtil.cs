@@ -6,6 +6,22 @@ namespace Sapphire
     public static class XmlUtil
     {
 
+        public static string GetStringAttribute(XmlNode node, string attributeName)
+        {
+            return GetAttribute(node, attributeName).Value;
+        }
+
+        public static string TryGetStringAttribute(XmlNode node, string attributeName, string defaultValue = "")
+        {
+            XmlAttribute attribute = TryGetAttribute(node, attributeName);
+            if (attribute == null)
+            {
+                return defaultValue;
+            }
+
+            return attribute.Value;
+        }
+
         public static bool GetBoolAttribute(XmlNode node, string attributeName)
         {
             XmlAttribute attribute = GetAttribute(node, attributeName);
@@ -81,7 +97,7 @@ namespace Sapphire
             return result;
         }
 
-        public static XmlAttribute GetAttribute(XmlNode node, string attributeName)
+        private static XmlAttribute GetAttribute(XmlNode node, string attributeName)
         {
             XmlAttribute attribute = null;
 
@@ -112,7 +128,7 @@ namespace Sapphire
             return attribute;
         }
 
-        public static XmlAttribute TryGetAttribute(XmlNode node, string attributeName)
+        private static XmlAttribute TryGetAttribute(XmlNode node, string attributeName)
         {
             XmlAttribute attribute = null;
 
