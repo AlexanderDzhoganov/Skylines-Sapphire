@@ -27,7 +27,8 @@ namespace Sapphire
             var atlas = ScriptableObject.CreateInstance<UITextureAtlas>();
             atlas.material = new Material(Shader.Find("UI/Default UI Shader"));
 
-            var atlasTexture = new Texture2D(2048, 2048);
+            var atlasTexture = new Texture2D(2048, 2048, TextureFormat.ARGB32, false, true);
+            atlasTexture.filterMode = FilterMode.Point;
             atlas.material.mainTexture = atlasTexture;
 
             var transparent = new Color(0, 0, 0, 0);
