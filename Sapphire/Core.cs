@@ -330,7 +330,7 @@ namespace Sapphire
                     return;
                 }
 
-                currentSkin.SafeReload(true, autoReloadSkinOnChange);
+                currentSkin.SafeReload(autoReloadSkinOnChange);
 
                 if (currentSkin.IsValid)
                 { 

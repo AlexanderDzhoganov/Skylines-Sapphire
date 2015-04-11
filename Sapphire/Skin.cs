@@ -140,14 +140,14 @@ namespace Sapphire
             skinXmlPath = _skinXmlPath;
             sapphirePath = Path.GetDirectoryName(skinXmlPath);
 
-            Reload(false, autoReloadOnChange);
+            Reload(autoReloadOnChange);
         }
 
-        public void SafeReload(bool dispose, bool autoReloadOnChange)
+        public void SafeReload(bool autoReloadOnChange)
         {
             try
             {
-                Reload(dispose, autoReloadOnChange);
+                Reload(autoReloadOnChange);
             }
             catch (XmlNodeException ex)
             {
@@ -169,14 +169,11 @@ namespace Sapphire
             }
         }
 
-        private void Reload(bool dipose, bool autoReloadOnChange)
+        private void Reload(bool autoReloadOnChange)
         {
             isValid = true;
 
-            if (!dipose)
-            {
-                Dispose();
-            }
+            Dispose();
 
             modules[ModuleClass.MainMenu] = new List<SkinModule>();
             modules[ModuleClass.InGame] = new List<SkinModule>();
@@ -517,7 +514,7 @@ namespace Sapphire
             {
                 if (fileWatcher.CheckForAnyChanges())
                 {
-                    SafeReload(true, fileWatcher != null);
+                    SafeReload(fileWatcher != null);
                     Apply(currentModuleClass);
                 }
             }
