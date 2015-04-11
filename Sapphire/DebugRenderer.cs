@@ -73,6 +73,11 @@ namespace Sapphire
                     continue;
                 }
 
+                if (component.name == "FullScreenContainer")
+                {
+                    continue;
+                }
+
                 var position = component.absolutePosition;
                 var size = component.size;
                 var rect = new Rect(position.x, position.y, size.x, size.y);
@@ -101,17 +106,20 @@ namespace Sapphire
             if (hoveredComponent != null)
             {
                 var coords = mouse;
-                if (coords.x + 256 >= Screen.width)
+
+                var size = new Vector2(300.0f, 160.0f);
+
+                if (coords.x + size.x >= Screen.width)
                 {
-                    coords.x = Screen.width - 256;
+                    coords.x = Screen.width - size.x;
                 }
 
-                if (coords.y + 256 >= Screen.height)
+                if (coords.y + size.y >= Screen.height)
                 {
-                    coords.y = Screen.height - 256;
+                    coords.y = Screen.height - size.y;
                 }
 
-                GUI.Window(81871, new Rect(coords.x, coords.y, 256, 256), DoInfoWindow, "", infoWindowStyle);
+                GUI.Window(81871, new Rect(coords.x, coords.y, size.x, size.y), DoInfoWindow, "", infoWindowStyle);
             }
         }
 
