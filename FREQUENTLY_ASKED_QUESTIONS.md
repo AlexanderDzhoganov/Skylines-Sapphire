@@ -17,7 +17,7 @@ where each `.` represents a level in the hierarchy i.e. `SomePanel` is a child o
 
 *Note: if you don't see the above output but instead a big red `NullReferenceException` that means a component with this name was not found in the scene.*
 
-You can immediately write a Sapphire selector for this component which would look like:
+You can then write a Sapphire selector for this component which would look like:
 
 ```xml
 <UIView>
