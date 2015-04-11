@@ -1,3 +1,7 @@
+### Table of contents
+[1. My skin is broken on different aspect ratios. How do I fix it?](#1.-My-skin-is-broken-on-different-aspect-ratios.-How-do-I-fix-it?)
+
+
 ### 1. My skin is broken on different aspect ratios. How do I fix it?
 
 If your skin is changing/ breaking on different aspect ratios that means you haven't set the proper `<anchor>` tags for your UI components. Make sure that each component is anchored where it should be e.g. the default "Esc" button is on the top-right of the screen and its anchor tag is `<anchor>Top|Right</anchor>`. By using proper `<anchor>`s you can make your skin work on any aspect ratio/ resolution.
