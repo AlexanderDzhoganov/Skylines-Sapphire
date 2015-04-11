@@ -35,7 +35,7 @@
 		
 		<Component name="OptionsBar">
 			<relativePosition>226.0, -20.0</relativePosition>
-			<Component name="RoadsOptionPanel(RoadsPanel)">
+			<Component name="RoadsOptionPanel">
 				<Component name="SnappingToggle">
 					<relativePosition sticky="true">16.0, 0.0</relativePosition>
 				</Component>
@@ -44,7 +44,7 @@
 		
 		<Component name="BulldozerButton">
 			<anchor>Bottom|Left</anchor>
-			<relativePosition>450.0, 12.0</relativePosition>
+			<relativePosition>454.0, 12.0</relativePosition>
 		</Component>
 		
 		<Component name="TSContainer">
