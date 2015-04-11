@@ -184,18 +184,16 @@ namespace Sapphire
             document = new XmlDocument();
             document.LoadXml(File.ReadAllText(skinXmlPath));
 
+            if (fileWatcher != null)
+            {
+                fileWatcher.Dispose();
+                fileWatcher = null;
+            }
+
             if (autoReloadOnChange)
             {
                 fileWatcher = new FileWatcher(sapphirePath);
                 fileWatcher.WatchFile("skin.xml");
-            }
-            else
-            {
-                if (fileWatcher != null)
-                {
-                    fileWatcher.Dispose();
-                    fileWatcher = null;
-                }
             }
 
             var root = document.SelectSingleNode("/SapphireSkin");
