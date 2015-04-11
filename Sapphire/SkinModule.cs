@@ -223,6 +223,8 @@ namespace Sapphire
                         ApplyInternalRecursive(node, childComponent);
                         break;
                     }
+
+                    continue;
                 }
              
                 ApplyInternalRecursive(node, childComponent);
