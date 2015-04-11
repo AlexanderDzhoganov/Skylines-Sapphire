@@ -54,4 +54,4 @@ You can immediately write a Sapphire selector for this component which would loo
 </UIView>
 ```
 
-will set the size of `FooBar` to 128, 256.
+The example above will set the size of `FooBar` to 128, 256.
