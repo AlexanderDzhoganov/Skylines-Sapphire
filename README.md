@@ -24,7 +24,9 @@ Making a new skin for Sapphire is a straight-forward process. Here is an overvie
   - 3.2 Define your skin sprites
   - 3.3 Define your skin colors
 - 4. Writing your first skin module
-- 5. Testing and publishing your skin on Steam Workshop
+- 5. Basic workflow
+- 6. Publishing your skin on Steam Workshop
+- 7. Additional resources
 
 ### 1. Download and extract the example and template skins
 
@@ -143,9 +145,7 @@ Due to the hierachical nature of the UI, Sapphire allows you to nest Component s
 
 Assuming that the component named `TSBar` exists and it has a child component named `Sprite` the module above will change the size and position of `TSBar` as well as hide (isVisible = false) its `Sprite` child.
 
-### 5. Testing and publishing your skin
-
-**5.1** Testing
+**6.1** Testing changes to your skin
 
 Sapphire is designed so that it is very easy and painless to make changes to your skin and test them out live.
 - Start C:S and you should see your new skin in the Sapphire skins list.
@@ -155,12 +155,34 @@ This method allows you to work on your skin without restarting the game. Using t
 
 **The ModTools console (opened by pressing F7) is very useful in pinpointing any errors in your XML, as it will print out descriptive error messages when you try to re-load your skin. Make sure that "Use ModTools Console", "Hook Unity's logging" and "Log exceptions to console" are all checked in the ModTools main menu (Ctrl+Q).**
 
-**5.2** Publishing your skin
+### 5. Basic workflow
+
+At this point you may be familiar with the basics but are still wondering how the basic workflow would look like. Here is an example workflow that you can use and tweak to your liking:
+
+For every component in the UI that you want to re-design in some way:
+1. Enable "Developer mode" from the checkbox in Sapphire's panel. This mode will paint the boundaries of all UI components as well as allow you to see the properties of a specific component by hovering over it.
+2. Write down the component's `name` and `parent` properties
+3. Open ModTools "Scene Explorer" and click on the down-arrow button in the top-left to open the expanded settings panel. **Disable the `Fields` checkbox on the top row.** 
+4. Type the `name` of your component into the `GameObject.Find` field in Scene Explorer's expanded settings panel and click "Find".
+5. If the component was found you will see it displayed in the left panel of the SceneExplorer along with an `>` icon to the left of the component's name. Click on `>` to open the component for editing.
+6. Now you will be able to see all the component's properties on the right side of Scene Explorer's window.
+6.1 It is very necessary to know where a component exists within the whole UI hierarchy (so that you can write the proper Sapphire <Component> selectors). Sometimes this is not trivial as components may be deeply nested within the hierarchy and finding them through browsing with the SceneExplorer may prove tedious. ModTools can solve this problem by providing a way to query the full path of a UI component. This is done through the ModTools console. Press F7 to open the console, and in
+the command- line field on the bottom type the following:
+```
+GameObjectUtil.Find(GameObject.Find("myUIComponent"));
+```
+where `myUIComponent` is the name of the UI component you're looking for (the same name you typed into GameObject.Find in SceneExplorer in step 4). If you get a NullReferenceException (red text) that means a component with this name does not exist in the scene.
+
+7. Modify any properties using the Scene Explorer you want to achieve your desired look. Write down all changes in your skin's XML.
+8. Reload your skin to preview your changes. Note that recent Sapphire versions can reload your skin automatically when you modify one of its files ("Reload active skin on file change" checkbox in Sapphire's panel)
+9. Repeat process for all UI components that you wish to modify/ redesign
+
+### 6. Publishing your skin
 
 **Warning: Do not bundle Sapphire.dll with your mod! You must put a link to Sapphire in your mod's description and tell your users to subscribe to it. This ensures all users get bug fixes and updates without you having to update your skin.**
 
 You can publish your skin on Steam's Workshop like any other code mod. Go to Content -> Mods in C:S and use the 'Share' button on your skin's entry in the list. Users who subscribe to your skin will automatically have it visible in their Sapphire skins list. If you want to update your skin, you can do it like other code mods - delete the mod's folder from AppData, subscribe to it in the workshop and then edit it from its workshop folder and use the 'Update' button in-game.
 
-### 6. Additional information
+### 7. Additional resources
 
 - [Module reference](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/blob/master/MODULE_REFERENCE.md) - thoroughly describes the syntax of skin modules. Look here for advanced usage instructions.
