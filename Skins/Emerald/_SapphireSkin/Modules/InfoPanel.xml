@@ -206,7 +206,7 @@
 				
 			<Component name="Demand">
 				<Component name="ResidentialDemand">
-					
+					<relativePosition>0.0, 5.47, 0.0</relativePosition>
 				</Component>
 				<Component name="CommercialDemand">
 					<relativePosition>25.0, 5.47, 0.0</relativePosition>
