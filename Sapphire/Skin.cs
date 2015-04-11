@@ -126,6 +126,11 @@ namespace Sapphire
 
         private FileWatcher fileWatcher;
 
+        public bool IsValid
+        {
+            get { return isValid; }
+        }
+
         private bool isValid = true;
 
         public Skin(string _skinXmlPath, bool autoReloadOnChange = true)
@@ -164,7 +169,7 @@ namespace Sapphire
 
         private void Reload(bool dipose = true, bool autoReloadOnChange = false)
         {
-            isValid = false;
+            isValid = true;
 
             if (!dipose)
             {
@@ -188,6 +193,7 @@ namespace Sapphire
             var root = document.SelectSingleNode("/SapphireSkin");
             if (root == null)
             {
+                isValid = false;
                 throw new ParseException("Skin missing root SapphireSkin node at " + sapphirePath, null);
             }
 
@@ -227,8 +233,6 @@ namespace Sapphire
                     }
                 }
             }
-
-            isValid = true;
         }
 
         public void Dispose()
@@ -266,10 +270,12 @@ namespace Sapphire
             {
                 Debug.LogErrorFormat("{0} while loading colors for skin ({1}) at node \"{2}\": {3}",
                     ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                isValid = false;
             }
             catch (Exception ex)
             {
                 Debug.LogErrorFormat("Exception while loading colors for skin ({0}): {1}", sapphirePath, ex.Message);
+                isValid = false;
             }
         }
 
@@ -342,10 +348,12 @@ namespace Sapphire
             {
                 Debug.LogErrorFormat("{0} while loading sprites for skin ({1}) at node \"{2}\": {3}",
                     ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                isValid = false;
             }
             catch (Exception ex)
             {
                 Debug.LogErrorFormat("Exception while loading sprites for skin ({0}): {1}", sapphirePath, ex.Message);
+                isValid = false;
             }
         }
 
@@ -436,6 +444,12 @@ namespace Sapphire
             }
 
             var module = SkinModule.FromXmlFile(this, modulePath);
+            if (module == null)
+            {
+                isValid = false;
+                return;
+            }
+
             modules[moduleClass].Add(module);
 
             if(fileWatcher != null)

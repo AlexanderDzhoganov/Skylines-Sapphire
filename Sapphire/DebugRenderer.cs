@@ -147,7 +147,12 @@ namespace Sapphire
             GUILayout.Label(String.Format("anchor: {0}", hoveredComponent.anchor));
             GUILayout.Label(String.Format("size: {0}", hoveredComponent.size));
             GUILayout.Label(String.Format("relativePosition: {0}", hoveredComponent.relativePosition));
-            GUILayout.Label(String.Format("absolutePosition: {0}", hoveredComponent.relativePosition));
+
+            var hash =
+               HashUtil.HashRect(new Rect(hoveredComponent.relativePosition.x, hoveredComponent.relativePosition.y,
+                   hoveredComponent.size.x, hoveredComponent.size.y));
+
+            GUILayout.Label(String.Format("hash: {0}", HashUtil.HashToString(hash)));
         }
 
         private int RenderSortFunc(UIComponent lhs, UIComponent rhs)

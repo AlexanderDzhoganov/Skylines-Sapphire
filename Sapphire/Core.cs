@@ -79,7 +79,15 @@ namespace Sapphire
                     if (metadata.sapphirePath == config.selectedSkinPath)
                     {
                         currentSkin = Skin.FromXmlFile(Path.Combine(metadata.sapphirePath, "skin.xml"));
-                        currentSkin.Apply(currentModuleClass);
+
+                        if (currentSkin.IsValid)
+                        {
+                            currentSkin.Apply(currentModuleClass);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Skin is invalid, will not apply.. (check messages above for errors)");
+                        }
                         break;
                     }
                 }
@@ -278,7 +286,15 @@ namespace Sapphire
                 }
 
                 currentSkin = Skin.FromXmlFile(Path.Combine(skin.sapphirePath, "skin.xml"));
-                currentSkin.Apply(currentModuleClass);
+
+                if (currentSkin.IsValid)
+                {
+                    currentSkin.Apply(currentModuleClass);
+                }
+                else
+                {
+                    Debug.LogWarning("Skin is invalid, will not apply.. (check messages above for errors)");
+                } 
                 
                 config.selectedSkinPath = currentSkin.SapphirePath;
                 SaveConfig();
@@ -436,7 +452,15 @@ namespace Sapphire
                 var path = currentSkin.SapphirePath;
                 currentSkin.Dispose();
                 currentSkin = Skin.FromXmlFile(Path.Combine(path, "skin.xml"));
-                currentSkin.Apply(currentModuleClass);
+
+                if (currentSkin.IsValid)
+                { 
+                    currentSkin.Apply(currentModuleClass);
+                }
+                else
+                {
+                    Debug.LogWarning("Skin is invalid, will not apply.. (check messages above for errors)");
+                } 
             }
             catch (Exception ex)
             {

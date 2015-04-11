@@ -206,8 +206,25 @@ namespace Sapphire
 
             var childComponents = Util.FindComponentsInChildren(node, component, name, regex, recursive, optional);
 
+            var hash = XmlUtil.TryGetStringAttribute(node, "hash", null);
+            
             foreach (var childComponent in childComponents)
             {
+                if (hash != null)
+                {
+                    var componentHash =
+                        HashUtil.HashToString(
+                            HashUtil.HashRect(new Rect(childComponent.relativePosition.x,
+                                childComponent.relativePosition.y,
+                                childComponent.size.x, childComponent.size.y)));
+
+                    if (componentHash == hash)
+                    {
+                        ApplyInternalRecursive(node, childComponent);
+                        break;
+                    }
+                }
+             
                 ApplyInternalRecursive(node, childComponent);
             }
         }
