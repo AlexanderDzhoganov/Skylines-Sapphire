@@ -62,7 +62,7 @@ After you're done with the example skin go to 1.3.
 
 **1.3** When you're ready to make your own skin, nagivate to the `Skins/TemplateSkin` folder of the master archive.
 
-**1.4** Create a new Cities: Skylines mod by creating a new folder for it in the appropriate location e.g. for windows users that would be `C:\Users\<YourUser>\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\<YourSkinName>`
+**1.4** Create a new Cities: Skylines mod by creating a new directory for it in the `Mods` folder.
 
 **1.5** Copy the contents of `Skins/Template` to your new folder. 
 
