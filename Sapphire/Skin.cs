@@ -133,6 +133,8 @@ namespace Sapphire
 
         private bool isValid = true;
 
+        private ModuleClass currentModuleClass;
+
         public Skin(string _skinXmlPath, bool autoReloadOnChange)
         {
             skinXmlPath = _skinXmlPath;
@@ -484,6 +486,8 @@ namespace Sapphire
                 return;
             }
 
+            currentModuleClass = moduleClass;
+
             foreach (var module in modules[moduleClass])
             {
                 module.Apply();
@@ -514,6 +518,7 @@ namespace Sapphire
                 if (fileWatcher.CheckForAnyChanges())
                 {
                     SafeReload(true, fileWatcher != null);
+                    Apply(currentModuleClass);
                 }
             }
         }

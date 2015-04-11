@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using ColossalFramework.UI;
 using UnityEngine;
 
@@ -27,11 +26,11 @@ namespace Sapphire
             bootstrapped = true;
         }
 
-        private List<SkinMetadata> availableSkins;
 
         private static readonly string configPath = "SapphireConfig.xml";
         private Configuration config = new Configuration();
 
+        private List<SkinMetadata> availableSkins;
         private Skin currentSkin = null;
 
         private DebugRenderer debugRenderer;
@@ -111,7 +110,7 @@ namespace Sapphire
                 }
                 else if (Input.GetKeyDown(KeyCode.S))
                 {
-                    ReloadActiveSkin();
+                    ReloadAndApplyActiveSkin();
                 }
             }
 
@@ -134,9 +133,8 @@ namespace Sapphire
 
         private void CreateUI()
         {
-            var atlas = GetSapphireAtlas();;
-            var sapphirePanel = CreateSapphirePanel(atlas);
-            var sapphireButton = CreateSapphireButton(atlas);
+            var sapphirePanel = CreateSapphirePanel();
+            var sapphireButton = UIUtil.CreateSapphireButton(currentModuleClass);
 
             sapphireButton.eventClick += (component, param) => { sapphirePanel.isVisible = !sapphirePanel.isVisible; };
 
@@ -154,7 +152,7 @@ namespace Sapphire
             }
         }
 
-        private UIPanel CreateSapphirePanel(UITextureAtlas atlas)
+        private UIPanel CreateSapphirePanel()
         {
             var uiView = GameObject.Find("UIView").GetComponent<UIView>();
             if (uiView == null)
@@ -167,7 +165,7 @@ namespace Sapphire
 
             panel.size = new Vector2(300, 180);
             panel.isVisible = false;
-            panel.atlas = atlas;
+            panel.atlas = EmbeddedResources.GetSapphireAtlas();
             panel.backgroundSprite = "DefaultPanelBackground";
 
             if (currentModuleClass == Skin.ModuleClass.MainMenu)
@@ -188,7 +186,7 @@ namespace Sapphire
 
             float y = 32.0f;
 
-            MakeCheckbox(panel, "AutoApplySkin", "Apply skin on start-up", y, config.applySkinOnStartup, value =>
+            UIUtil.MakeCheckbox(panel, "AutoApplySkin", "Apply skin on start-up", new Vector2(4.0f, y), config.applySkinOnStartup, value =>
             {
                 config.applySkinOnStartup = value;
                 SaveConfig();
@@ -196,7 +194,7 @@ namespace Sapphire
 
             y += 28.0f;
 
-            MakeCheckbox(panel, "DrawDebugInfo", "Developer mode (Ctrl+D)", y, false, value =>
+            UIUtil.MakeCheckbox(panel, "DrawDebugInfo", "Developer mode (Ctrl+D)", new Vector2(4.0f, y), false, value =>
             {
                 if (debugRenderer != null)
                 {
@@ -205,11 +203,11 @@ namespace Sapphire
             });
 
             y += 28.0f;
-            
-            MakeCheckbox(panel, "AutoReload", "Auto-reload active skin on file change", y, false, value =>
+
+            UIUtil.MakeCheckbox(panel, "AutoReload", "Auto-reload active skin on file change", new Vector2(4.0f, y), false, value =>
             {
                 autoReloadSkinOnChange = value;
-                ReloadActiveSkin();
+                ReloadAndApplyActiveSkin();
             });
 
 
@@ -318,126 +316,12 @@ namespace Sapphire
 
             y += 36.0f;
 
-            MakeButton(panel, "ReloadSkin", "Reload active skin (Ctrl+S)", y, () =>
-            {
-                ReloadActiveSkin();
-            });
+            UIUtil.MakeButton(panel, "ReloadSkin", "Reload active skin (Ctrl+S)", new Vector2(4.0f, y), ReloadAndApplyActiveSkin);
 
             return panel;
         }
 
-        private UIButton CreateSapphireButton(UITextureAtlas atlas)
-        {
-            var uiView = GameObject.Find("UIView").GetComponent<UIView>();
-            if (uiView == null)
-            {
-                Debug.LogError("UIView is null!");
-                return null;
-            }
-
-            var button = uiView.AddUIComponent(typeof(UIButton)) as UIButton;
-
-            button.name = "SapphireButton";
-            button.gameObject.name = "SapphireButton";
-            button.width = 32;
-            button.height = 32;
-
-            button.pressedBgSprite = "";
-            button.normalBgSprite = "";
-            button.hoveredBgSprite = "";
-            button.disabledBgSprite = "";
-
-            button.atlas = atlas;
-            button.normalFgSprite = "SapphireIcon";
-            button.hoveredFgSprite = "SapphireIconHover";
-            button.pressedFgSprite = "SapphireIconPressed";
-            button.foregroundSpriteMode = UIForegroundSpriteMode.Scale;
-            button.scaleFactor = 1.0f;
-
-            button.tooltip = "Sapphire Skin Manager";
-            button.tooltipBox = uiView.defaultTooltipBox;
-
-            if (currentModuleClass == Skin.ModuleClass.MainMenu)
-            {
-                button.relativePosition = new Vector3(4.0f, 2.0f, 0.0f);
-            }
-            else
-            {
-                button.relativePosition = new Vector3(4.0f, 64.0f, 0.0f);
-            }
-
-            return button;
-        }
-
-        private delegate void ButtonClicked();
-
-        private static UIButton MakeButton(UIPanel panel, string name, string text, float y, ButtonClicked clicked)
-        {
-            var button = panel.AddUIComponent<UIButton>();
-            button.name = name;
-            button.text = text;
-            button.relativePosition = new Vector3(4.0f, y);
-            button.size = new Vector2(200.0f, 24.0f);
-            button.normalBgSprite = "ButtonMenu";
-            button.disabledBgSprite = "ButtonMenuDisabled";
-            button.hoveredBgSprite = "ButtonMenuHovered";
-            button.focusedBgSprite = "ButtonMenu";
-            button.pressedBgSprite = "ButtonMenuPressed";
-            button.textScale = 0.8f;
-
-            button.eventClick += (component, param) =>
-            {
-                clicked();
-            };
-
-            return button;
-        }
-
-        private delegate void CheckboxSetValue(bool value);
-
-        private static UICheckBox MakeCheckbox(UIPanel panel, string name, string text, float y, bool value,
-            CheckboxSetValue setValue)
-        {
-            var label = panel.AddUIComponent<UILabel>();
-            label.name = name;
-            label.text = text;
-            label.relativePosition = new Vector3(4.0f, y);
-            label.textScale = 0.8f;
-            label.textColor = Color.black;
-
-            var checkbox = panel.AddUIComponent<UICheckBox>();
-            checkbox.AlignTo(label, UIAlignAnchor.TopLeft);
-            checkbox.relativePosition = new Vector3(checkbox.relativePosition.x + 274.0f, checkbox.relativePosition.y - 2.0f);
-            checkbox.size = new Vector2(16.0f, 16.0f);
-            checkbox.isVisible = true;
-            checkbox.canFocus = true;
-            checkbox.isInteractive = true;
-
-            if (setValue != null)
-            {
-                checkbox.eventCheckChanged += (component, newValue) =>
-                {
-                    setValue(newValue);
-                };
-            }
-
-            var uncheckSprite = checkbox.AddUIComponent<UISprite>();
-            uncheckSprite.size = new Vector2(16.0f, 16.0f);
-            uncheckSprite.relativePosition = new Vector3(0, 0);
-            uncheckSprite.spriteName = "check-unchecked";
-            uncheckSprite.isVisible = true;
-
-            var checkSprite = checkbox.AddUIComponent<UISprite>();
-            checkSprite.size = new Vector2(16.0f, 16.0f);
-            checkSprite.relativePosition = new Vector3(0, 0);
-            checkSprite.spriteName = "check-checked";
-
-            checkbox.isChecked = value;
-            checkbox.checkedBoxObject = checkSprite;
-            return checkbox;
-        }
-
-        private void ReloadActiveSkin()
+        private void ReloadAndApplyActiveSkin()
         {
             try
             {
@@ -446,9 +330,7 @@ namespace Sapphire
                     return;
                 }
 
-                var path = currentSkin.SapphirePath;
-                currentSkin.Dispose();
-                currentSkin = Skin.FromXmlFile(Path.Combine(path, "skin.xml"), autoReloadSkinOnChange);
+                currentSkin.SafeReload(true, autoReloadSkinOnChange);
 
                 if (currentSkin.IsValid)
                 { 
@@ -463,53 +345,6 @@ namespace Sapphire
             {
                 Debug.LogErrorFormat("Failed to load skin: {0}", ex.Message);
             }
-        }
-
-        private UITextureAtlas GetSapphireAtlas()
-        {
-            var atlasPacker = new AtlasPacker();
-            atlasPacker.AddSprite("SapphireIcon", GetSapphireIcon());
-            atlasPacker.AddSprite("SapphireIconHover", GetSapphireIconHover());
-            atlasPacker.AddSprite("SapphireIconPressed", GetSapphireIconPressed());
-            atlasPacker.AddSprite("DefaultPanelBackground", GetSapphireBackground());
-            return atlasPacker.GenerateAtlas("SapphireIconsAtlas");
-        }
-
-        private Texture2D GetSapphireIcon()
-        {
-            var texture = new Texture2D(128, 128);
-            texture.LoadImage(GetResource("Sapphire.Resources.SapphireIcon.png"));
-            return texture;
-        }
-
-        private Texture2D GetSapphireIconHover()
-        {
-            var texture = new Texture2D(128, 128);
-            texture.LoadImage(GetResource("Sapphire.Resources.SapphireIconHover.png"));
-            return texture;
-        }
-
-        private Texture2D GetSapphireIconPressed()
-        {
-            var texture = new Texture2D(128, 128);
-            texture.LoadImage(GetResource("Sapphire.Resources.SapphireIconPressed.png"));
-            return texture;
-        }
-
-        private Texture2D GetSapphireBackground()
-        {
-            var texture = new Texture2D(128, 128);
-            texture.LoadImage(GetResource("Sapphire.Resources.DefaultPanelBackground.png"));
-            return texture;
-        }
-
-        private static byte[] GetResource(string name)
-        {
-            var asm = Assembly.GetExecutingAssembly();
-            var stream = asm.GetManifestResourceStream(name);
-            byte[] data = new byte[stream.Length];
-            stream.Read(data, 0, (int)stream.Length);
-            return data;
         }
 
     }

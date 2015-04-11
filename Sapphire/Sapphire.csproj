@@ -55,6 +55,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="DebugRenderer.cs" />
     <Compile Include="Detours.cs" />
+    <Compile Include="EmbeddedResources.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="HashUtil.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="SkinModule.cs" />
     <Compile Include="SkinLoader.cs" />
     <Compile Include="TypeUtil.cs" />
+    <Compile Include="UIUtil.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="XmlUtil.cs" />
   </ItemGroup>
