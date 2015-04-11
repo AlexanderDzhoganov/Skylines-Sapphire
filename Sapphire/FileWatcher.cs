@@ -43,13 +43,13 @@ namespace Sapphire
                     NotifyFilters.Size |
                     NotifyFilters.Security;
 
-                watcher.Filter = "*.*";
+                watcher.Filter = Path.GetFileName(filePath);
                 watcher.Changed += (sender, args) =>
-                {
+                {   
                     lock (_changedFilesLock)
                     {
                         _changedFiles.Add(args.FullPath);
-                    }
+                    } 
                 };
 
                 watcher.EnableRaisingEvents = true;
