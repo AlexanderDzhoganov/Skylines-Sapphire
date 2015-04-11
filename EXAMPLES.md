@@ -25,6 +25,8 @@
 ```xml
 <Component name="TSBar">
 
+  ..
+
   <Component name="MainToolstrip">
     <Component name="Roads">
       <atlas>IconsAtlas</atlas>
@@ -44,6 +46,8 @@
       <disabledBgSprite>RoadsBgDisabled</disabledBgSprite>
       
     </Component>
+    
+    ..
   </Component>
  
 </Component>
