@@ -27,8 +27,8 @@ namespace Sapphire
             var atlas = ScriptableObject.CreateInstance<UITextureAtlas>();
             atlas.material = new Material(Shader.Find("UI/Default UI Shader"));
 
-            var atlasTexture = new Texture2D(2048, 2048, TextureFormat.ARGB32, false, true);
-            atlasTexture.filterMode = FilterMode.Point;
+            var atlasTexture = new Texture2D(2048, 2048, TextureFormat.ARGB32, false, false);
+            atlasTexture.filterMode = FilterMode.Bilinear;
             atlas.material.mainTexture = atlasTexture;
 
             var transparent = new Color(0, 0, 0, 0);
@@ -66,10 +66,8 @@ namespace Sapphire
                 float s = (float)(texture.width) / atlasTexture.width;
                 float t = (float)(texture.height) / atlasTexture.height;
 
-                float pixelSize = 1.0f/atlasTexture.width;
-
                 var sprite = new UITextureAtlas.SpriteInfo();
-                sprite.region = new Rect(u + pixelSize, v + pixelSize, s - pixelSize * 2.0f, t - pixelSize * 2.0f);
+                sprite.region = new Rect(u, v, s, t);
                 sprite.name = name;
                 sprite.texture = texture;
                 atlas.AddSprite(sprite);
