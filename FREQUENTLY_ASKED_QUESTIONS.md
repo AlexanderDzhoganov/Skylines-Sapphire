@@ -26,7 +26,11 @@ replace `FooBar` with the name of the component you're looking for. Press `enter
 ```
 SomePanel.SomethingElse.FooBar
 ```
-where each `.` represents a level in the hierarchy i.e. `SomePanel` is a child of the root UIView, `SomethingElse` is a child of `SomePanel` and `FooBar` is a child of `SomethingElse`. You can immediately write a Sapphire selector for this component which would look like:
+where each `.` represents a level in the hierarchy i.e. `SomePanel` is a child of the root UIView, `SomethingElse` is a child of `SomePanel` and `FooBar` is a child of `SomethingElse`. 
+
+*Note: if you don't see the above output but instead a big red `NullReferenceException` that means a component with this name was not found in the scene.*
+
+You can immediately write a Sapphire selector for this component which would look like:
 
 ```xml
 <Component name="SomePanel">
