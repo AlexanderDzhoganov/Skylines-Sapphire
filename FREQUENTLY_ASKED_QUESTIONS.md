@@ -22,4 +22,4 @@ Open the ModTools console by pressing F7 and type:
 GameObjectUtil.WhereIs(GameObject.Find("FooBar"));
 ```
 
-replace `FooBar` with the name of the component you're looking for.
+replace `FooBar` with the name of the component you're looking for. Press `enter` to submit the command- line.
