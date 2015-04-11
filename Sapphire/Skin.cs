@@ -136,11 +136,11 @@ namespace Sapphire
             Reload(false, autoReloadOnChange);
         }
 
-        private void SafeReload(bool dispose = true)
+        public void SafeReload(bool dispose = true, bool autoReloadOnChange = false)
         {
             try
             {
-                Reload();
+                Reload(dispose, autoReloadOnChange);
             }
             catch (XmlNodeException ex)
             {
@@ -494,7 +494,7 @@ namespace Sapphire
             {
                 if (fileWatcher.CheckForAnyChanges())
                 {
-                    Reload(true, true);
+                    SafeReload(true);
                 }
             }
         }

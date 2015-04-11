@@ -1,5 +1,4 @@
-﻿
-using System.Reflection;
+﻿using System.Reflection;
 using ColossalFramework;
 using ColossalFramework.UI;
 using UnityEngine;

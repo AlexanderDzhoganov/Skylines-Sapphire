@@ -107,7 +107,7 @@ namespace Sapphire
             {
                 var coords = mouse;
 
-                var size = new Vector2(300.0f, 160.0f);
+                var size = new Vector2(300.0f, 180.0f);
 
                 if (coords.x + size.x >= Screen.width)
                 {
@@ -136,7 +136,8 @@ namespace Sapphire
 
         void DoInfoWindow(int i)
         {
-            GUILayout.Label(String.Format("name: {0} ({1})", hoveredComponent.name, hoveredComponent.GetType().Name));
+            GUILayout.Label(String.Format("name: {0}", hoveredComponent.name));
+            GUILayout.Label(String.Format("type: {0}", hoveredComponent.GetType().Name));
 
             if (hoveredComponent.parent != null)
             {
