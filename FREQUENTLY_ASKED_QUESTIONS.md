@@ -46,3 +46,21 @@ Creating new components using similar syntax to the current one is possible but 
 ### 4. Can I change the behaviour of UI components and/ or re-parent them? Can I bundle code with my Sapphire skin?
 
 Yes! Absolutely. You can include code with your Sapphire skin by putting it in the "Source/" folder of your mod's root directory or by compiling a .DLL yourself (by e.g. Visual Studio or MonoDevelop) and putting it in your mod's root folder. This allows extreme changes to the game's interface up to a 100% complete rewrite. Any component that you create via your code is skinnable with Sapphire so you should not bother with setting up any properties through code - just create the component, name it and then skin it using a Sapphire skin module.
+
+### 5. How can I select one of two or more Components which have identical names?
+
+This is mostly the case with modders who don't name their UI components so they remain with the default names like "UIButton" or "UILabel. When several such "UIButton" components have the same parent it is impossible to select one using name matching. This is where the `hash` attribute comes in. Each component has a hash value which you can see by hovering over it in 'developer mode'. This hash value can be used to differentiate between two or more components which have the same name. Here is an example:
+
+```xml
+<Component name="UIButton" hash="1B0CDBFE9" optional="true">
+	<relativePosition>1700.0, 1012.0</relativePosition>
+</Component>
+
+<Component name="UIButton" hash="180411189" optional="true">
+	<relativePosition>1700.0, 1044.0</relativePosition>
+</Component>
+```
+
+This specific example comes from the "No Pillars" mod which creates two "unnamed" buttons with the same parent. By looking up the hash values in 'developer mode' and specifying them in the `hash` attribute we can select only one of the two buttons. This works for any number of components sharing the same name.
+
+**Warning: Component hashes are not globally unique! They are to be used only to select between components which _share the same parent_. The `name` attribute is still mandatory**
