@@ -189,6 +189,14 @@ namespace Sapphire
                 fileWatcher = new FileWatcher(sapphirePath);
                 fileWatcher.WatchFile("skin.xml");
             }
+            else
+            {
+                if (fileWatcher != null)
+                {
+                    fileWatcher.Dispose();
+                    fileWatcher = null;
+                }
+            }
 
             var root = document.SelectSingleNode("/SapphireSkin");
             if (root == null)
