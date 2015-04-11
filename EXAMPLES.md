@@ -31,7 +31,9 @@
 
   <Component name="MainToolstrip">
     <Component name="Roads">
-      <atlas>IconsAtlas</atlas>
+      <atlas>IconsAtlas</atlas> <!-- sets the sprite atlas to use for this component -->
+      <foregroundSpriteMode>Scale</foregroundSpriteMode> <!-- makes it so your sprite scales with the size of the button -->
+      <size>32.0, 32.0</size> <!-- sets the size of the component to x = 32.0, y = 32.0
       
       <!-- these are the foreground sprites -->
       <normalFgSprite>RoadsNormal</normalFgSprite>
