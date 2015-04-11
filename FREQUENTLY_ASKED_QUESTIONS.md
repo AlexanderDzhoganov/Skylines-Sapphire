@@ -22,4 +22,24 @@ Open the ModTools console by pressing F7 and type:
 GameObjectUtil.WhereIs(GameObject.Find("FooBar"));
 ```
 
-replace `FooBar` with the name of the component you're looking for. Press `enter` to submit the command- line.
+replace `FooBar` with the name of the component you're looking for. Press `enter` to submit the command- line and you should see something like:
+```
+SomePanel.SomethingElse.FooBar
+```
+where each `.` represents a level in the hierarchy i.e. `SomePanel` is a child of the root UIView, `SomethingElse` is a child of `SomePanel` and `FooBar` is a child of `SomethingElse`. You can immediately write a Sapphire selector for this component which would look like:
+
+```xml
+<Component name="SomePanel">
+
+  <Component name="SomethingElse">
+
+    <Component name="FooBar">
+      <size>128.0, 256.0</size>
+    </Component>
+
+  </Component>
+
+</Component>
+```
+
+will set the size of `FooBar` to 128, 256.
