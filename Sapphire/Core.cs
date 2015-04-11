@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using ColossalFramework;
 using ColossalFramework.UI;
 using UnityEngine;
 
 namespace Sapphire
 {
-    public class SapphireBootstrap : MonoBehaviour
+
+    public class Core : MonoBehaviour
     {
 
         private static bool bootstrapped = false;
@@ -23,7 +23,7 @@ namespace Sapphire
 
             currentModuleClass = moduleClass;
 
-            FindObjectOfType<UIView>().gameObject.AddComponent<SapphireBootstrap>();
+            FindObjectOfType<UIView>().gameObject.AddComponent<Core>();
             bootstrapped = true;
         }
 
@@ -34,7 +34,7 @@ namespace Sapphire
 
         private Skin currentSkin = null;
 
-        private List<UICheckBox> skinCheckBoxes = new List<UICheckBox>();
+        private DebugRenderer debugRenderer;
 
         private void LoadConfig()
         {
@@ -83,6 +83,8 @@ namespace Sapphire
             }
             
             CreateUI();
+
+            debugRenderer = gameObject.AddComponent<DebugRenderer>();
         }
 
         void Update()
@@ -147,10 +149,18 @@ namespace Sapphire
             title.text = "Sapphire Skin Manager";
             title.textColor = Color.black;
 
-            MakeCheckbox(panel, "AutoApplySkin", "Apply skin on start-up", 48.0f, config.applySkinOnStartup, value =>
+            MakeCheckbox(panel, "AutoApplySkin", "Apply skin on start-up", 24.0f, config.applySkinOnStartup, value =>
             {
                 config.applySkinOnStartup = value;
                 SaveConfig();
+            });
+
+            MakeCheckbox(panel, "DrawDebugInfo", "Developer mode", 48.0f, false, value =>
+            {
+                if (debugRenderer != null)
+                {
+                    debugRenderer.drawDebugInfo = value;
+                }
             });
 
             var skinsDropdown = panel.AddUIComponent<UIDropDown>();
@@ -162,7 +172,7 @@ namespace Sapphire
             }
 
             skinsDropdown.size = new Vector2(296.0f, 32.0f);
-            skinsDropdown.relativePosition = new Vector3(2.0f, 72.0f);
+            skinsDropdown.relativePosition = new Vector3(2.0f, 70.0f);
             skinsDropdown.listBackground = "GenericPanelLight";
             skinsDropdown.itemHeight = 32;
             skinsDropdown.itemHover = "ListItemHover";

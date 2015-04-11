@@ -14,7 +14,7 @@ namespace Sapphire
             {
                 try
                 {
-                    SapphireBootstrap.Bootstrap(Skin.ModuleClass.MainMenu);
+                    Core.Bootstrap(Skin.ModuleClass.MainMenu);
                 }
                 catch (Exception ex)
                 {
@@ -41,15 +41,15 @@ namespace Sapphire
             {
                 if (mode == LoadMode.NewGame || mode == LoadMode.LoadGame)
                 {
-                    SapphireBootstrap.Bootstrap(Skin.ModuleClass.InGame);
+                    Core.Bootstrap(Skin.ModuleClass.InGame);
                 }
                 else if (mode == LoadMode.NewMap || mode == LoadMode.LoadMap)
                 {
-                    SapphireBootstrap.Bootstrap(Skin.ModuleClass.MapEditor);
+                    Core.Bootstrap(Skin.ModuleClass.MapEditor);
                 }
                 else if (mode == LoadMode.NewAsset || mode == LoadMode.LoadAsset)
                 {
-                    SapphireBootstrap.Bootstrap(Skin.ModuleClass.AssetEditor);
+                    Core.Bootstrap(Skin.ModuleClass.AssetEditor);
                 }
             }
             catch (Exception ex)

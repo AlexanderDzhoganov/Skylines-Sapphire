@@ -53,12 +53,13 @@
   <ItemGroup>
     <Compile Include="AtlasPacker.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="DebugRenderer.cs" />
     <Compile Include="Detours.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="MakeCameraFullscreen.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Bootstrap.cs" />
+    <Compile Include="Core.cs" />
     <Compile Include="Icons.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
