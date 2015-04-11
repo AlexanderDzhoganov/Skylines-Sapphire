@@ -64,7 +64,7 @@ After you're done with the example skin go to 1.3.
 
 **1.4** Create a new Cities: Skylines mod by creating a new directory for it in the `Mods` folder.
 
-**1.5** Copy the contents of `Skins/Template` to your new folder. 
+**1.5** Copy the contents of `Skins/TemplateSkin` to your new folder. Note: Copy the contents, not the folder itself.
 
 **1.6** At this point your mod's root folder should contain a folder named `Source` and a folder named `_SapphireSkin`. 
 
