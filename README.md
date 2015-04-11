@@ -199,3 +199,4 @@ You can publish your skin on Steam's Workshop like any other code mod. Go to Con
 
 - [Module reference](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/blob/master/MODULE_REFERENCE.md) - thoroughly describes the syntax of skin modules. Look here for advanced usage instructions.
 - [FAQ](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/blob/master/FREQUENTLY_ASKED_QUESTIONS.md)
+- [Examples](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/blob/master/EXAMPLES.md)
