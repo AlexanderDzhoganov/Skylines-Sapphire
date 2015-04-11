@@ -25,7 +25,7 @@
 		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
 		<color>PanelColor</color>
 	</Component>
-	dd
+	
 	<Component name="(Library) TutorialPanel">
 		<backgroundSprite></backgroundSprite> 
 		<color>PanelColor</color>
