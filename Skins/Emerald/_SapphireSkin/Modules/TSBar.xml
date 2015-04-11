@@ -11,7 +11,7 @@
 		<Component name="TSCloseButton">
 			<foregroundSpriteMode>Scale</foregroundSpriteMode>
 			<size>42.0, 42.0</size>
-			<relativePosition sticky="true">1866.0, -944.0</relativePosition>
+			<relativePosition sticky="true">1866.0, -944.0</relativePosition> 
 		</Component>
 		
 		<Component name="ZoomButton">

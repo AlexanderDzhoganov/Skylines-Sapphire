@@ -1,4 +1,5 @@
 <UIView>
+
 	<Component name="ChirperPanel" optional="true">
 		<zOrder sticky="true">9999</zOrder>
 	</Component>
@@ -18,15 +19,15 @@
 		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
 		<color>PanelColor</color>
 	</Component>
-	
+	  
 	<Component name=".*Library.*" name_regex="true">
-		<atlas>BackgroundsAtlas</atlas>
+		<atlas>BackgroundsAtlas</atlas> 
 		<backgroundSprite>DefaultPanelBackground</backgroundSprite>
 		<color>PanelColor</color>
 	</Component>
-	
+	dd
 	<Component name="(Library) TutorialPanel">
-		<backgroundSprite></backgroundSprite>
+		<backgroundSprite></backgroundSprite> 
 		<color>PanelColor</color>
 	</Component>
 	

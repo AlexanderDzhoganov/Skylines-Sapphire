@@ -73,4 +73,26 @@
 		<relativePosition>1700.0, 1044.0</relativePosition>
 	</Component>
 
+	<!-- Toggle Snapping Mod -->
+	<Component name="TSBar">
+		<Component name="OptionsBar">
+			<Component name="RoadsOptionPanel(RoadsPanel)" optional="true">
+				<Component name="SnappingToggle" optional="true">
+					<relativePosition>15.0, 57.0</relativePosition>
+				</Component>
+			</Component>
+		</Component>
+	</Component>
+	
+	<!-- Toggle Street Direction Viewer Mod -->
+	<Component name="TSBar">
+		<Component name="OptionsBar">
+			<Component name="RoadsOptionPanel(RoadsPanel)" optional="true">
+				<Component name="StreetDirectionViewerButton" optional="true">
+					<relativePosition>-50.0, 57.0</relativePosition>
+				</Component>
+			</Component>
+		</Component>
+	</Component>
+
 </UIView>
