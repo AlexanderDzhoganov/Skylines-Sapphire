@@ -43,7 +43,7 @@ namespace Sapphire
                 hoveredRectStyle.active.background = bgTexture;
                 hoveredRectStyle.focused.background = bgTexture;
 
-                infoWindowStyle = new GUIStyle(GUI.skin.window);
+                infoWindowStyle = new GUIStyle(GUI.skin.box);
                 infoWindowStyle.normal.background = null;
                 infoWindowStyle.hover.background = null;
                 infoWindowStyle.active.background = null;
@@ -103,12 +103,12 @@ namespace Sapphire
                 var coords = mouse;
                 if (coords.x + 256 >= Screen.width)
                 {
-                    coords.x -= 256;
+                    coords.x = Screen.width - 256;
                 }
 
                 if (coords.y + 256 >= Screen.height)
                 {
-                    coords.y -= 256;
+                    coords.y = Screen.height - 256;
                 }
 
                 GUI.Window(81871, new Rect(coords.x, coords.y, 256, 256), DoInfoWindow, "", infoWindowStyle);
