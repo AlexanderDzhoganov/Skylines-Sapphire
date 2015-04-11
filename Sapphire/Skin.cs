@@ -28,13 +28,13 @@ namespace Sapphire
             AssetEditor = 3
         }
 
-        public static Skin FromXmlFile(string skinXmlPath)
+        public static Skin FromXmlFile(string skinXmlPath, bool autoReloadOnChange)
         {
             Skin skin = null;
 
             try
             {
-                skin = new Skin(skinXmlPath);
+                skin = new Skin(skinXmlPath, autoReloadOnChange);
             }
             catch (XmlNodeException ex)
             {
@@ -133,7 +133,7 @@ namespace Sapphire
 
         private bool isValid = true;
 
-        public Skin(string _skinXmlPath, bool autoReloadOnChange = true)
+        public Skin(string _skinXmlPath, bool autoReloadOnChange)
         {
             skinXmlPath = _skinXmlPath;
             sapphirePath = Path.GetDirectoryName(skinXmlPath);
@@ -141,7 +141,7 @@ namespace Sapphire
             Reload(false, autoReloadOnChange);
         }
 
-        public void SafeReload(bool dispose = true, bool autoReloadOnChange = false)
+        public void SafeReload(bool dispose, bool autoReloadOnChange)
         {
             try
             {
@@ -167,7 +167,7 @@ namespace Sapphire
             }
         }
 
-        private void Reload(bool dipose = true, bool autoReloadOnChange = false)
+        private void Reload(bool dipose, bool autoReloadOnChange)
         {
             isValid = true;
 
@@ -396,6 +396,11 @@ namespace Sapphire
                 foreach (XmlNode spriteNode in childNode.ChildNodes)
                 {
                     var path = spriteNode.InnerText;
+                    if (fileWatcher != null)
+                    {
+                        fileWatcher.WatchFile(path);
+                    }
+
                     var name = XmlUtil.GetStringAttribute(spriteNode, "name");
                     Debug.LogWarningFormat("Packing sprite \"{0}\" in atlas", name);
 
@@ -415,11 +420,6 @@ namespace Sapphire
                     texture.LoadImage(File.ReadAllBytes(fullPath));
                     texture.filterMode = FilterMode.Bilinear;
                     spriteTextureCache.Add(path, texture);
-
-                    if (fileWatcher != null)
-                    {
-                        fileWatcher.WatchFile(path);
-                    }
 
                     atlasPacker.AddSprite(name, texture);
                     count++;
@@ -443,6 +443,11 @@ namespace Sapphire
 
         private void AddModuleAtPath(ModuleClass moduleClass, string modulePath)
         {
+            if (fileWatcher != null)
+            {
+                fileWatcher.WatchFile(modulePath);
+            }
+
             var name = Path.GetFileNameWithoutExtension(modulePath);
             if (name == null)
             {
@@ -457,11 +462,6 @@ namespace Sapphire
             }
 
             modules[moduleClass].Add(module);
-
-            if(fileWatcher != null)
-            {
-                fileWatcher.WatchFile(modulePath);
-            }
         }
 
         public void ApplyStickyProperties(ModuleClass moduleClass)
@@ -514,7 +514,7 @@ namespace Sapphire
             {
                 if (fileWatcher.CheckForAnyChanges())
                 {
-                    SafeReload(true);
+                    SafeReload(true, fileWatcher != null);
                 }
             }
         }

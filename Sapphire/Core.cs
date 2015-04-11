@@ -78,7 +78,7 @@ namespace Sapphire
                 {
                     if (metadata.sapphirePath == config.selectedSkinPath)
                     {
-                        currentSkin = Skin.FromXmlFile(Path.Combine(metadata.sapphirePath, "skin.xml"));
+                        currentSkin = Skin.FromXmlFile(Path.Combine(metadata.sapphirePath, "skin.xml"), false);
 
                         if (currentSkin.IsValid)
                         {
@@ -209,10 +209,7 @@ namespace Sapphire
             MakeCheckbox(panel, "AutoReload", "Auto-reload active skin on file change", y, false, value =>
             {
                 autoReloadSkinOnChange = value;
-                if (autoReloadSkinOnChange)
-                {
-                    ReloadActiveSkin();
-                }
+                ReloadActiveSkin();
             });
 
 
@@ -285,7 +282,7 @@ namespace Sapphire
                     currentSkin.Dispose();
                 }
 
-                currentSkin = Skin.FromXmlFile(Path.Combine(skin.sapphirePath, "skin.xml"));
+                currentSkin = Skin.FromXmlFile(Path.Combine(skin.sapphirePath, "skin.xml"), autoReloadSkinOnChange);
 
                 if (currentSkin.IsValid)
                 {
@@ -451,7 +448,7 @@ namespace Sapphire
 
                 var path = currentSkin.SapphirePath;
                 currentSkin.Dispose();
-                currentSkin = Skin.FromXmlFile(Path.Combine(path, "skin.xml"));
+                currentSkin = Skin.FromXmlFile(Path.Combine(path, "skin.xml"), autoReloadSkinOnChange);
 
                 if (currentSkin.IsValid)
                 { 
