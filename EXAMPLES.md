@@ -1,6 +1,6 @@
-# [Go here](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/tree/master/Skins/Emerald/_SapphireSkin) for a full-featured, working Sapphire skin that you can test and modify yourself.
+## [Click here](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/tree/master/Skins/Emerald/_SapphireSkin) for a full-featured, working Sapphire skin that you can test and modify yourself.
 
-## Example 1 - Completely replacing the sprites for the "Roads" button on the main toolstrip
+### Example 1 - Completely replacing the sprites for the "Roads" button on the main toolstrip
 
 1. In your skin.xml
 
