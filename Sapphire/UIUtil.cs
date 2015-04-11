@@ -43,7 +43,7 @@ namespace Sapphire
             }
             else
             {
-                button.relativePosition = new Vector3(4.0f, 64.0f, 0.0f);
+                button.relativePosition = new Vector3(64.0f, 16.0f, 0.0f);
             }
 
             return button;

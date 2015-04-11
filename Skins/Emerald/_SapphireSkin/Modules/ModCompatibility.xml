@@ -1,5 +1,10 @@
 <UIView>
 
+	<!-- Sapphire -->
+	<Component name="SapphireButton">
+		<relativePosition>1400.0, 1030.0</relativePosition>
+	</Component>
+
 	<!-- Change lanes mod -->
 	<Component name="LaneUIToggle" optional="true">
 		<relativePosition>4.0, 700.0</relativePosition>
@@ -95,4 +100,20 @@
 		</Component>
 	</Component>
 
+	<!-- Toggle traffic lights -->
+	<Component name="TSBar">
+		<Component name="OptionsBar">
+			<relativePosition>226.0, -20.0</relativePosition>
+			<Component name="RoadsOptionPanel(RoadsPanel)" optional="true">
+				<Component name="SnappingToggle">
+					<relativePosition sticky="true">16.0, 0.0</relativePosition>
+				</Component>
+
+				<Component name="UIButton" hash="2E0B2DC2">
+					<size>36.0, 36.0</size>
+					<relativePosition>220.0, 0.0</relativePosition>
+				</Component>
+			</Component>
+		</Component>
+	</Component>
 </UIView>

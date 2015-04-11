@@ -30,6 +30,7 @@ namespace ModTools
             if (t == typeof(UnityEngine.Color)) return true;
             if (t == typeof(UnityEngine.Color32)) return true;
             if (t.IsEnum) return true;
+
             return false;
         }
 
