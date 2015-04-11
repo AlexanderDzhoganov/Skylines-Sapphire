@@ -7,6 +7,7 @@ namespace Sapphire
     public class Configuration
     {
 
+        public bool showSapphireIconInGame = true;
         public bool applySkinOnStartup = false;
         public string selectedSkinPath = "";
 

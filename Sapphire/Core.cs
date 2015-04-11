@@ -38,6 +38,9 @@ namespace Sapphire
         private bool autoReloadSkinOnChange = false;
         private float autoReloadCheckTimer = 1.0f;
 
+        private UIButton sapphireButton;
+        private UIPanel sapphirePanel;
+
         private void LoadConfig()
         {
             config = Configuration.Deserialize(configPath);
@@ -57,6 +60,16 @@ namespace Sapphire
         {
             currentSkin = null;
             config = null;
+
+            if (sapphirePanel != null)
+            {
+                Destroy(sapphirePanel);
+            }
+
+            if (sapphireButton != null)
+            {
+                Destroy(sapphireButton);
+            }
 
             MakeCameraFullscreen.Deinitialize();
 
@@ -101,7 +114,14 @@ namespace Sapphire
         {
             if (Input.GetKey(KeyCode.LeftControl))
             {
-                if (Input.GetKeyDown(KeyCode.D))
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    if (sapphirePanel != null)
+                    {
+                        sapphirePanel.isVisible = !sapphirePanel.isVisible;
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.D))
                 {
                     if (debugRenderer != null)
                     {
@@ -133,8 +153,13 @@ namespace Sapphire
 
         private void CreateUI()
         {
-            var sapphirePanel = CreateSapphirePanel();
-            var sapphireButton = UIUtil.CreateSapphireButton(currentModuleClass);
+            sapphirePanel = CreateSapphirePanel();
+            sapphireButton = UIUtil.CreateSapphireButton(currentModuleClass);
+
+            if (currentModuleClass == Skin.ModuleClass.InGame && !config.showSapphireIconInGame)
+            {
+                sapphireButton.isVisible = false;
+            }
 
             sapphireButton.eventClick += (component, param) => { sapphirePanel.isVisible = !sapphirePanel.isVisible; };
 
@@ -163,7 +188,7 @@ namespace Sapphire
 
             var panel = uiView.AddUIComponent(typeof(UIPanel)) as UIPanel;
 
-            panel.size = new Vector2(300, 180);
+            panel.size = new Vector2(300, 220);
             panel.isVisible = false;
             panel.atlas = EmbeddedResources.GetSapphireAtlas();
             panel.backgroundSprite = "DefaultPanelBackground";
@@ -185,6 +210,19 @@ namespace Sapphire
             title.textColor = Color.black;
 
             float y = 32.0f;
+
+            UIUtil.MakeCheckbox(panel, "ShowIconInGame", "Show Sapphire icon in-game", new Vector2(4.0f, y), config.showSapphireIconInGame, value =>
+            {
+                config.showSapphireIconInGame = value;
+                SaveConfig();
+
+                if (currentModuleClass == Skin.ModuleClass.InGame)
+                {
+                    sapphireButton.isVisible = false;
+                }
+            });
+
+            y += 28.0f;
 
             UIUtil.MakeCheckbox(panel, "AutoApplySkin", "Apply skin on start-up", new Vector2(4.0f, y), config.applySkinOnStartup, value =>
             {
