@@ -25,17 +25,13 @@ You can then write a Sapphire selector for this component which would look like:
 ..
   
   <Component name="SomePanel">
-  
     <Component name="SomethingElse">
-  
       <Component name="FooBar">
         <size>128.0, 256.0</size>
       </Component>
-  
     </Component>
-  
   </Component>
-
+  
 ..
 
 </UIView>
