@@ -16,7 +16,6 @@ namespace Sapphire
         public string sapphirePath;
     }
 
-
     public class Skin
     {
 
@@ -62,7 +61,7 @@ namespace Sapphire
             try
             {
                 var document = new XmlDocument();
-                document.LoadXml(File.ReadAllText(Path.Combine(skinXmlPath, "skin.xml")));
+                document.LoadXml(File.ReadAllText(skinXmlPath));
 
                 var root = document.SelectSingleNode("/SapphireSkin");
                 if (root == null)

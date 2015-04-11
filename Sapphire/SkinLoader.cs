@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using ColossalFramework.Plugins;
+using UnityEngine;
 
 namespace Sapphire
 {
@@ -24,7 +25,13 @@ namespace Sapphire
                     continue;
                 }
 
-                var metadata = Skin.MetadataFromXmlFile(sapphirePath);
+                if (!File.Exists(Path.Combine(sapphirePath, "skin.xml")))
+                {
+                    Debug.LogWarningFormat("\"skin.xml\" not found in \"{0}\", skipping", sapphirePath);
+                    continue;
+                }
+
+                var metadata = Skin.MetadataFromXmlFile(Path.Combine(sapphirePath, "skin.xml"));
                 if (metadata != null)
                 {
                     skins.Add(metadata);
