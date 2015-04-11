@@ -56,6 +56,7 @@
     <Compile Include="DebugRenderer.cs" />
     <Compile Include="Detours.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="FileWatcher.cs" />
     <Compile Include="MakeCameraFullscreen.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

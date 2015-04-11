@@ -80,7 +80,7 @@ namespace Sapphire
 
                 var position = component.absolutePosition;
                 var size = component.size;
-                var rect = new Rect(position.x, position.y, size.x, size.y);
+                var rect = CalculateRealComponentRect(position, size);
 
                 if (rect.Contains(mouse))
                 {
@@ -98,7 +98,7 @@ namespace Sapphire
 
                 var position = component.absolutePosition;
                 var size = component.size;
-                var rect = new Rect(position.x, position.y, size.x, size.y);
+                var rect = CalculateRealComponentRect(position, size);
 
                 GUI.Box(rect, "", hoveredComponent == component ? hoveredRectStyle : normalRectStyle);
             }
@@ -121,6 +121,17 @@ namespace Sapphire
 
                 GUI.Window(81871, new Rect(coords.x, coords.y, size.x, size.y), DoInfoWindow, "", infoWindowStyle);
             }
+        }
+
+        Rect CalculateRealComponentRect(Vector3 absolutePosition, Vector2 size)
+        {
+            var dx = Screen.width / 1920.0f;
+            var dy = Screen.height / 1080.0f;
+            absolutePosition.x *= dx;
+            absolutePosition.y *= dy;
+            size.x *= dx;
+            size.y *= dy;
+            return new Rect(absolutePosition.x, absolutePosition.y, size.x, size.y);
         }
 
         void DoInfoWindow(int i)

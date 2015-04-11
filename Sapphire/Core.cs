@@ -36,6 +36,9 @@ namespace Sapphire
 
         private DebugRenderer debugRenderer;
 
+        private bool autoReloadSkinOnChange = false;
+        private float autoReloadCheckTimer = 1.0f;
+
         private void LoadConfig()
         {
             config = Configuration.Deserialize(configPath);
@@ -89,9 +92,35 @@ namespace Sapphire
 
         void Update()
         {
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    if (debugRenderer != null)
+                    {
+                        debugRenderer.drawDebugInfo = !debugRenderer.drawDebugInfo;
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.S))
+                {
+                    ReloadActiveSkin();
+                }
+            }
+
             if (currentSkin != null)
             {
                 currentSkin.ApplyStickyProperties(currentModuleClass);
+            }
+
+            if (currentSkin != null && autoReloadSkinOnChange)
+            {
+                autoReloadCheckTimer -= Time.deltaTime;
+                if (autoReloadCheckTimer <= 0.0f)
+                {
+                    autoReloadCheckTimer = 1.0f;
+                }
+
+                currentSkin.ReloadIfChanged();
             }
         }
 
@@ -149,19 +178,37 @@ namespace Sapphire
             title.text = "Sapphire Skin Manager";
             title.textColor = Color.black;
 
-            MakeCheckbox(panel, "AutoApplySkin", "Apply skin on start-up", 24.0f, config.applySkinOnStartup, value =>
+            float y = 32.0f;
+
+            MakeCheckbox(panel, "AutoApplySkin", "Apply skin on start-up", y, config.applySkinOnStartup, value =>
             {
                 config.applySkinOnStartup = value;
                 SaveConfig();
             });
 
-            MakeCheckbox(panel, "DrawDebugInfo", "Developer mode", 48.0f, false, value =>
+            y += 28.0f;
+
+            MakeCheckbox(panel, "DrawDebugInfo", "Developer mode (Ctrl+D)", y, false, value =>
             {
                 if (debugRenderer != null)
                 {
                     debugRenderer.drawDebugInfo = value;
                 }
             });
+
+            y += 28.0f;
+            
+            MakeCheckbox(panel, "AutoReload", "Auto-reload active skin on file change", y, false, value =>
+            {
+                autoReloadSkinOnChange = value;
+                if (autoReloadSkinOnChange)
+                {
+                    ReloadActiveSkin();
+                }
+            });
+
+
+            y += 28.0f;
 
             var skinsDropdown = panel.AddUIComponent<UIDropDown>();
 
@@ -172,7 +219,7 @@ namespace Sapphire
             }
 
             skinsDropdown.size = new Vector2(296.0f, 32.0f);
-            skinsDropdown.relativePosition = new Vector3(2.0f, 70.0f);
+            skinsDropdown.relativePosition = new Vector3(2.0f, y);
             skinsDropdown.listBackground = "GenericPanelLight";
             skinsDropdown.itemHeight = 32;
             skinsDropdown.itemHover = "ListItemHover";
@@ -212,7 +259,7 @@ namespace Sapphire
                 {
                     if (currentSkin != null)
                     {
-                        currentSkin.Dispose(currentModuleClass);
+                        currentSkin.Dispose();
                     }
 
                     currentSkin = null;
@@ -227,7 +274,7 @@ namespace Sapphire
 
                 if (currentSkin != null)
                 {
-                    currentSkin.Dispose(currentModuleClass);
+                    currentSkin.Dispose();
                 }
 
                 currentSkin = Skin.FromXmlFile(Path.Combine(skin.sapphirePath, "skin.xml"));
@@ -256,7 +303,9 @@ namespace Sapphire
             skinsDropdownButton.zOrder = 0;
             skinsDropdownButton.textScale = 0.8f;
 
-            MakeButton(panel, "ReloadSkin", "Reload active skin", panel.size.y - 32.0f, () =>
+            y += 36.0f;
+
+            MakeButton(panel, "ReloadSkin", "Reload active skin (Ctrl+S)", y, () =>
             {
                 ReloadActiveSkin();
             });
@@ -314,13 +363,14 @@ namespace Sapphire
             var button = panel.AddUIComponent<UIButton>();
             button.name = name;
             button.text = text;
-            button.relativePosition = new Vector3(2.0f, y - 6.0f);
+            button.relativePosition = new Vector3(4.0f, y);
             button.size = new Vector2(200.0f, 24.0f);
             button.normalBgSprite = "ButtonMenu";
             button.disabledBgSprite = "ButtonMenuDisabled";
             button.hoveredBgSprite = "ButtonMenuHovered";
             button.focusedBgSprite = "ButtonMenu";
             button.pressedBgSprite = "ButtonMenuPressed";
+            button.textScale = 0.8f;
 
             button.eventClick += (component, param) =>
             {
@@ -344,7 +394,7 @@ namespace Sapphire
 
             var checkbox = panel.AddUIComponent<UICheckBox>();
             checkbox.AlignTo(label, UIAlignAnchor.TopLeft);
-            checkbox.relativePosition = new Vector3(checkbox.relativePosition.x + 200.0f, checkbox.relativePosition.y - 6.0f);
+            checkbox.relativePosition = new Vector3(checkbox.relativePosition.x + 274.0f, checkbox.relativePosition.y - 2.0f);
             checkbox.size = new Vector2(16.0f, 16.0f);
             checkbox.isVisible = true;
             checkbox.canFocus = true;
@@ -384,7 +434,7 @@ namespace Sapphire
                 }
 
                 var path = currentSkin.SapphirePath;
-                currentSkin.Dispose(currentModuleClass);
+                currentSkin.Dispose();
                 currentSkin = Skin.FromXmlFile(Path.Combine(path, "skin.xml"));
                 currentSkin.Apply(currentModuleClass);
             }

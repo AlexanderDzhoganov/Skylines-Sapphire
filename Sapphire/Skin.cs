@@ -34,9 +34,7 @@ namespace Sapphire
 
             try
             {
-                var document = new XmlDocument();
-                document.LoadXml(File.ReadAllText(skinXmlPath));
-                skin = new Skin(Path.GetDirectoryName(skinXmlPath), document);
+                skin = new Skin(skinXmlPath);
             }
             catch (XmlNodeException ex)
             {
@@ -117,6 +115,7 @@ namespace Sapphire
         public Dictionary<string, Color32> colorDefinitions = new Dictionary<string, Color32>(); 
 
         private string sapphirePath;
+        private string skinXmlPath;
 
         public string SapphirePath
         {
@@ -125,15 +124,66 @@ namespace Sapphire
 
         private XmlDocument document;
 
-        public Skin(string _sapphirePath, XmlDocument _document)
+        private FileWatcher fileWatcher;
+
+        private bool isValid = true;
+
+        public Skin(string _skinXmlPath, bool autoReloadOnChange = true)
         {
+            skinXmlPath = _skinXmlPath;
+            sapphirePath = Path.GetDirectoryName(skinXmlPath);
+
+            Reload(false, autoReloadOnChange);
+        }
+
+        private void SafeReload(bool dispose = true)
+        {
+            try
+            {
+                Reload();
+            }
+            catch (XmlNodeException ex)
+            {
+                Debug.LogErrorFormat("{0} while parsing XML at {1} at node \"{2}\": {3}",
+                    ex.GetType(), skinXmlPath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                isValid = false;
+            }
+            catch (XmlException ex)
+            {
+                Debug.LogErrorFormat("XmlException while parsing XML \"{0}\" at line {1}, col {2}: {3}",
+                    skinXmlPath, ex.LineNumber, ex.LinePosition, ex.Message);
+                isValid = false;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("Exception while parsing XML \"{0}\": {1}",
+                    skinXmlPath, ex.ToString());
+                isValid = false;
+            }
+        }
+
+        private void Reload(bool dipose = true, bool autoReloadOnChange = false)
+        {
+            isValid = false;
+
+            if (!dipose)
+            {
+                Dispose();
+            }
+
             modules[ModuleClass.MainMenu] = new List<SkinModule>();
             modules[ModuleClass.InGame] = new List<SkinModule>();
             modules[ModuleClass.MapEditor] = new List<SkinModule>();
             modules[ModuleClass.AssetEditor] = new List<SkinModule>();
 
-            sapphirePath = _sapphirePath;
-            document = _document;
+            document = new XmlDocument();
+            document.LoadXml(File.ReadAllText(skinXmlPath));
+
+            if (autoReloadOnChange)
+            {
+                fileWatcher = new FileWatcher(sapphirePath);
+                fileWatcher.WatchFile("skin.xml");
+            }
 
             var root = document.SelectSingleNode("/SapphireSkin");
             if (root == null)
@@ -177,11 +227,13 @@ namespace Sapphire
                     }
                 }
             }
+
+            isValid = true;
         }
 
-        public void Dispose(ModuleClass moduleClass)
+        public void Dispose()
         {
-            Rollback(moduleClass);
+            Rollback();
 
             foreach (var atlas in spriteAtlases)
             {
@@ -196,6 +248,12 @@ namespace Sapphire
 
             spriteAtlases.Clear();
             spriteTextureCache.Clear();
+
+            if (fileWatcher != null)
+            {
+                fileWatcher.Dispose();
+                fileWatcher = null;
+            }
         }
 
         private void LoadColors()
@@ -344,6 +402,11 @@ namespace Sapphire
                     texture.filterMode = FilterMode.Bilinear;
                     spriteTextureCache.Add(path, texture);
 
+                    if (fileWatcher != null)
+                    {
+                        fileWatcher.WatchFile(path);
+                    }
+
                     atlasPacker.AddSprite(name, texture);
                     count++;
                 }
@@ -374,10 +437,20 @@ namespace Sapphire
 
             var module = SkinModule.FromXmlFile(this, modulePath);
             modules[moduleClass].Add(module);
+
+            if(fileWatcher != null)
+            {
+                fileWatcher.WatchFile(modulePath);
+            }
         }
 
         public void ApplyStickyProperties(ModuleClass moduleClass)
         {
+            if (!isValid)
+            {
+                return;
+            }
+
             foreach (var module in modules[moduleClass])
             {
                 module.ApplyStickyProperties();
@@ -386,17 +459,43 @@ namespace Sapphire
 
         public void Apply(ModuleClass moduleClass)
         {
+            if (!isValid)
+            {
+                Debug.LogWarning("Trying to apply an invalid skin");
+                return;
+            }
+
             foreach (var module in modules[moduleClass])
             {
                 module.Apply();
             }
         }
 
-        public void Rollback(ModuleClass moduleClass)
+        public void Rollback()
         {
-            foreach (var module in modules[moduleClass])
+            if (!isValid)
             {
-                module.Rollback();
+                Debug.LogWarning("Trying to roll-back an invalid skin");
+                return;
+            }
+
+            foreach (var list in modules.Values)
+            {
+                foreach (var module in list)
+                {
+                    module.Rollback();
+                }
+            }
+        }
+
+        public void ReloadIfChanged()
+        {
+            if (fileWatcher != null)
+            {
+                if (fileWatcher.CheckForAnyChanges())
+                {
+                    Reload(true, true);
+                }
             }
         }
 
