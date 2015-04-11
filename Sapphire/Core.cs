@@ -216,9 +216,13 @@ namespace Sapphire
                 config.showSapphireIconInGame = value;
                 SaveConfig();
 
-                if (currentModuleClass == Skin.ModuleClass.InGame)
+                if (!config.showSapphireIconInGame && currentModuleClass == Skin.ModuleClass.InGame)
                 {
                     sapphireButton.isVisible = false;
+                }
+                else
+                {
+                    sapphireButton.isVisible = true;
                 }
             });
 
