@@ -161,19 +161,19 @@ At this point you may be familiar with the basics but are still wondering how th
 
 For every component in the UI that you want to re-design in some way:
 
-1. Enable "Developer mode" from the checkbox in Sapphire's panel. This mode will paint the boundaries of all UI components as well as allow you to see the properties of a specific component by hovering over it.
+* Enable "Developer mode" from the checkbox in Sapphire's panel. This mode will paint the boundaries of all UI components as well as allow you to see the properties of a specific component by hovering over it.
 
-2. Write down the component's `name` and `parent` properties
+* Write down the component's `name` and `parent` properties
 
-3. Open ModTools "Scene Explorer" and click on the down-arrow button in the top-left to open the expanded settings panel. **Disable the `Fields` checkbox on the top row.** 
+* Open ModTools "Scene Explorer" and click on the down-arrow button in the top-left to open the expanded settings panel. **Disable the `Fields` checkbox on the top row.** 
 
-4. Type the `name` of your component into the `GameObject.Find` field in Scene Explorer's expanded settings panel and click "Find".
+* Type the `name` of your component into the `GameObject.Find` field in Scene Explorer's expanded settings panel and click "Find".
 
-5. If the component was found you will see it displayed in the left panel of the SceneExplorer along with an `>` icon to the left of the component's name. Click on `>` to open the component for editing.
+* If the component was found you will see it displayed in the left panel of the SceneExplorer along with an `>` icon to the left of the component's name. Click on `>` to open the component for editing.
 
-6. Now you will be able to see all the component's properties on the right side of Scene Explorer's window.
+* Now you will be able to see all the component's properties on the right side of Scene Explorer's window.
 
-6.1 It is very necessary to know where a component exists within the whole UI hierarchy (so that you can write the proper Sapphire <Component> selectors). Sometimes this is not trivial as components may be deeply nested within the hierarchy and finding them through browsing with the SceneExplorer may prove tedious. 
+*  It is very necessary to know where a component exists within the whole UI hierarchy (so that you can write the proper Sapphire <Component> selectors). Sometimes this is not trivial as components may be deeply nested within the hierarchy and finding them through browsing with the SceneExplorer may prove tedious. 
 
 ModTools can solve this problem by providing a way to query the full path of a UI component. This is done through the ModTools console. Press F7 to open the console, and in the command- line field on the bottom type the following:
 
@@ -183,11 +183,11 @@ GameObjectUtil.Find(GameObject.Find("myUIComponent"));
 
 where `myUIComponent` is the name of the UI component you're looking for (the same name you typed into GameObject.Find in SceneExplorer in step 4). If you get a NullReferenceException (red text) that means a component with this name does not exist in the scene.
 
-7. Modify any properties using the Scene Explorer you want to achieve your desired look. Write down all changes in your skin's XML.
+* Modify any properties using the Scene Explorer you want to achieve your desired look. Write down all changes in your skin's XML.
 
-8. Reload your skin to preview your changes. Note that recent Sapphire versions can reload your skin automatically when you modify one of its files ("Reload active skin on file change" checkbox in Sapphire's panel)
+* Reload your skin to preview your changes. Note that recent Sapphire versions can reload your skin automatically when you modify one of its files ("Reload active skin on file change" checkbox in Sapphire's panel)
 
-9. Repeat process for all UI components that you wish to modify/ redesign
+* Repeat process for all UI components that you wish to modify/ redesign
 
 ### 6. Publishing your skin
 
