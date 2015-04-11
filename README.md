@@ -32,7 +32,32 @@ Making a new skin for Sapphire is a straight-forward process. Here is an overvie
 
 **1.1** Download and extract [the Sapphire master archive](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/archive/master.zip)
 
-**1.2** Navigate to the `Skins/Emerald` folder. ***This is a fully-working Sapphire skin that you can test out and modify to learn how the system works.***. Copy the contents of the folder to your C:S mods folder (e.g. `C:\Users\nlight\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\Emerald`). After that the skin should be visible in the Sapphire skins list in-game.
+**1.2** Navigate to the `Skins/Emerald` folder. 
+
+***This is a fully-working Sapphire skin that you can test out and modify to learn how the system works.***. 
+
+Copy the contents of this folder to your C:S mods folder.
+
+The mods folder is located in differnt places depending on your OS, here is a list to help:
+- Windows - `C:\Users\<YOUR USERNAME>\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\Emerald`). 
+- Linux - ` ~/.local/share/Colossal Order/Cities_Skylines/Addons/Mods`
+- OSX - `/users/library/Application Support/Colossal Order/Cities_Skylines/Addons/Mods`
+- 
+
+Note the folder structure necessary for this to work. Double check that you have the same structure locally.
+
+```
+Mods/
+	Emerald/
+		_SapphireSkin/
+			skin.xml
+			Modules/
+			Sprites/
+		Source/
+			Source.cs
+```
+
+After the last step the skin should be visible in the Sapphire skins list in-game.
 
 After you're done with the example skin go to 1.3.
 
