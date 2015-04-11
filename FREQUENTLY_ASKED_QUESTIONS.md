@@ -47,7 +47,7 @@ Creating new components using similar syntax to the current one is possible but 
 
 Yes! Absolutely. You can include code with your Sapphire skin by putting it in the "Source/" folder of your mod's root directory or by compiling a .DLL yourself (by e.g. Visual Studio or MonoDevelop) and putting it in your mod's root folder. This allows extreme changes to the game's interface up to a 100% complete rewrite. Any component that you create via your code is skinnable with Sapphire so you should not bother with setting up any properties through code - just create the component, name it and then skin it using a Sapphire skin module.
 
-### 5. How can I select one of two or more Components which have identical names?
+### 5. Two or more components which share the same parent have identical names. How can I select only one of them?
 
 This is mostly the case with modders who don't name their UI components so they remain with the default names like "UIButton" or "UILabel. When several such "UIButton" components have the same parent it is impossible to select one using name matching. This is where the `hash` attribute comes in. Each component has a hash value which you can see by hovering over it in 'developer mode'. This hash value can be used to differentiate between two or more components which have the same name. Here is an example:
 
