@@ -1,4 +1,4 @@
-### How to select all components in the scene?
+### 1. How to select all components in the scene?
 
-`<Component name=".*" name_regex="true" recursive="true">`
+- Use `<Component name=".*" name_regex="true" recursive="true">`
 
