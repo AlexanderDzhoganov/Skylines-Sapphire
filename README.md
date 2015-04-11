@@ -187,7 +187,7 @@ where `myUIComponent` is the name of the UI component you're looking for (the sa
 
 * Reload your skin to preview your changes. Note that recent Sapphire versions can reload your skin automatically when you modify one of its files ("Reload active skin on file change" checkbox in Sapphire's panel)
 
-* Repeat process for all UI components that you wish to modify/ redesign
+* Repeat the process above for all UI components that you wish to modify/ redesign
 
 ### 6. Publishing your skin
 
