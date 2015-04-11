@@ -38,3 +38,11 @@ You can then write a Sapphire selector for this component which would look like:
 ```
 
 The example above will set the size of `FooBar` to 128, 256.
+
+### 3. How can I create new UI components using Sapphire syntax? Why don't you make it possible to do so?
+
+Creating new components using similar syntax to the current one is possible but left out as a design decision. The reason behind that is it will introduce a huge amount of complexity e.g. you add a button - but now you need a way to code a behaviour for it (as a button that does nothing is absolutely useless). In practice, introducing this to the Sapphire syntax will gradually turn it into a full-blown programming language. This is very undesirable as C# is already a much better programming language than any XML- based syntax could ever be and it also goes in an orthogonal direction to Sapphire's goal of allowing "skinning" not designing of UIs. For the proper way to handle creation of new elements see (4).
+
+### 4. Can I change the behaviour of UI components and/ or re-parent them? Can I bundle code with my Sapphire skin?
+
+Yes! Absolutely. You can include code with your Sapphire skin by putting it in the "Source/" folder of your mod's root directory or by compiling a .DLL yourself (by e.g. Visual Studio or MonoDevelop) and putting it in your mod's root folder. This allows extreme changes to the game's interface up to a 100% complete rewrite. Any component that you create via your code is skinnable with Sapphire so you should not bother with setting up any properties through code - just create the component, name it and then skin it using a Sapphire skin module.
