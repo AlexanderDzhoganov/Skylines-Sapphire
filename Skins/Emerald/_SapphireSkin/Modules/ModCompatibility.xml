@@ -14,16 +14,16 @@
 
 					<Component name="ExtendedRoadUpgradeButtonTwoWay">
 						<size>36.0, 36.0</size>
-					</Component>
+					</Component> 
 					<Component name="ExtendedRoadUpgradeButtonOneWay">
 						<size>36.0, 36.0</size>
-					</Component>d
+					</Component>
 				</Component>
 			</Component>
 		</Component>
 	</Component>
 
-	<!-- Extended building info -->
+	<!-- Extended building info -->  
 	<Component name="FullScreenContainer">
 		<Component name="(Library) ZonedBuildingWorldInfoPanel">
 			<Component name="buildingWindowObject" optional="true">
@@ -62,6 +62,15 @@
 		<Component name=".*" name_regex="true" recursive="true">
 			<textColor optional="true">Black</textColor>
 		</Component>
+	</Component>
+
+	<!-- No pillars -->
+	<Component name="UIButton" hash="1B0CDBFE9" optional="true">
+		<relativePosition>1700.0, 1012.0</relativePosition>
+	</Component>
+
+	<Component name="UIButton" hash="180411189" optional="true">
+		<relativePosition>1700.0, 1044.0</relativePosition>
 	</Component>
 
 </UIView>
