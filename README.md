@@ -39,10 +39,9 @@ Making a new skin for Sapphire is a straight-forward process. Here is an overvie
 Copy the contents of this folder to your C:S mods folder.
 
 The mods folder is located in differnt places depending on your OS, here is a list to help:
-- Windows - `C:\Users\<YOUR USERNAME>\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\`). 
-- Linux - ` ~/.local/share/Colossal Order/Cities_Skylines/Addons/Mods`
+- Windows - `C:\Users\<YOUR USERNAME>\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\`
+- Linux - `~/.local/share/Colossal Order/Cities_Skylines/Addons/Mods`
 - OSX - `/users/library/Application Support/Colossal Order/Cities_Skylines/Addons/Mods`
-- 
 
 Note the folder structure necessary for this to work. Double check that you have the same structure locally.
 
