@@ -65,6 +65,8 @@ This specific example comes from the "No Pillars" mod which creates two "unnamed
 
 **Warning: Component hashes are not globally unique! They are to be used only to select between components which _share the same parent_. The `name` attribute is still mandatory**
 
+Note that using the `optional` attribute when specifying a `hash` is recommended as there are a number of things that could go wrong and change the hash of a component before Sapphire can get to it. Using `optional` ensures that at least your skin won't fail to load if this happens even with the missing component selector.
+
 ### 6. Where can I find the vanilla UI sprites?
 
 There is a dump of all sprites that are in the vanilla game here - http://docs.skylinesmodding.com/en/master/resources/UI-Sprites-1.html
