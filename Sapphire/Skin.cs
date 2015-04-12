@@ -108,7 +108,6 @@ namespace Sapphire
             get { return author; }
         }
 
-        public Dictionary<string, Texture2D> spriteTextureCache = new Dictionary<string, Texture2D>();
         public Dictionary<string, UITextureAtlas> spriteAtlases = new Dictionary<string, UITextureAtlas>();
 
         public Dictionary<string, Color32> colorDefinitions = new Dictionary<string, Color32>(); 
@@ -249,13 +248,9 @@ namespace Sapphire
                 GameObject.Destroy(atlas.Value);
             }
 
-            foreach (var texture in spriteTextureCache)
-            {
-                GameObject.Destroy(texture.Value);
-            }
+            colorDefinitions.Clear();
 
             spriteAtlases.Clear();
-            spriteTextureCache.Clear();
 
             if (fileWatcher != null)
             {
@@ -402,11 +397,6 @@ namespace Sapphire
                     var name = XmlUtil.GetStringAttribute(spriteNode, "name");
                     Debug.LogWarningFormat("Packing sprite \"{0}\" in atlas", name);
 
-                    if (spriteTextureCache.ContainsKey(path))
-                    {
-                        continue;
-                    }
-
                     var fullPath = Path.Combine(sapphirePath, path);
 
                     if (!File.Exists(fullPath))
@@ -414,11 +404,7 @@ namespace Sapphire
                         throw new FileNotFoundException(String.Format("Sprite \"{0}\" not found!", fullPath), fullPath);
                     }
 
-                    var texture = new Texture2D(0, 0, TextureFormat.ARGB32, false, true);
-                    texture.LoadImage(File.ReadAllBytes(fullPath));
-                    spriteTextureCache.Add(path, texture);
-
-                    atlasPacker.AddSprite(name, texture);
+                    atlasPacker.AddSprite(name, fullPath);
                     count++;
                 }
 
