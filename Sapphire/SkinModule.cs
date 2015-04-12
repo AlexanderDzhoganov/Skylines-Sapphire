@@ -264,31 +264,23 @@ namespace Sapphire
 
             foreach (XmlNode stateNode in node.ChildNodes)
             {
-                if (stateNode.Name == "normal")
+                try
                 {
-                    sprites[index].normal = stateNode.InnerText;
+                    var property = sprites[index].GetType().GetProperty(stateNode.Name);
+                    if (property == null)
+                    {
+                        throw new ParseException(String.Format
+                        ("Invalid property \"{0}\" for SpriteState, allowed are \"normal\", \"hovered\", \"focused\", \"pressed\", \"disabled\"",
+                            stateNode.InnerText), node);
+                    }
+
+                    SetPropertyValueWithRollback(sprites[index], property, stateNode.InnerText);
                 }
-                else if (stateNode.Name == "hovered")
-                {
-                    sprites[index].hovered = stateNode.InnerText;
-                }
-                else if (stateNode.Name == "focused")
-                {
-                    sprites[index].focused = stateNode.InnerText;
-                }
-                else if (stateNode.Name == "pressed")
-                {
-                    sprites[index].pressed = stateNode.InnerText;
-                }
-                else if (stateNode.Name == "disabled")
-                {
-                    sprites[index].disabled = stateNode.InnerText;
-                }
-                else
+                catch (Exception ex)
                 {
                     throw new ParseException(String.Format
-                        ("Invalid property \"{0}\" for SpriteState, allowed are \"normal\", \"hovered\", \"focused\", \"pressed\", \"disabled\",",
-                            stateNode.InnerText), node);
+                        ("Exception while processing SpriteState node - {0}",
+                            ex.ToString()), node);
                 }
             }
         }
@@ -347,7 +339,7 @@ namespace Sapphire
             SetPropertyValueWithRollback(component, property, value);
         }
 
-        private void SetPropertyValueWithRollback(UIComponent component, PropertyInfo property, object value)
+        private void SetPropertyValueWithRollback(object component, PropertyInfo property, object value)
         {
             var originalValue = property.GetValue(component, null);
 
