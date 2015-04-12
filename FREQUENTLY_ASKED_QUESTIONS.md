@@ -64,3 +64,7 @@ This is mostly the case with modders who don't name their UI components so they 
 This specific example comes from the "No Pillars" mod which creates two "unnamed" buttons with the same parent. By looking up the hash values in 'developer mode' and specifying them in the `hash` attribute we can select only one of the two buttons. This works for any number of components sharing the same name.
 
 **Warning: Component hashes are not globally unique! They are to be used only to select between components which _share the same parent_. The `name` attribute is still mandatory**
+
+### 6. Where can I find the vanilla UI sprites?
+
+There is a dump of all sprites that are in the vanilla game here - http://docs.skylinesmodding.com/en/master/resources/UI-Sprites-1.html
