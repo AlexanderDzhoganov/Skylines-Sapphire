@@ -267,6 +267,8 @@ namespace Sapphire
 
             tags.Clear();
 
+            renderArea = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
+
             if (fileWatcher != null)
             {
                 fileWatcher.Dispose();
