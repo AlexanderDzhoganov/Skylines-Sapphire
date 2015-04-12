@@ -141,13 +141,13 @@ namespace Sapphire
             }
             catch (ParseException ex)
             {
-                Debug.LogErrorFormat("Error while applying skin mdoule \"{1}\" at node \"{2}\": {3}",
+                Debug.LogErrorFormat("Error while applying skin module \"{1}\" at node \"{2}\": {3}",
                     ex.GetType(), sourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
                 return false;
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while applying skin mdoule \"{1}\" at node \"{2}\": {3}",
+                Debug.LogErrorFormat("{0} while applying skin module \"{1}\" at node \"{2}\": {3}",
                     ex.GetType(), sourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
                 return false;
             }

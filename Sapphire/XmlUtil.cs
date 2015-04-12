@@ -18,12 +18,30 @@ namespace Sapphire
 
             using (var sw = new System.IO.StringWriter())
             {
-                using (var xw = new XmlTextWriter(sw))
+                if (node.ParentNode != null)
                 {
-                    xw.Formatting = Formatting.Indented;
-                    xw.Indentation = 0;
-                    node.WriteContentTo(xw);
+                    try
+                    {
+                        sw.WriteLine("<{0} name=\"{1}\">", node.ParentNode.Name, node.ParentNode.Attributes["name"].Value);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
+
+                try
+                {
+                    sw.WriteLine("  <{0} name=\"{1}\">..</{0}", node.Name, node.Attributes["name"].Value);
+                }
+                catch (Exception)
+                {
+                }
+
+                if (node.ParentNode != null)
+                {
+                    sw.WriteLine("</{0}>", node.ParentNode.Name);
+                }
+
                 return sw.ToString();
             }
         }
