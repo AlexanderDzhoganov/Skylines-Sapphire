@@ -23,6 +23,7 @@ namespace Sapphire
         {
             rawSprites.Add(new KeyValuePair<string, Texture2D>(name, texture));
         }
+
         public void AddSprite(string name, string pngPath)
         {
             pathSprites.Add(new KeyValuePair<string, string>(name, pngPath));

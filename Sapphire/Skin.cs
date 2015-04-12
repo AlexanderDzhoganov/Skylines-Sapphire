@@ -377,8 +377,7 @@ namespace Sapphire
                 var atlasName = XmlUtil.GetStringAttribute(childNode, "name");
                 if (spriteAtlases.ContainsKey(atlasName))
                 {
-                    Debug.LogWarningFormat("Duplicate atlas name \"{0}\", ignoring second definition..", atlasName);
-                    continue;
+                    throw new ParseException(String.Format("Duplicate atlas name \"{0}\"", atlasName), childNode);
                 }
 
                 Debug.LogWarningFormat("Generating atlas \"{0}\"", atlasName);
@@ -395,20 +394,20 @@ namespace Sapphire
                     }
 
                     var name = XmlUtil.GetStringAttribute(spriteNode, "name");
-                    Debug.LogWarningFormat("Packing sprite \"{0}\" in atlas", name);
+                    Debug.LogWarningFormat("Found definition for sprite \"{0}\" in atlas \"{1}\"", name, atlasName);
 
                     var fullPath = Path.Combine(sapphirePath, path);
 
                     if (!File.Exists(fullPath))
                     {
-                        throw new FileNotFoundException(String.Format("Sprite \"{0}\" not found!", fullPath), fullPath);
+                        throw new FileNotFoundException(String.Format("Sprite at path \"{0}\" not found!", fullPath), fullPath);
                     }
 
                     atlasPacker.AddSprite(name, fullPath);
                     count++;
                 }
 
-                Debug.LogWarningFormat("Added {0} sprites..", count);
+                Debug.LogWarningFormat("Added {0} sprites to atlas \"{1}\"", count, atlasName);
                 
                 try
                 {
