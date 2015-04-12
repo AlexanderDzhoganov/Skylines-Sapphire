@@ -49,7 +49,7 @@ Yes! Absolutely. You can include code with your Sapphire skin by putting it in t
 
 ### 5. Two or more components which share the same parent have identical names. How can I select only one of them?
 
-This is mostly the case with modders who don't name their UI components so they remain with the default names like "UIButton" or "UILabel. When several such "UIButton" components have the same parent it is impossible to select one using name matching. This is where the `hash` attribute comes in. Each component has a hash value which you can see by hovering over it in 'developer mode'. This hash value can be used to differentiate between two or more components which have the same name. Here is an example:
+This is mostly the case with modders who don't name their UI components so they remain with the default names like "UIButton" or "UILabel". When several components have the same parent and the same name it becomes impossible to select only one using standard name matching. This is where the `hash` attribute comes in. Each component has a hash value which you can see by hovering over it in 'developer mode'. This hash value can be used to differentiate between two or more components which have the same name. Here is an example:
 
 ```xml
 <Component name="UIButton" hash="1B0CDBFE9" optional="true">
