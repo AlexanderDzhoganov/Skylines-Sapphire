@@ -112,6 +112,8 @@ namespace Sapphire
 
         public Dictionary<string, Color32> colorDefinitions = new Dictionary<string, Color32>(); 
 
+        public Dictionary<string, string> tags = new Dictionary<string, string>(); 
+
         private string sapphirePath;
         private string skinXmlPath;
 
@@ -263,6 +265,8 @@ namespace Sapphire
 
             spriteAtlases.Clear();
 
+            tags.Clear();
+
             if (fileWatcher != null)
             {
                 fileWatcher.Dispose();
@@ -279,12 +283,12 @@ namespace Sapphire
             catch (XmlNodeException ex)
             {
                 Debug.LogErrorFormat("{0} while loading skin settings for skin ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                    ex.GetType(), name, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
                 isValid = false;
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while loading skin settings for skin ({0}): {1}", sapphirePath, ex.Message);
+                Debug.LogErrorFormat("Exception while loading skin settings for skin ({0}): {1}", name, ex.Message);
                 isValid = false;
             }
         }
@@ -337,12 +341,12 @@ namespace Sapphire
             catch (XmlNodeException ex)
             {
                 Debug.LogErrorFormat("{0} while loading colors for skin ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                    ex.GetType(), name, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
                 isValid = false;
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while loading colors for skin ({0}): {1}", sapphirePath, ex.Message);
+                Debug.LogErrorFormat("Exception while loading colors for skin ({0}): {1}", name, ex.Message);
                 isValid = false;
             }
         }
@@ -415,12 +419,12 @@ namespace Sapphire
             catch (XmlNodeException ex)
             {
                 Debug.LogErrorFormat("{0} while loading sprites for skin ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                    ex.GetType(), name, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
                 isValid = false;
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while loading sprites for skin ({0}): {1}", sapphirePath, ex.Message);
+                Debug.LogErrorFormat("Exception while loading sprites for skin ({0}): {1}", name, ex.Message);
                 isValid = false;
             }
         }
@@ -538,9 +542,25 @@ namespace Sapphire
 
             currentModuleClass = moduleClass;
 
+            List<SkinModule> appliedModules = new List<SkinModule>();
+
             foreach (var module in modules[moduleClass])
             {
-                module.Apply();
+                if (module.Apply())
+                {
+                    appliedModules.Add(module);
+                }
+                else
+                {
+                    module.Rollback();
+                    foreach (var appliedModule in appliedModules)
+                    {
+                        appliedModule.Rollback();
+                    }
+
+                    Debug.LogWarning("Failed to apply skin module (look for an error in the messages above). All changes have been reverted.");
+                    return;
+                }
             }
 
             SetCameraRectHelper.CameraRect = renderArea;

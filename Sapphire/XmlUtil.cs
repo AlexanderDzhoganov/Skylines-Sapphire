@@ -9,6 +9,25 @@ namespace Sapphire
     public static class XmlUtil
     {
 
+        public static string XmlNodeInfo(XmlNode node)
+        {
+            if (node == null)
+            {
+                return "null";
+            }
+
+            using (var sw = new System.IO.StringWriter())
+            {
+                using (var xw = new XmlTextWriter(sw))
+                {
+                    xw.Formatting = Formatting.Indented;
+                    xw.Indentation = 0;
+                    node.WriteContentTo(xw);
+                }
+                return sw.ToString();
+            }
+        }
+
         public static object GetValueForType(XmlNode node, Type t, string value, Dictionary<string, UITextureAtlas> spriteAtlases)
         {
             if (t == typeof(int))

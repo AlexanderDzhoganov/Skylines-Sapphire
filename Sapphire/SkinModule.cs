@@ -9,6 +9,8 @@ using UnityEngine;
 namespace Sapphire
 {
 
+
+
     public class SkinModule
     {
 
@@ -41,17 +43,17 @@ namespace Sapphire
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while parsing SkinModule xml ({1}) at node \"{2}\": {3}", 
-                    ex.GetType(), path, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                Debug.LogErrorFormat("{0} while parsing skin module \"{1}\" at node \"{2}\": {3}", 
+                    ex.GetType(), path, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
             }
             catch (XmlException ex)
             {
-                Debug.LogErrorFormat("XmlException while parsing XML \"{0}\" at line {1}, col {2}: {3}",
+                Debug.LogErrorFormat("XmlException while parsing skin module \"{0}\" at line {1}, col {2}: {3}",
                     path, ex.LineNumber, ex.LinePosition, ex.Message);
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while parsing XML \"{0}\": {1}",
+                Debug.LogErrorFormat("{0} while parsing skin module \"{1}\": {2}", ex.GetType(),
                     path, ex.ToString());
             }
            
@@ -73,17 +75,17 @@ namespace Sapphire
             }
             catch (ParseException ex)
             {
-                Debug.LogErrorFormat("Error while applying sticky properties for skin xml ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                Debug.LogErrorFormat("Error while applying sticky properties for skin module \"{1}\" at node \"{2}\": {3}",
+                    ex.GetType(), sourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while applying sticky properties for skin xml ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                Debug.LogErrorFormat("{0} while applying sticky properties for skin module \"{1}\" at node \"{2}\": {3}",
+                    ex.GetType(), sourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while applying sticky properties for skin xml ({0}): {1}", sourcePath, ex.Message);
+                Debug.LogErrorFormat("{0} while applying sticky properties for skin module \"{1}\": {2}", ex.GetType(), sourcePath, ex.ToString());
             }
         }
 
@@ -97,7 +99,7 @@ namespace Sapphire
 
         public void Rollback()
         {
-            Debug.LogWarningFormat("Rolling back changes from skin \"{0}\"", sourcePath);
+            Debug.LogWarningFormat("Rolling back changes from skin module \"{0}\"", sourcePath);
 
             stickyProperties = new List<StickyProperty>();
 
@@ -107,10 +109,11 @@ namespace Sapphire
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception during skin rollback ({0}): {1}", sourcePath, ex.Message);
+                Debug.LogErrorFormat("{0} during skin module \"{1}\" rollback: {2}", ex.GetType(), sourcePath, ex.ToString());
+                return;
             }
 
-            Debug.LogWarning("SkinModule successfully rolled back!");
+            Debug.LogFormat("Skin module \"{0}\" successfully rolled back!", sourcePath);
         }
 
         private void RollbackInternal()
@@ -125,32 +128,36 @@ namespace Sapphire
             rollbackStack.Clear();
         }
 
-        public void Apply()
+        public bool Apply()
         {
-            Debug.LogWarningFormat("Applying skin \"{0}\"", sourcePath);
+            Debug.LogFormat("Applying skin module \"{0}\"", sourcePath);
 
             stickyProperties = new List<StickyProperty>();
 
             try
             {
                 ApplyInternal();
+                Debug.LogFormat("Skin module \"{0}\" successfully applied!", sourcePath);
             }
             catch (ParseException ex)
             {
-                Debug.LogErrorFormat("Error while parsing skin xml ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                Debug.LogErrorFormat("Error while applying skin mdoule \"{1}\" at node \"{2}\": {3}",
+                    ex.GetType(), sourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
+                return false;
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while applying skin xml ({1}) at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                Debug.LogErrorFormat("{0} while applying skin mdoule \"{1}\" at node \"{2}\": {3}",
+                    ex.GetType(), sourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
+                return false;
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while applying skin xml ({0}): {1}", sourcePath, ex.Message);
+                Debug.LogErrorFormat("{0} while applying skin module \"{1}\": {2}", ex.GetType(), sourcePath, ex.ToString());
+                return false;
             }
 
-            Debug.LogWarning("SkinModule successfully applied!");
+            return true;
         }
 
         private void ApplyInternal()
@@ -170,13 +177,17 @@ namespace Sapphire
             {
                 if (childNode.Attributes == null)
                 {
-                    Debug.LogWarningFormat("Child with null attributes: \"{0}\"", childNode.Name);
+                    Debug.LogWarningFormat("Child with null attributes: \"{0}\"", XmlUtil.XmlNodeInfo(childNode));
                     continue;
                 }
 
                 if (childNode.Name == "Component")
                 {
                     ApplyComponentSelector(childNode, component);
+                }
+                else if (childNode.Name == "IfDef")
+                {
+                    ApplyConditionalSelector(childNode, component);
                 }
                 else if(component != null)
                 {
@@ -196,7 +207,13 @@ namespace Sapphire
             }
         }
 
-        void ApplyComponentSelector(XmlNode node, UIComponent component)
+        private void ApplyConditionalSelector(XmlNode node, UIComponent component)
+        {
+            var tag = XmlUtil.GetStringAttribute(node, "tag");
+
+        }
+
+        private void ApplyComponentSelector(XmlNode node, UIComponent component)
         {
             var name = XmlUtil.GetStringAttribute(node, "name");
 
@@ -231,7 +248,7 @@ namespace Sapphire
             }
         }
 
-        void ApplyUIMultiStateButtonSpriteStateProperty(XmlNode node, UIComponent component)
+        private void ApplyUIMultiStateButtonSpriteStateProperty(XmlNode node, UIComponent component)
         {
             var index = XmlUtil.GetIntAttribute(node, "index");
 
@@ -285,7 +302,7 @@ namespace Sapphire
             }
         }
 
-        void ApplyGenericProperty(XmlNode node, UIComponent component)
+        private void ApplyGenericProperty(XmlNode node, UIComponent component)
         {
             bool optional = XmlUtil.TryGetBoolAttribute(node, "optional");
             bool sticky = XmlUtil.TryGetBoolAttribute(node, "sticky");
@@ -315,6 +332,11 @@ namespace Sapphire
                 }
 
                 throw new MissingComponentPropertyException(setNode.Name, component, node);
+            }
+
+            if (!property.CanWrite)
+            {
+                throw new ParseException(String.Format("Property \"{0}\" of component \"{1}\" is read-only", property.Name, component.name), setNode);
             }
 
             object value = null;
@@ -350,15 +372,15 @@ namespace Sapphire
         {
             var originalValue = property.GetValue(component, null);
 
-            rollbackStack.Add(() =>
-            {
-                property.SetValue(component, originalValue, null);
-            });
-
             if (originalValue != value)
             {
                 SetPropertyValue(component, property, value);
             }
+
+            rollbackStack.Add(() =>
+            {
+                property.SetValue(component, originalValue, null);
+            });
         }
 
         private void SetPropertyValue(object component, PropertyInfo property, object value)
