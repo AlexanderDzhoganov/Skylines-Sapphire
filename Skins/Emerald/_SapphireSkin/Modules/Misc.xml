@@ -1,11 +1,6 @@
 <UIView>
 
-	<Component name="ChirperPanel" optional="true">
-		<zOrder sticky="true">9999</zOrder>
-	</Component>
-	
 	<Component name="Esc">
-		<zOrder sticky="true">9999</zOrder>
 		<atlas>BackgroundsAtlas</atlas>
 		<normalBgSprite>RoundBack</normalBgSprite>
 		<hoveredBgSprite>RoundBackHovered</hoveredBgSprite>
