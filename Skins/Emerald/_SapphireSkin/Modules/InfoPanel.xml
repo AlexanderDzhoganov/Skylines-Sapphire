@@ -3,7 +3,7 @@
 	<Component name="InfoPanel">
 		<backgroundSprite></backgroundSprite>
 		<color>PanelColor</color>
-		<relativePosition>0.0, 0.0, 0.0</relativePosition>
+		<relativePosition sticky="true">0.0, 0.0, 0.0</relativePosition>
 		<zOrder sticky="true">60</zOrder>
 		
 		<Component name="InfoMenu">
