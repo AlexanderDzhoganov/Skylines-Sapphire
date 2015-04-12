@@ -5,6 +5,10 @@ Author: nlight
 
 -->
 <SapphireSkin name="Emerald" author="nlight">
+	<SkinSettings>
+		<InGameRenderArea>0.0, 0.0, 1920.0, 1020.0</InGameRenderArea>
+	</SkinSettings>
+
 	<Module class="MainMenu">Modules/MainMenu.xml</Module>
 	
 	<Module class="InGame">Modules/Misc.xml</Module>

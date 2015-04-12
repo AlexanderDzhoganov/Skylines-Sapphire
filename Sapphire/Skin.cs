@@ -124,6 +124,16 @@ namespace Sapphire
 
         private FileWatcher fileWatcher;
 
+        private Rect renderArea = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
+
+        public Rect RenderArea
+        {
+            get
+            {
+                return renderArea;
+            }
+        }
+
         public bool IsValid
         {
             get { return isValid; }
@@ -200,6 +210,7 @@ namespace Sapphire
                 throw new ParseException("Skin missing root SapphireSkin node at " + sapphirePath, null);
             }
 
+            LoadSkinSettings();
             LoadSprites();
             LoadColors();
 
@@ -256,6 +267,64 @@ namespace Sapphire
             {
                 fileWatcher.Dispose();
                 fileWatcher = null;
+            }
+        }
+
+        private void LoadSkinSettings()
+        {
+            try
+            {
+                LoadSkinSettingsInternal();
+            }
+            catch (XmlNodeException ex)
+            {
+                Debug.LogErrorFormat("{0} while loading skin settings for skin ({1}) at node \"{2}\": {3}",
+                    ex.GetType(), sapphirePath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
+                isValid = false;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("Exception while loading skin settings for skin ({0}): {1}", sapphirePath, ex.Message);
+                isValid = false;
+            }
+        }
+
+        private void LoadSkinSettingsInternal()
+        {
+            Debug.LogWarning("Loading skin settings");
+
+            var rootSettingsNode = document.SelectSingleNode("/SapphireSkin/SkinSettings");
+
+            if (rootSettingsNode == null)
+            {
+                Debug.LogWarning("Skin defines no settings");
+                return;
+            }
+
+            foreach (XmlNode childNode in rootSettingsNode)
+            {
+                var settingsKey = childNode.Name;
+                var text = childNode.InnerText;
+
+                if (text.Length == 0)
+                {
+                    throw new ParseException(String.Format("Empty value for settings key \"{0}\"", settingsKey), childNode);
+                }
+
+                if (settingsKey == "InGameRenderArea")
+                {
+                    var rect = (Rect)XmlUtil.GetValueForType(childNode, typeof (Rect), childNode.InnerText, null);
+                    Debug.LogWarning(String.Format("Setting skin \"InGameRenderArea\" to {0}", rect));
+
+                    rect.width /= 1920.0f;
+                    rect.height /= 1080.0f;
+
+                    rect.x /= 1920.0f;
+                    rect.y /= 1080.0f;
+                    rect.y = 1.0f - rect.y - rect.height;
+
+                    renderArea = rect;
+                }
             }
         }
 
@@ -473,6 +542,8 @@ namespace Sapphire
             {
                 module.Apply();
             }
+
+            SetCameraRectHelper.CameraRect = renderArea;
         }
 
         public void Rollback()
@@ -490,6 +561,8 @@ namespace Sapphire
                     module.Rollback();
                 }
             }
+
+            SetCameraRectHelper.ResetCameraRect();
         }
 
         public void ReloadIfChanged()

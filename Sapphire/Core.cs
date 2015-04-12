@@ -71,14 +71,14 @@ namespace Sapphire
                 Destroy(sapphireButton);
             }
 
-            MakeCameraFullscreen.Deinitialize();
+            SetCameraRectHelper.Deinitialize();
 
             bootstrapped = false;
         }
 
         void Awake()
         {
-            MakeCameraFullscreen.Initialize();
+            SetCameraRectHelper.Initialize();
 
             LoadConfig();
 

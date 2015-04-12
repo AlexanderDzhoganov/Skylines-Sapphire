@@ -5,12 +5,26 @@ using UnityEngine;
 
 namespace Sapphire
 {
-    public class MakeCameraFullscreen
+    public class SetCameraRectHelper
     {
 
         private static RedirectCallsState cameraControllerRedirect;
         private static bool cameraControllerRedirected = false;
+        private static FieldInfo cachedFreeCameraField;
 
+        private static Rect cameraRect = new Rect(0f, 0.105f, 1f, 0.895f);
+
+        public static Rect CameraRect
+        {
+            get { return cameraRect; }
+            set { cameraRect = value; }
+        }
+
+        public static void ResetCameraRect()
+        {
+            cameraRect = new Rect(0f, 0.105f, 1f, 0.895f);
+        }
+        
         public static void Initialize()
         {
             if (cameraControllerRedirected)
@@ -18,13 +32,15 @@ namespace Sapphire
                 return;
             }
 
+            cachedFreeCameraField = typeof(CameraController).GetField("m_cachedFreeCamera", BindingFlags.Instance | BindingFlags.NonPublic);
+
             var cameraController = GameObject.FindObjectOfType<CameraController>();
             if (cameraController != null)
             {
                 cameraControllerRedirect = RedirectionHelper.RedirectCalls(
                     typeof(CameraController).GetMethod("UpdateFreeCamera",
                         BindingFlags.Instance | BindingFlags.NonPublic),
-                    typeof(MakeCameraFullscreen).GetMethod("UpdateFreeCamera",
+                    typeof(SetCameraRectHelper).GetMethod("UpdateFreeCamera",
                         BindingFlags.Instance | BindingFlags.NonPublic));
 
                 cameraControllerRedirected = true;
@@ -42,6 +58,7 @@ namespace Sapphire
             cameraControllerRedirected = false;
         }
 
+
         private void UpdateFreeCamera()
         {
             var cameraController = GameObject.FindObjectOfType<CameraController>();
@@ -50,8 +67,7 @@ namespace Sapphire
             {
                 return;
             }
-
-            var cachedFreeCameraField = typeof(CameraController).GetField("m_cachedFreeCamera", BindingFlags.Instance | BindingFlags.NonPublic);
+            
             if (cachedFreeCameraField == null)
             {
                 return;
@@ -69,8 +85,14 @@ namespace Sapphire
                 Singleton<PropManager>.instance.MarkersVisible = !cameraController.m_freeCamera;
                 Singleton<GuideManager>.instance.TutorialDisabled = cameraController.m_freeCamera;
             }
-
-            camera.rect = new Rect(0, 0, 1, 1);
+            if ((bool)cachedFreeCameraField.GetValue(cameraController))
+            {
+                camera.rect = new Rect(0f, 0f, 1f, 1f);
+            }
+            else
+            {
+                camera.rect = cameraRect;
+            }
         }
 
     }
