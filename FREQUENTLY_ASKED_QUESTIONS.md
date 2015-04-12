@@ -11,7 +11,7 @@ GameObjectUtil.WhereIs(GameObject.Find("FooBar"));
 
 replace `FooBar` with the name of the component you're looking for. Press `enter` to submit the command- line and you should see something like:
 ```
-UIView.SomePanel.SomethingElse.FooBar
+UIView.SomePanel.SomethingElse.FooBar.FooBar
 ```
 where each `.` represents a level in the hierarchy i.e. `SomePanel` is a child of the root UIView, `SomethingElse` is a child of `SomePanel` and `FooBar` is a child of `SomethingElse`. 
 
