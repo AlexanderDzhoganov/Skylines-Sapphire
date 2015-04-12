@@ -71,7 +71,7 @@ namespace Sapphire
 
                 var name = XmlUtil.GetStringAttribute(root, "name");
                 var author = XmlUtil.GetStringAttribute(root, "author");
-                metadata = new SkinMetadata {name = name, author = author, sapphirePath = skinXmlPath};
+                metadata = new SkinMetadata {name = name, author = author, sapphirePath = Path.GetDirectoryName(skinXmlPath)};
             }
             catch (XmlNodeException ex)
             {
