@@ -92,12 +92,9 @@ namespace Sapphire
                     Debug.LogWarningFormat("Texture for sprite \"{0}\" already exists in atlas, reusing cached copy..", name);
                     continue;
                 }
-
+                
                 var texture = new Texture2D(0, 0, TextureFormat.ARGB32, false, true);
                 texture.LoadImage(File.ReadAllBytes(pngPath));
-
-                x += texture.width + 2;
-                maxY = Mathf.Max(maxY, texture.height);
 
                 if (x + texture.width >= atlasTexture.width)
                 {
@@ -113,6 +110,9 @@ namespace Sapphire
 
                 var spriteRect = CopySpriteToAtlas(atlas, x, y, name, texture);
                 spriteCache.Add(pngPath, new KeyValuePair<Texture2D, Rect>(texture, spriteRect));
+
+                x += texture.width + 2;
+                maxY = Mathf.Max(maxY, texture.height);
             }
 
             atlasTexture.Apply();
