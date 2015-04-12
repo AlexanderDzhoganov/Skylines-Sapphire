@@ -91,7 +91,7 @@ namespace Sapphire
         {
             foreach (var property in stickyProperties)
             {
-                SetPropertyValue(property.childNode, property.node, property.component, true);
+                SetPropertyValue(property.childNode, property.node, property.component, true, false);
             }
         }
 
@@ -300,10 +300,10 @@ namespace Sapphire
                 });
             }
 
-            SetPropertyValue(node, node, component, optional);
+            SetPropertyValue(node, node, component, optional, true);
         }
 
-        private void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component, bool optional)
+        private void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component, bool optional, bool rollback)
         {
             var property = ReflectionCache.GetPropertyForType(component.GetType(), setNode.Name);
 
@@ -336,7 +336,14 @@ namespace Sapphire
                 value = GetValueForType(setNode, property.PropertyType, setNode.InnerText);
             }
 
-            SetPropertyValueWithRollback(component, property, value);
+            if (rollback)
+            {
+                SetPropertyValueWithRollback(component, property, value);
+            }
+            else
+            {
+                SetPropertyValue(component, property, value);
+            }
         }
 
         private void SetPropertyValueWithRollback(object component, PropertyInfo property, object value)
@@ -348,6 +355,14 @@ namespace Sapphire
                 property.SetValue(component, originalValue, null);
             });
 
+            if (originalValue != value)
+            {
+                SetPropertyValue(component, property, value);
+            }
+        }
+
+        private void SetPropertyValue(object component, PropertyInfo property, object value)
+        {
             property.SetValue(component, value, null);
         }
 
