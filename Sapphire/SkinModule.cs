@@ -266,7 +266,7 @@ namespace Sapphire
             {
                 try
                 {
-                    var property = sprites[index].GetType().GetProperty(stateNode.Name);
+                    var property = ReflectionCache.GetPropertyForType(sprites[index].GetType(), stateNode.Name);
                     if (property == null)
                     {
                         throw new ParseException(String.Format
@@ -305,7 +305,7 @@ namespace Sapphire
 
         private void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component, bool optional)
         {
-            var property = component.GetType().GetProperty(setNode.Name, BindingFlags.Instance | BindingFlags.Public);
+            var property = ReflectionCache.GetPropertyForType(component.GetType(), setNode.Name);
 
             if (property == null)
             {
