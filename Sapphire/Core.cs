@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using ColossalFramework.UI;
 using UnityEngine;
 
@@ -84,6 +85,8 @@ namespace Sapphire
 
             LoadConfig();
 
+            InitializeInGamePanels();
+
             availableSkins = SkinLoader.FindAllSkins();
             
             if (!string.IsNullOrEmpty(config.selectedSkinPath) && config.applySkinOnStartup)
@@ -102,6 +105,30 @@ namespace Sapphire
             CreateUI();
 
             debugRenderer = gameObject.AddComponent<DebugRenderer>();
+        }
+
+        void InitializeInGamePanels()
+        {
+            var roadsPanels = FindObjectsOfType<RoadsPanel>();
+
+            foreach (var property in typeof(RoadsPanel).GetProperties(BindingFlags.Instance | BindingFlags.NonPublic))
+            {
+                if (!property.CanRead)
+                {
+                    continue;
+                }
+
+                foreach (var roadsPanel in roadsPanels)
+                {
+                    try
+                    {
+                        property.GetValue(roadsPanel, null);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }    
+            }
         }
 
         void Update()
