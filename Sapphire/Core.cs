@@ -76,7 +76,9 @@ namespace Sapphire
             bootstrapped = false;
         }
 
-        void Awake()
+        private bool needToApplyCurrentSkin = false;
+
+        void Start()
         {
             SetCameraRectHelper.Initialize();
 
@@ -91,15 +93,7 @@ namespace Sapphire
                     if (metadata.sapphirePath == config.selectedSkinPath)
                     {
                         currentSkin = Skin.FromXmlFile(Path.Combine(metadata.sapphirePath, "skin.xml"), false);
-
-                        if (currentSkin.IsValid)
-                        {
-                            currentSkin.Apply(currentModuleClass);
-                        }
-                        else
-                        {
-                            Debug.LogWarning("Skin is invalid, will not apply.. (check messages above for errors)");
-                        }
+                        needToApplyCurrentSkin = true;
                         break;
                     }
                 }
@@ -112,6 +106,20 @@ namespace Sapphire
 
         void Update()
         {
+            if (needToApplyCurrentSkin)
+            {
+                if (currentSkin.IsValid)
+                {
+                    currentSkin.Apply(currentModuleClass);
+                }
+                else
+                {
+                    Debug.LogWarning("Skin is invalid, will not apply.. (check messages above for errors)");
+                }
+
+                needToApplyCurrentSkin = false;
+            }
+
             if (Input.GetKey(KeyCode.LeftControl))
             {
                 if (Input.GetKeyDown(KeyCode.A))
@@ -131,6 +139,17 @@ namespace Sapphire
                 else if (Input.GetKeyDown(KeyCode.S))
                 {
                     ReloadAndApplyActiveSkin();
+                }
+                else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.J))
+                {
+                    var path = "vanilla_ui_dump.xml";
+                    if (currentSkin != null)
+                    {
+                        path = currentSkin.Name + "_dump.xml";
+                    }
+
+                    SceneUtil.DumpSceneToXML(path);
+                    Debug.LogWarningFormat("Dumped scene to \"{0}\"", path);   
                 }
             }
 
@@ -360,10 +379,17 @@ namespace Sapphire
             skinsDropdownButton.zOrder = 0;
             skinsDropdownButton.textScale = 0.8f;
 
-            y += 36.0f;
+            y += 40.0f;
 
             UIUtil.MakeButton(panel, "ReloadSkin", "Reload active skin (Ctrl+S)", new Vector2(4.0f, y), ReloadAndApplyActiveSkin);
+/*
+            y += 36.0f;
 
+            UIUtil.MakeButton(panel, "DumpScene", "Dump scene to XML", new Vector2(4.0f, y), () =>
+            {
+                
+            });
+            */
             return panel;
         }
 

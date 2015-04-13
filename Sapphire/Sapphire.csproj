@@ -59,6 +59,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="HashUtil.cs" />
+    <Compile Include="SceneUtil.cs" />
     <Compile Include="SetCameraRectHelper.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

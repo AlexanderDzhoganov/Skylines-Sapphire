@@ -78,6 +78,11 @@ namespace Sapphire
                     continue;
                 }
 
+                if (component.name == "PauseOutline")
+                {
+                    continue;
+                }
+
                 var position = component.absolutePosition;
                 var size = component.size;
                 var rect = CalculateRealComponentRect(position, size);
