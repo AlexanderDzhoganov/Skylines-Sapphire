@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Xml;
 using ColossalFramework.UI;
 using UnityEngine;
@@ -127,6 +128,8 @@ namespace Sapphire
         private FileWatcher fileWatcher;
 
         private Rect renderArea = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
+
+        public Dictionary<object, List<KeyValuePair<PropertyInfo, object>>> rollbackDataMap;
 
         public Rect RenderArea
         {
@@ -254,7 +257,6 @@ namespace Sapphire
         public void Dispose()
         {
             Rollback();
-
             foreach (var atlas in spriteAtlases)
             {
                 GameObject.Destroy(atlas.Value.material.mainTexture);
@@ -545,6 +547,7 @@ namespace Sapphire
             currentModuleClass = moduleClass;
 
             List<SkinModule> appliedModules = new List<SkinModule>();
+            rollbackDataMap = new Dictionary<object, List<KeyValuePair<PropertyInfo, object>>>();
 
             foreach (var module in modules[moduleClass])
             {
@@ -561,6 +564,8 @@ namespace Sapphire
                     }
 
                     Debug.LogWarning("Failed to apply skin module (look for an error in the messages above). All changes have been reverted.");
+                    rollbackDataMap = null;
+                    isValid = false;
                     return;
                 }
             }
@@ -584,6 +589,12 @@ namespace Sapphire
                 }
             }
 
+            if (rollbackDataMap != null)
+            {
+                rollbackDataMap.Clear();
+                rollbackDataMap = null;
+            }
+            
             SetCameraRectHelper.ResetCameraRect();
         }
 

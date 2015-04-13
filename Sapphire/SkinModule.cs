@@ -370,7 +370,28 @@ namespace Sapphire
 
         private void SetPropertyValueWithRollback(object component, PropertyInfo property, object value)
         {
-            var originalValue = property.GetValue(component, null);
+            if (!skin.rollbackDataMap.ContainsKey(component))
+            {
+                skin.rollbackDataMap.Add(component, new List<KeyValuePair<PropertyInfo, object>>());
+            }
+
+            bool valueFound = false;
+            object originalValue = null;
+            foreach (var item in skin.rollbackDataMap[component])
+            {
+                if (item.Key == property)
+                {
+                    originalValue = item.Value;
+                    valueFound = true;
+                    break;
+                }
+            }
+
+            if(!valueFound)
+            {
+                originalValue = property.GetValue(component, null);
+                skin.rollbackDataMap[component].Add(new KeyValuePair<PropertyInfo, object>(property, originalValue));
+            }
 
             if (originalValue != value)
             {
