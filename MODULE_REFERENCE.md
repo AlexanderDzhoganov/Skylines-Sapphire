@@ -102,8 +102,8 @@ This is a list of properties that all components have:
 - `autoLayout` - bool - Whether the panel should auto-layout its children
 - `autoFitChildrenHorizontally`, `autoFitChildrenVertically` - bool
 - `wrapLayout` - bool
-- `autoLayoutDirection`
-- `autoLayoutStart`
+- `autoLayoutDirection` - `Horizontal` or `Vertical`
+- `autoLayoutStart` 
 - `useCenter` - bool
 - `autoLayoutPadding`
 
@@ -116,12 +116,14 @@ This is a list of properties that all components have:
 - `disabledBottomColor` - Color32
 - `tabStrip`
 - `autoSize` - bool
-- `horizontalAlignment` - `Left`, `Center`, `Right`
-- `verticalAlignment` - `Top`, `Middle`, `Bottom`
-- `textHorizontalAlignment` - `Left`, `Center`, `Right`
-- `textVerticalAlignment` - `Top`, `Middle`, `Bottom`
+- `horizontalAlignment` - `Left`, `Center` or `Right`
+- `verticalAlignment` - `Top`, `Middle` or `Bottom`
+- `textHorizontalAlignment` - `Left`, `Center` or `Right`
+- `textVerticalAlignment` - `Top`, `Middle` or `Bottom`
 - `textPadding` - RectOffset
-- `textColor`, `hoveredTextColor`, `pressedTextColor`, `focusedTextColor` - Color32
+- `textColor`, `hoveredTextColor`, `pressedTextColor`, `focusedTextColor` - Color32 - Color of the button's text
+- `text` - Text of the button
+- `textScale` - Text scale
 - `color`, `hoveredColor`, `pressedColor`, `focusedColor` - Color32
 
 ### UILabel
