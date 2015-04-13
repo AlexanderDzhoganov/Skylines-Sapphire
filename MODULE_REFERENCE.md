@@ -72,34 +72,34 @@ Where `MyTestChild` is a child component of `MyTestPanel`.
 #### Shared by all components
 
 This is a list of properties that all components have:
-- `isEnabled` - bool - example: `<isEnabled>true</isVisible>`
-- `isVisible` - bool - example: `<isVisible>false</isVisible>`
-- `isInteractive` - bool
-- `autoSize` - bool
-- `clipChildren` - bool
-- `anchor`
-- `opacity` - float
-- `color` - Color32
-- `disabledColor` - Color32
+- `isEnabled` - bool - Controls whether the component is enabled (e.g. button is clickable)
+- `isVisible` - bool - Controls whether the component is visible
+- `isInteractive` - bool 
+- `autoSize` - bool - Auto-sized components will auto-resize to fit theor contents
+- `clipChildren` - bool - Whether the component will clip its children or not
+- `anchor` - Anchor of the component e.g. <anchor>Top|Right</anchor>. 
+- `opacity` - float - Opacity of the component from 0.0 to 1.0
+- `color` - Color32 - Color tint of the component. Will be multiplied with the color from the texture sprite.
+- `disabledColor` - Color32 - Color tint of the component when isEnabled = false
 - `area` - Rect
 - `limits`
-- `size` - Vector2 - example: `<size>16.0, 12.0</size>`
-- `relativePosition` - Vector3 - example: `<relativePosition>2.0, 2.0, 0.0</relativePosition>`
-- `pivot`
+- `size` - Vector2 - Size of the component in pixels e.g `<size>16.0, 12.0</size>`
+- `relativePosition` - Vector3 - Position of the component (in pixels) relative to its parent e.g. `<relativePosition>2.0, 2.0, 0.0</relativePosition>`
+- `pivot` - 
 - `arbitraryPivotOffset`
-- `zOrder` - int
-- `width`, `height` - float
-- `minimumSize`, `maximumSize` - Vector2
-- `tooltipAnchor`
+- `zOrder` - int - Z-order of the component. Components with higher zOrder values will appear in front of components with  lower ones.
+- `width`, `height` - float - same as `<size>` but split into two different properties
+- `minimumSize`, `maximumSize` - Vector2 - Minimum size of resizable components
+- `tooltipAnchor` 
 - `bringTooltipToFront` - bool
-- `tooltip` - string
+- `tooltip` - string - Tooltip message when you hover over the component
 
 #### UIPanel
-- `atlas` - SpriteAtlas
+- `atlas` - SpriteAtlas - Sprite atlas that this component uses
 - `flip` - bool
 - `backgroundSprite` - Sprite - example: `<backgroundSprite>mySprite</backgroundSprite>`
 - `padding` - RectOffset
-- `autoLayout` - bool
+- `autoLayout` - bool - Whether the panel should auto-layout its children
 - `autoFitChildrenHorizontally`, `autoFitChildrenVertically` - bool
 - `wrapLayout` - bool
 - `autoLayoutDirection`
@@ -108,6 +108,7 @@ This is a list of properties that all components have:
 - `autoLayoutPadding`
 
 ### UIButton
+- `atlas` - SpriteAtlas - Sprite atlas that this component uses
 - `buttonState` - `Normal`, `Hovered`, `Disabled`, `Pressed`, `Focused`
 - `wordWrap` - bool
 - `normalBgSprite`, `hoveredBgSprite`, `focusedBgSprite`, `pressedBgSprite`, `disabledBgSprite` - string
@@ -124,7 +125,7 @@ This is a list of properties that all components have:
 - `color`, `hoveredColor`, `pressedColor`, `focusedColor` - Color32
 
 ### UILabel
-- `atlas` - SpriteAtlas
+- `atlas` - SpriteAtlas - Sprite atlas that this component uses
 - `backgroundSprite` - string
 - `prefix` - string
 - `suffix` - string
