@@ -396,12 +396,12 @@ namespace Sapphire
             if (originalValue != value)
             {
                 SetPropertyValue(component, property, value);
-            }
 
-            rollbackStack.Add(() =>
-            {
-                property.SetValue(component, originalValue, null);
-            });
+                rollbackStack.Add(() =>
+                {
+                    property.SetValue(component, originalValue, null);
+                });
+            }
         }
 
         private void SetPropertyValue(object component, PropertyInfo property, object value)

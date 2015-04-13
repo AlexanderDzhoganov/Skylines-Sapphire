@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Xml;
 using ColossalFramework.UI;
@@ -583,9 +584,9 @@ namespace Sapphire
 
             foreach (var list in modules.Values)
             {
-                foreach (var module in list)
+                for (int i = list.Count - 1; i >= 0; i--)
                 {
-                    module.Rollback();
+                    list[i].Rollback();
                 }
             }
 
