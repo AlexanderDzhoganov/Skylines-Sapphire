@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Xml;
@@ -9,27 +8,18 @@ using UnityEngine;
 namespace Sapphire
 {
 
-
-
     public class SkinModule
     {
 
         private string sourcePath;
-        private XmlDocument document;
-        private Skin skin;
 
-        struct StickyProperty
+        public string SourcePath
         {
-            public XmlNode childNode;
-            public XmlNode node;
-            public UIComponent component;
+            get {  return sourcePath; }
         }
 
-        private List<StickyProperty> stickyProperties = new List<StickyProperty>();
-
-        private delegate void RollbackAction();
-
-        private List<RollbackAction> rollbackStack = new List<RollbackAction>(); 
+        private XmlDocument document;
+        private Skin skin;
 
         public static SkinModule FromXmlFile(Skin skin, string path)
         {
@@ -67,111 +57,20 @@ namespace Sapphire
             document = _document;
         }
 
-        public void ApplyStickyProperties()
-        {
-            try
-            {
-                ApplyStickyPropertiesInternal();
-            }
-            catch (ParseException ex)
-            {
-                Debug.LogErrorFormat("Error while applying sticky properties for skin module \"{1}\" at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
-            }
-            catch (XmlNodeException ex)
-            {
-                Debug.LogErrorFormat("{0} while applying sticky properties for skin module \"{1}\" at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
-            }
-            catch (Exception ex)
-            {
-                Debug.LogErrorFormat("{0} while applying sticky properties for skin module \"{1}\": {2}", ex.GetType(), sourcePath, ex.ToString());
-            }
-        }
+        public delegate void ModuleWalkCallback(XmlNode node, UIComponent component);
 
-        private void ApplyStickyPropertiesInternal()
-        {
-            foreach (var property in stickyProperties)
-            {
-                SetPropertyValue(property.childNode, property.node, property.component, true, false);
-            }
-        }
-
-        public void Rollback()
-        {
-            Debug.LogWarningFormat("Rolling back changes from skin module \"{0}\"", sourcePath);
-
-            stickyProperties = new List<StickyProperty>();
-
-            try
-            {
-                RollbackInternal();
-            }
-            catch (Exception ex)
-            {
-                Debug.LogErrorFormat("{0} during skin module \"{1}\" rollback: {2}", ex.GetType(), sourcePath, ex.ToString());
-                return;
-            }
-
-            Debug.LogFormat("Skin module \"{0}\" successfully rolled back!", sourcePath);
-        }
-
-        private void RollbackInternal()
-        {
-            rollbackStack.Reverse();
-
-            foreach (var action in rollbackStack)
-            {
-                action();
-            }
-
-            rollbackStack.Clear();
-        }
-
-        public bool Apply()
-        {
-            Debug.LogFormat("Applying skin module \"{0}\"", sourcePath);
-
-            stickyProperties = new List<StickyProperty>();
-
-            try
-            {
-                ApplyInternal();
-                Debug.LogFormat("Skin module \"{0}\" successfully applied!", sourcePath);
-            }
-            catch (ParseException ex)
-            {
-                Debug.LogErrorFormat("Error while applying skin module \"{1}\" at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
-                return false;
-            }
-            catch (XmlNodeException ex)
-            {
-                Debug.LogErrorFormat("{0} while applying skin module \"{1}\" at node \"{2}\": {3}",
-                    ex.GetType(), sourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogErrorFormat("{0} while applying skin module \"{1}\": {2}", ex.GetType(), sourcePath, ex.ToString());
-                return false;
-            }
-
-            return true;
-        }
-
-        private void ApplyInternal()
+        public void WalkModule(ModuleWalkCallback visitor)
         {
             var rootNode = document.SelectSingleNode("/UIView");
             if (rootNode == null)
             {
-                throw new Exception("SkinModule missing root UIView node");    
+                throw new Exception("SkinModule missing root UIView node");
             }
 
-            ApplyInternalRecursive(rootNode, null);
+            WalkModuleInternalRecursive(visitor, rootNode, null);
         }
 
-        private void ApplyInternalRecursive(XmlNode node, UIComponent component)
+        private void WalkModuleInternalRecursive(ModuleWalkCallback visitor, XmlNode node, UIComponent component)
         {
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -183,22 +82,11 @@ namespace Sapphire
 
                 if (childNode.Name == "Component")
                 {
-                    ApplyComponentSelector(childNode, component);
+                    ApplyComponentSelector(visitor, childNode, component);
                 }
-                else if (childNode.Name == "IfDef")
+                else if (component != null)
                 {
-                    ApplyConditionalSelector(childNode, component);
-                }
-                else if(component != null)
-                {
-                    if (component.GetType() == typeof(UIMultiStateButton) && childNode.Name == "SpriteState")
-                    {
-                        ApplyUIMultiStateButtonSpriteStateProperty(childNode, component);
-                    }
-                    else
-                    {
-                        ApplyGenericProperty(childNode, component);
-                    }
+                    visitor(childNode, component);
                 }
                 else
                 {
@@ -207,13 +95,7 @@ namespace Sapphire
             }
         }
 
-        private void ApplyConditionalSelector(XmlNode node, UIComponent component)
-        {
-            var tag = XmlUtil.GetStringAttribute(node, "tag");
-
-        }
-
-        private void ApplyComponentSelector(XmlNode node, UIComponent component)
+        private void ApplyComponentSelector(ModuleWalkCallback visitor, XmlNode node, UIComponent component)
         {
             var name = XmlUtil.GetStringAttribute(node, "name");
 
@@ -224,7 +106,7 @@ namespace Sapphire
             var childComponents = Util.FindComponentsInChildren(node, component, name, regex, recursive, optional);
 
             var hash = XmlUtil.TryGetStringAttribute(node, "hash", null);
-            
+
             foreach (var childComponent in childComponents)
             {
                 if (hash != null)
@@ -237,176 +119,15 @@ namespace Sapphire
 
                     if (componentHash == hash)
                     {
-                        ApplyInternalRecursive(node, childComponent);
+                        WalkModuleInternalRecursive(visitor, node, childComponent);
                         break;
                     }
 
                     continue;
                 }
-             
-                ApplyInternalRecursive(node, childComponent);
+
+                WalkModuleInternalRecursive(visitor, node, childComponent);
             }
-        }
-
-        private void ApplyUIMultiStateButtonSpriteStateProperty(XmlNode node, UIComponent component)
-        {
-            var index = XmlUtil.GetIntAttribute(node, "index");
-
-            var type = XmlUtil.GetStringAttribute(node, "type");
-            if (type != "background" && type != "foreground")
-            {
-                throw new ParseException(String.Format
-                    ("Invalid value for SpriteState attribute \"type\" (only \"foreground\" and \"background\" are allowed - \"{0}\"",
-                        index), node);
-            }
-
-            var button = component as UIMultiStateButton;
-            UIMultiStateButton.SpriteSetState sprites = null;
-
-            if (type == "background")
-            {
-                sprites = button.backgroundSprites;
-            }
-            else
-            {
-                sprites = button.foregroundSprites;
-            }
-
-            if (index >= sprites.Count)
-            {
-                throw new ParseException(String.Format
-                ("Invalid value for SpriteState attribute \"index\", object has only \"{1}\" states - \"{0}\"",
-                   index, sprites.Count), node);
-            }
-
-            foreach (XmlNode stateNode in node.ChildNodes)
-            {
-                try
-                {
-                    var property = ReflectionCache.GetPropertyForType(sprites[index].GetType(), stateNode.Name);
-                    if (property == null)
-                    {
-                        throw new ParseException(String.Format
-                        ("Invalid property \"{0}\" for SpriteState, allowed are \"normal\", \"hovered\", \"focused\", \"pressed\", \"disabled\"",
-                            stateNode.InnerText), node);
-                    }
-
-                    SetPropertyValueWithRollback(sprites[index], property, stateNode.InnerText);
-                }
-                catch (Exception ex)
-                {
-                    throw new ParseException(String.Format
-                        ("Exception while processing SpriteState node - {0}",
-                            ex.ToString()), node);
-                }
-            }
-        }
-
-        private void ApplyGenericProperty(XmlNode node, UIComponent component)
-        {
-            bool optional = XmlUtil.TryGetBoolAttribute(node, "optional");
-            bool sticky = XmlUtil.TryGetBoolAttribute(node, "sticky");
-
-            if (sticky)
-            {
-                stickyProperties.Add(new StickyProperty
-                {
-                    childNode = node,
-                    component = component,
-                    node = node
-                });
-            }
-
-            SetPropertyValue(node, node, component, optional, true);
-        }
-
-        private void SetPropertyValue(XmlNode setNode, XmlNode node, UIComponent component, bool optional, bool rollback)
-        {
-            var property = ReflectionCache.GetPropertyForType(component.GetType(), setNode.Name);
-
-            if (property == null)
-            {
-                if (optional)
-                {
-                    return;
-                }
-
-                throw new MissingComponentPropertyException(setNode.Name, component, node);
-            }
-
-            if (!property.CanWrite)
-            {
-                throw new ParseException(String.Format("Property \"{0}\" of component \"{1}\" is read-only", property.Name, component.name), setNode);
-            }
-
-            object value = null;
-
-            bool raw = XmlUtil.TryGetBoolAttribute(setNode, "raw");
-
-            if (property.PropertyType == typeof (Color32) && !raw)
-            {
-                var colorName = setNode.InnerText;
-                if (!skin.colorDefinitions.ContainsKey(colorName))
-                {
-                    throw new ParseException(String.Format("Invalid or undefined color name \"{0}\"", colorName), setNode);
-                }
-
-                value = skin.colorDefinitions[colorName];
-            }
-            else
-            {
-                value = XmlUtil.GetValueForType(setNode, property.PropertyType, setNode.InnerText, skin.spriteAtlases);
-            }
-
-            if (rollback)
-            {
-                SetPropertyValueWithRollback(component, property, value);
-            }
-            else
-            {
-                SetPropertyValue(component, property, value);
-            }
-        }
-
-        private void SetPropertyValueWithRollback(object component, PropertyInfo property, object value)
-        {
-            if (!skin.rollbackDataMap.ContainsKey(component))
-            {
-                skin.rollbackDataMap.Add(component, new List<KeyValuePair<PropertyInfo, object>>());
-            }
-
-            bool valueFound = false;
-            object originalValue = null;
-            foreach (var item in skin.rollbackDataMap[component])
-            {
-                if (item.Key == property)
-                {
-                    originalValue = item.Value;
-                    valueFound = true;
-                    break;
-                }
-            }
-
-            if(!valueFound)
-            {
-                originalValue = property.GetValue(component, null);
-                skin.rollbackDataMap[component].Add(new KeyValuePair<PropertyInfo, object>(property, originalValue));
-            }
-
-            if (originalValue != value)
-            {
-                SetPropertyValue(component, property, value);
-
-                rollbackStack.Add(() =>
-                {
-                    property.SetValue(component, originalValue, null);
-                });
-            }
-        }
-
-        private void SetPropertyValue(object component, PropertyInfo property, object value)
-        {
-            property.SetValue(component, value, null);
         }
 
     }

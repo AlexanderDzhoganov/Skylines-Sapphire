@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Xml;
 using ColossalFramework.UI;
 using UnityEngine;
@@ -130,8 +128,6 @@ namespace Sapphire
 
         private Rect renderArea = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
 
-        public Dictionary<object, List<KeyValuePair<PropertyInfo, object>>> rollbackDataMap;
-
         public Rect RenderArea
         {
             get
@@ -149,10 +145,13 @@ namespace Sapphire
 
         private ModuleClass currentModuleClass;
 
+        private SkinApplicator applicator;
+
         public Skin(string _skinXmlPath, bool autoReloadOnChange)
         {
             skinXmlPath = _skinXmlPath;
             sapphirePath = Path.GetDirectoryName(skinXmlPath);
+            applicator = new SkinApplicator(this);
 
             Reload(autoReloadOnChange);
         }
@@ -531,10 +530,7 @@ namespace Sapphire
                 return;
             }
 
-            foreach (var module in modules[moduleClass])
-            {
-                module.ApplyStickyProperties();
-            }
+            applicator.ApplyStickyProperties();
         }
 
         public void Apply(ModuleClass moduleClass)
@@ -547,28 +543,16 @@ namespace Sapphire
 
             currentModuleClass = moduleClass;
 
-            List<SkinModule> appliedModules = new List<SkinModule>();
-            rollbackDataMap = new Dictionary<object, List<KeyValuePair<PropertyInfo, object>>>();
-
-            foreach (var module in modules[moduleClass])
+            try
             {
-                if (module.Apply())
-                {
-                    appliedModules.Add(module);
-                }
-                else
-                {
-                    module.Rollback();
-                    foreach (var appliedModule in appliedModules)
-                    {
-                        appliedModule.Rollback();
-                    }
-
-                    Debug.LogWarning("Failed to apply skin module (look for an error in the messages above). All changes have been reverted.");
-                    rollbackDataMap = null;
-                    isValid = false;
-                    return;
-                }
+                applicator.Apply(modules[moduleClass]);
+            }
+            catch (Exception )
+            {
+                applicator.Rollback();
+                Debug.LogWarning("Failed to apply skin module (look for an error in the messages above). All changes have been reverted.");
+                isValid = false;
+                return;
             }
 
             SetCameraRectHelper.CameraRect = renderArea;
@@ -581,21 +565,8 @@ namespace Sapphire
                 Debug.LogWarning("Trying to roll-back an invalid skin");
                 return;
             }
-
-            foreach (var list in modules.Values)
-            {
-                for (int i = list.Count - 1; i >= 0; i--)
-                {
-                    list[i].Rollback();
-                }
-            }
-
-            if (rollbackDataMap != null)
-            {
-                rollbackDataMap.Clear();
-                rollbackDataMap = null;
-            }
             
+            applicator.Rollback();
             SetCameraRectHelper.ResetCameraRect();
         }
 

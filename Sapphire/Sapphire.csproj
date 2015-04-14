@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="ReflectionCache.cs" />
     <Compile Include="Skin.cs" />
+    <Compile Include="SkinApplicator.cs" />
     <Compile Include="SkinModule.cs" />
     <Compile Include="SkinLoader.cs" />
     <Compile Include="TypeUtil.cs" />
