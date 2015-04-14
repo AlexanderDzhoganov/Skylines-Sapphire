@@ -93,10 +93,13 @@ namespace Sapphire
         {
             bool optional = XmlUtil.TryGetBoolAttribute(node, "optional");
             bool sticky = XmlUtil.TryGetBoolAttribute(node, "sticky");
-            AspectRatio aspect = Util.AspectRatioFromString(XmlUtil.TryGetStringAttribute(node, "aspect"));
-            if (aspect != currentAspectRatio)
+            string aspect = XmlUtil.TryGetStringAttribute(node, "aspect", "any");
+            if (aspect != "any")
             {
-                return;
+                if (Util.AspectRatioFromString(aspect) != currentAspectRatio)
+                {
+                    return;
+                }
             }
 
             if (sticky)
@@ -265,7 +268,7 @@ namespace Sapphire
 
         public bool Apply(List<SkinModule> skinModules)
         {
-            float aspect = Screen.width/Screen.height;
+            float aspect = (float)Screen.width/Screen.height;
 
             if (Util.DeltaCompare(aspect, 1.777f))
             {
