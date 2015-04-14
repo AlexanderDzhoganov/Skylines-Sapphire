@@ -1,1 +1,1 @@
-## This document has been moved [here](https://github.com/AlexanderDzhoganov/Skylines-Sapphire/wiki/FAQ)
+## This document has been moved to https://github.com/AlexanderDzhoganov/Skylines-Sapphire/wiki/FAQ
