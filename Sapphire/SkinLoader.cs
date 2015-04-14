@@ -6,7 +6,6 @@ using UnityEngine;
 namespace Sapphire
 {
 
-  
     public class SkinLoader
     {
 

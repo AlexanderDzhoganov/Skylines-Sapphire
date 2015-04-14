@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Reflection;
 using System.Xml;
 using ColossalFramework.UI;
@@ -8,7 +7,6 @@ using UnityEngine;
 
 namespace Sapphire
 {
-
 
     public class SkinApplicator
     {
