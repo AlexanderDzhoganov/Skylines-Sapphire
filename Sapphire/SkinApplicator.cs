@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
 using System.Xml;
 using ColossalFramework.UI;
@@ -7,6 +8,8 @@ using UnityEngine;
 
 namespace Sapphire
 {
+
+
     public class SkinApplicator
     {
 
@@ -24,6 +27,8 @@ namespace Sapphire
         private delegate void RollbackAction();
         private List<RollbackAction> rollbackStack = new List<RollbackAction>();
         public Dictionary<object, List<KeyValuePair<PropertyInfo, object>>> rollbackDataMap = new Dictionary<object, List<KeyValuePair<PropertyInfo, object>>>();
+
+        private AspectRatio currentAspectRatio = AspectRatio.R16_9;
 
         public SkinApplicator(Skin _skin)
         {
@@ -88,6 +93,11 @@ namespace Sapphire
         {
             bool optional = XmlUtil.TryGetBoolAttribute(node, "optional");
             bool sticky = XmlUtil.TryGetBoolAttribute(node, "sticky");
+            AspectRatio aspect = Util.AspectRatioFromString(XmlUtil.TryGetStringAttribute(node, "aspect"));
+            if (aspect != currentAspectRatio)
+            {
+                return;
+            }
 
             if (sticky)
             {
@@ -252,8 +262,32 @@ namespace Sapphire
             rollbackStack.Clear();
         }
 
+
         public bool Apply(List<SkinModule> skinModules)
         {
+            float aspect = Screen.width/Screen.height;
+
+            if (Util.DeltaCompare(aspect, 1.777f))
+            {
+                currentAspectRatio = AspectRatio.R16_9;
+            }
+            else if (Util.DeltaCompare(aspect, 1.6f))
+            {
+                currentAspectRatio = AspectRatio.R16_10;
+            }
+            else if (Util.DeltaCompare(aspect, 1.333f))
+            {
+                currentAspectRatio = AspectRatio.R4_3;
+            }
+            else if (Util.DeltaCompare(aspect, 2.333f))
+            {
+                currentAspectRatio = AspectRatio.R16_9;
+            }
+            else
+            {
+                currentAspectRatio = AspectRatio.R16_9;
+            }
+
             stickyProperties = new List<StickyProperty>();
             rollbackStack = new List<RollbackAction>();
 

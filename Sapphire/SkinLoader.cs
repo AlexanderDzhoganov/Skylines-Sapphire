@@ -17,6 +17,11 @@ namespace Sapphire
             var plugins = PluginManager.instance.GetPluginsInfo();
             foreach (var plugin in plugins)
             {
+                if (!plugin.isEnabled)
+                {
+                    continue;
+                }
+
                 var path = plugin.modPath;
                 var sapphirePath = Path.Combine(path, "_SapphireSkin");
 

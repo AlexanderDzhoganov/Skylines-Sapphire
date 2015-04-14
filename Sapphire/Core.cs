@@ -223,6 +223,8 @@ namespace Sapphire
             }
         }
 
+        private UIDropDown skinsDropdown;
+
         private UIPanel CreateSapphirePanel()
         {
             var uiView = GameObject.Find("UIView").GetComponent<UIView>();
@@ -234,7 +236,7 @@ namespace Sapphire
 
             var panel = uiView.AddUIComponent(typeof(UIPanel)) as UIPanel;
 
-            panel.size = new Vector2(300, 220);
+            panel.size = new Vector2(300, 250);
             panel.isVisible = false;
             panel.atlas = EmbeddedResources.GetSapphireAtlas();
             panel.backgroundSprite = "DefaultPanelBackground";
@@ -305,7 +307,7 @@ namespace Sapphire
 
             y += 28.0f;
 
-            var skinsDropdown = panel.AddUIComponent<UIDropDown>();
+            skinsDropdown = panel.AddUIComponent<UIDropDown>();
 
             skinsDropdown.AddItem("Vanilla (by Colossal Order)");
             foreach (var skin in availableSkins)
@@ -385,6 +387,7 @@ namespace Sapphire
                 
                 config.selectedSkinPath = currentSkin.SapphirePath;
                 SaveConfig();
+                panel.isVisible = false;
             };
                         
             var skinsDropdownButton = skinsDropdown.AddUIComponent<UIButton>();
@@ -409,15 +412,33 @@ namespace Sapphire
             y += 40.0f;
 
             UIUtil.MakeButton(panel, "ReloadSkin", "Reload active skin (Ctrl+S)", new Vector2(4.0f, y), ReloadAndApplyActiveSkin);
-/*
+
             y += 36.0f;
 
-            UIUtil.MakeButton(panel, "DumpScene", "Dump scene to XML", new Vector2(4.0f, y), () =>
+            UIUtil.MakeButton(panel, "RefreshSkins", "Refresh available skins", new Vector2(4.0f, y), () =>
             {
-                
+                RefreshSkinsList();
             });
-            */
+
             return panel;
+        }
+
+        void RefreshSkinsList()
+        {
+            if (skinsDropdown != null)
+            {
+                availableSkins = SkinLoader.FindAllSkins();
+                skinsDropdown.localizedItems = new string[0];
+
+                skinsDropdown.AddItem("Vanilla (by Colossal Order)");
+                foreach (var skin in availableSkins)
+                {
+                    skinsDropdown.AddItem(String.Format("{0} (by {1})", skin.name, skin.author));
+                }
+
+                skinsDropdown.selectedIndex = 0;
+                skinsDropdown.Invalidate();
+            }
         }
 
         private void ReloadAndApplyActiveSkin()

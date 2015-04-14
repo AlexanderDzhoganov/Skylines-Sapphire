@@ -7,8 +7,48 @@ using UnityEngine;
 
 namespace Sapphire
 {
+    public enum AspectRatio
+    {
+        R16_9,
+        R16_10,
+        R4_3,
+        R21_9
+    }
+
     public static class Util
     {
+
+        public static AspectRatio AspectRatioFromString(string aspect)
+        {
+            if (aspect == null)
+            {
+                return AspectRatio.R16_9;
+            }
+
+            switch (aspect)
+            {
+                case "16:9":
+                    return AspectRatio.R16_9;
+                case "16:10":
+                    return AspectRatio.R16_10;
+                case "4:3":
+                    return AspectRatio.R4_3;
+                case "21:9":
+                    return AspectRatio.R21_9;
+            }
+
+            return AspectRatio.R16_9;
+        }
+
+        public static bool DeltaCompare(float a, float b, float delta = 0.01f)
+        {
+            if (Mathf.Abs(a - b) < delta)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         public static List<UIComponent> FindComponentsInChildren(XmlNode node, UIComponent component, string childName, bool regex, bool recursive, bool optional, int depth = 0)
         {

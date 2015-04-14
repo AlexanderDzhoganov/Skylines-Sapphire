@@ -32,6 +32,8 @@ namespace Sapphire
                 return;
             }
 
+            ResetCameraRect();
+
             cachedFreeCameraField = typeof(CameraController).GetField("m_cachedFreeCamera", BindingFlags.Instance | BindingFlags.NonPublic);
 
             var cameraController = GameObject.FindObjectOfType<CameraController>();
