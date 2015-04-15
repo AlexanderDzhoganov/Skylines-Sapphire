@@ -513,7 +513,7 @@ namespace Sapphire
                 throw new Exception(String.Format("Invalid skin module path \"{0}\"", modulePath));
             }
 
-            var module = SkinModule.FromXmlFile(this, modulePath);
+            var module = SkinModule.FromXmlFile(modulePath);
             if (module == null)
             {
                 isValid = false;

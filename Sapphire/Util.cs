@@ -18,6 +18,33 @@ namespace Sapphire
     public static class Util
     {
 
+        public static AspectRatio AspectRatioFromResolution(float width, float height, AspectRatio defaultAspect = AspectRatio.R16_9)
+        {
+            float aspect = width/height;
+            
+            if (DeltaCompare(aspect, 1.777f))
+            {
+                return AspectRatio.R16_9;
+            }
+            
+            if (DeltaCompare(aspect, 1.6f))
+            {
+                return AspectRatio.R16_10;
+            }
+
+            if (DeltaCompare(aspect, 1.333f))
+            {
+                return AspectRatio.R4_3;
+            }
+
+            if (DeltaCompare(aspect, 2.333f))
+            {
+                return AspectRatio.R16_9;
+            }
+
+            return defaultAspect;
+        }
+
         public static AspectRatio AspectRatioFromString(string aspect)
         {
             if (aspect == null)

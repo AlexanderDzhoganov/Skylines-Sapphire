@@ -263,31 +263,9 @@ namespace Sapphire
             rollbackStack.Clear();
         }
 
-
         public bool Apply(List<SkinModule> skinModules)
         {
-            float aspect = (float)Screen.width/Screen.height;
-
-            if (Util.DeltaCompare(aspect, 1.777f))
-            {
-                currentAspectRatio = AspectRatio.R16_9;
-            }
-            else if (Util.DeltaCompare(aspect, 1.6f))
-            {
-                currentAspectRatio = AspectRatio.R16_10;
-            }
-            else if (Util.DeltaCompare(aspect, 1.333f))
-            {
-                currentAspectRatio = AspectRatio.R4_3;
-            }
-            else if (Util.DeltaCompare(aspect, 2.333f))
-            {
-                currentAspectRatio = AspectRatio.R16_9;
-            }
-            else
-            {
-                currentAspectRatio = AspectRatio.R16_9;
-            }
+            currentAspectRatio = Util.AspectRatioFromResolution(Screen.width, Screen.height);
 
             stickyProperties = new List<StickyProperty>();
             rollbackStack = new List<RollbackAction>();

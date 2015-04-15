@@ -18,9 +18,8 @@ namespace Sapphire
         }
 
         private XmlDocument document;
-        private Skin skin;
 
-        public static SkinModule FromXmlFile(Skin skin, string path)
+        public static SkinModule FromXmlFile(string path)
         {
             SkinModule skinModule = null;
 
@@ -28,7 +27,7 @@ namespace Sapphire
             {
                 var document = new XmlDocument();
                 document.LoadXml(File.ReadAllText(path));
-                skinModule = new SkinModule(skin, path, document);
+                skinModule = new SkinModule(path, document);
             }
             catch (XmlNodeException ex)
             {
@@ -49,9 +48,8 @@ namespace Sapphire
             return skinModule;
         }
 
-        private SkinModule(Skin _skin, string path, XmlDocument _document)
+        private SkinModule(string path, XmlDocument _document)
         {
-            skin = _skin;
             sourcePath = path;
             document = _document;
         }
