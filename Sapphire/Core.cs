@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using ColossalFramework.IO;
 using ColossalFramework.UI;
 using UnityEngine;
 
@@ -38,7 +39,7 @@ namespace Sapphire
             }
         }
 
-        private static readonly string configPath = "SapphireConfig.xml";
+        private static readonly string configPath = Path.Combine(DataLocation.localApplicationData, "SapphireConfig.xml");
         private Configuration config = new Configuration();
 
         private List<SkinMetadata> availableSkins;
