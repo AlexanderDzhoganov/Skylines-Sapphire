@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 using ColossalFramework.UI;
 using UnityEngine;
@@ -114,7 +115,7 @@ namespace Sapphire
                                 childComponent.relativePosition.y,
                                 childComponent.size.x, childComponent.size.y)));
 
-                    if (componentHash == hash)
+                    if (Regex.IsMatch(componentHash, hash))
                     {
                         WalkModuleInternalRecursive(visitor, node, childComponent);
                         break;
