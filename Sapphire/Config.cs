@@ -23,6 +23,11 @@ namespace Sapphire
         {
             var serializer = new XmlSerializer(typeof(Configuration));
 
+            if (!Directory.Exists(Path.GetDirectoryName(filename)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(filename));
+            }
+
             using (var writer = new StreamWriter(filename))
             {
                 config.OnPreSerialize();

@@ -287,6 +287,21 @@ namespace Sapphire
                     }
                 }
             }
+
+            CheckAndLoadOverride(ModuleClass.MainMenu);
+            CheckAndLoadOverride(ModuleClass.AssetEditor);
+            CheckAndLoadOverride(ModuleClass.MapEditor);
+            CheckAndLoadOverride(ModuleClass.InGame);
+        }
+
+        private void CheckAndLoadOverride(ModuleClass moduleClass)
+        {
+            var overridePath = Path.Combine(Core.overrideDirectory, String.Format("{0}_{1}.xml", name, moduleClass.ToString()));
+            if (File.Exists(overridePath))
+            {
+                Debug.LogWarningFormat("Found override for skin \"{0}\" at \"{1}\"", name, overridePath);
+                AddModuleAtPath(moduleClass, overridePath);
+            }
         }
 
         private void LoadSkinSettings()

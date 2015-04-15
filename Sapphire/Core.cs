@@ -39,7 +39,10 @@ namespace Sapphire
             }
         }
 
-        private static readonly string configPath = Path.Combine(DataLocation.localApplicationData, "SapphireConfig.xml");
+        public static string overrideDirectory = Path.Combine(DataLocation.localApplicationData,
+            Path.Combine("Sapphire", "Override"));
+        
+        private static readonly string configPath = Path.Combine(DataLocation.localApplicationData, Path.Combine("Sapphire", "SapphireConfig.xml"));
         private Configuration config = new Configuration();
 
         private List<SkinMetadata> availableSkins;
@@ -107,6 +110,18 @@ namespace Sapphire
             SetCameraRectHelper.Initialize();
 
             LoadConfig();
+
+            if (!Directory.Exists(overrideDirectory))
+            {
+                try
+                {
+                    Directory.CreateDirectory(overrideDirectory);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogException(ex);
+                }
+            }
 
             InitializeInGamePanels();
 
