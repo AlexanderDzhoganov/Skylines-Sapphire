@@ -27,6 +27,14 @@ namespace Sapphire
             bootstrapped = true;
         }
 
+        public static void Deinitialize()
+        {
+            var core = FindObjectOfType<UIView>().GetComponent<Core>();
+            if (core != null)
+            {
+                Destroy(core);
+            }
+        }
 
         private static readonly string configPath = "SapphireConfig.xml";
         private Configuration config = new Configuration();
@@ -59,22 +67,34 @@ namespace Sapphire
 
         void OnDestroy()
         {
-            currentSkin = null;
-            config = null;
-
-            if (sapphirePanel != null)
+            try
             {
-                Destroy(sapphirePanel);
-            }
+                if (currentSkin != null)
+                {
+                    currentSkin.Rollback();
+                }
 
-            if (sapphireButton != null)
+                currentSkin = null;
+                config = null;
+
+                if (sapphirePanel != null)
+                {
+                    Destroy(sapphirePanel);
+                }
+
+                if (sapphireButton != null)
+                {
+                    Destroy(sapphireButton);
+                }
+
+                SetCameraRectHelper.Deinitialize();
+
+                bootstrapped = false;
+            }
+            catch (Exception ex)
             {
-                Destroy(sapphireButton);
+                Debug.LogException(ex);
             }
-
-            SetCameraRectHelper.Deinitialize();
-
-            bootstrapped = false;
         }
 
         private bool needToApplyCurrentSkin = false;

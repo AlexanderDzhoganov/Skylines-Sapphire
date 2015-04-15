@@ -164,19 +164,19 @@ namespace Sapphire
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while parsing xml \"{1}\" at node \"{2}\": {3}",
+                ErrorLogger.LogErrorFormat("{0} while parsing xml \"{1}\" at node \"{2}\": {3}",
                     ex.GetType(), skinXmlPath, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
                 isValid = false;
             }
             catch (XmlException ex)
             {
-                Debug.LogErrorFormat("XmlException while parsing xml \"{0}\" at line {1}, col {2}: {3}",
+                ErrorLogger.LogErrorFormat("XmlException while parsing xml \"{0}\" at line {1}, col {2}: {3}",
                     skinXmlPath, ex.LineNumber, ex.LinePosition, ex.Message);
                 isValid = false;
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("{0} while parsing xml \"{1}\": {2}", ex.GetType(),
+                ErrorLogger.LogErrorFormat("{0} while parsing xml \"{1}\": {2}", ex.GetType(),
                     skinXmlPath, ex.ToString());
                 isValid = false;
             }
@@ -286,13 +286,13 @@ namespace Sapphire
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while loading skin settings for skin \"{1}\" at node \"{2}\": {3}",
+                ErrorLogger.LogErrorFormat("{0} while loading skin settings for skin \"{1}\" at node \"{2}\": {3}",
                     ex.GetType(), name, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
                 isValid = false;
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("{0} while loading skin settings for skin \"{1}\": {2}", ex.GetType(), name, ex.Message);
+                ErrorLogger.LogErrorFormat("{0} while loading skin settings for skin \"{1}\": {2}", ex.GetType(), name, ex.Message);
                 isValid = false;
             }
         }
@@ -344,13 +344,13 @@ namespace Sapphire
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while loading colors for skin \"{1}\" at node \"{2}\": {3}",
+                ErrorLogger.LogErrorFormat("{0} while loading colors for skin \"{1}\" at node \"{2}\": {3}",
                     ex.GetType(), name, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
                 isValid = false;
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("Exception while loading colors for skin \"{0}\": {1}", name, ex.Message);
+                ErrorLogger.LogErrorFormat("Exception while loading colors for skin \"{0}\": {1}", name, ex.Message);
                 isValid = false;
             }
         }
@@ -422,13 +422,13 @@ namespace Sapphire
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while loading sprites for skin \"{1}\" at node \"{2}\": {3}",
+                ErrorLogger.LogErrorFormat("{0} while loading sprites for skin \"{1}\" at node \"{2}\": {3}",
                     ex.GetType(), name, ex.Node == null ? "null" : ex.Node.Name, ex.ToString());
                 isValid = false;
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("{0} while loading sprites for skin \"{1}\": {2}", ex.GetType(), name, ex.Message);
+                ErrorLogger.LogErrorFormat("{0} while loading sprites for skin \"{1}\": {2}", ex.GetType(), name, ex.Message);
                 isValid = false;
             }
         }
@@ -492,7 +492,7 @@ namespace Sapphire
                 }
                 catch (AtlasPacker.TooManySprites)
                 {
-                    Debug.LogError("Too many sprites in atlas \"" + atlasName + "\", move some sprites to a new atlas!");
+                    ErrorLogger.LogError("Too many sprites in atlas \"" + atlasName + "\", move some sprites to a new atlas!");
                     break;
                 }
 

@@ -56,6 +56,8 @@
     <Compile Include="DebugRenderer.cs" />
     <Compile Include="Detours.cs" />
     <Compile Include="EmbeddedResources.cs" />
+    <Compile Include="ErrorLogger.cs" />
+    <Compile Include="ExceptionDialog.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="HashUtil.cs" />

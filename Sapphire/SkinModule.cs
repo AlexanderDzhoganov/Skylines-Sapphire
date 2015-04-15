@@ -32,17 +32,17 @@ namespace Sapphire
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while parsing skin module \"{1}\" at node \"{2}\": {3}", 
+                ErrorLogger.LogErrorFormat("{0} while parsing skin module \"{1}\" at node \"{2}\": {3}", 
                     ex.GetType(), path, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
             }
             catch (XmlException ex)
             {
-                Debug.LogErrorFormat("XmlException while parsing skin module \"{0}\" at line {1}, col {2}: {3}",
+                ErrorLogger.LogErrorFormat("XmlException while parsing skin module \"{0}\" at line {1}, col {2}: {3}",
                     path, ex.LineNumber, ex.LinePosition, ex.Message);
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("{0} while parsing skin module \"{1}\": {2}", ex.GetType(),
+                ErrorLogger.LogErrorFormat("{0} while parsing skin module \"{1}\": {2}", ex.GetType(),
                     path, ex.ToString());
             }
            

@@ -210,17 +210,17 @@ namespace Sapphire
             }
             catch (ParseException ex)
             {
-                Debug.LogErrorFormat("Error while applying sticky properties for skin \"{1}\" at node \"{2}\": {3}",
+                ErrorLogger.LogErrorFormat("Error while applying sticky properties for skin \"{1}\" at node \"{2}\": {3}",
                     ex.GetType(), skin.Name, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
             }
             catch (XmlNodeException ex)
             {
-                Debug.LogErrorFormat("{0} while applying sticky properties for skin \"{1}\" at node \"{2}\": {3}",
+                ErrorLogger.LogErrorFormat("{0} while applying sticky properties for skin \"{1}\" at node \"{2}\": {3}",
                     ex.GetType(), skin.Name, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("{0} while applying sticky properties for skin \"{1}\": {2}", ex.GetType(), skin.Name, ex.ToString());
+                ErrorLogger.LogErrorFormat("{0} while applying sticky properties for skin \"{1}\": {2}", ex.GetType(), skin.Name, ex.ToString());
             }
         }
 
@@ -244,7 +244,7 @@ namespace Sapphire
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("{0} during skin \"{1}\" rollback: {2}", ex.GetType(), skin.Name, ex.ToString());
+                ErrorLogger.LogErrorFormat("{0} during skin \"{1}\" rollback: {2}", ex.GetType(), skin.Name, ex.ToString());
                 return;
             }
 
@@ -281,19 +281,19 @@ namespace Sapphire
                 }
                 catch (ParseException ex)
                 {
-                    Debug.LogErrorFormat("Error while applying skin module \"{1}\" at node \"{2}\": {3}",
+                    ErrorLogger.LogErrorFormat("Error while applying skin module \"{1}\" at node \"{2}\": {3}",
                         ex.GetType(), skinModule.SourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
                     return false;
                 }
                 catch (XmlNodeException ex)
                 {
-                    Debug.LogErrorFormat("{0} while applying skin module \"{1}\" at node \"{2}\": {3}",
+                    ErrorLogger.LogErrorFormat("{0} while applying skin module \"{1}\" at node \"{2}\": {3}",
                         ex.GetType(), skinModule.SourcePath, XmlUtil.XmlNodeInfo(ex.Node), ex.ToString());
                     return false;
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogErrorFormat("{0} while applying skin module \"{1}\": {2}", ex.GetType(), skinModule.SourcePath, ex.ToString());
+                    ErrorLogger.LogErrorFormat("{0} while applying skin module \"{1}\": {2}", ex.GetType(), skinModule.SourcePath, ex.ToString());
                     return false;
                 }
             }
