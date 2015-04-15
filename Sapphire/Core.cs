@@ -21,6 +21,8 @@ namespace Sapphire
                 return;
             }
 
+            ErrorLogger.ResetSettings();
+
             currentModuleClass = moduleClass;
 
             FindObjectOfType<UIView>().gameObject.AddComponent<Core>();

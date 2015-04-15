@@ -5,10 +5,32 @@ namespace Sapphire
 {
     public static class ErrorLogger
     {
+        private static bool foundModTools = false;
+        private static bool lookedForModTools = false;
+
+        public static void ResetSettings()
+        {
+            lookedForModTools = false;
+            foundModTools = false;
+        }
+
+        private static bool FoundModTools
+        {
+            get
+            {
+                if (!lookedForModTools)
+                {
+                    foundModTools = GameObject.Find("ModTools") != null;
+                    lookedForModTools = true;
+                }
+
+                return foundModTools;
+            }
+        }
 
         public static void LogError(string message)
         {
-            if (GameObject.Find("ModTools") == null)
+            if (!FoundModTools)
             {
                 ExceptionDialog.Show(message);
             }
@@ -18,7 +40,7 @@ namespace Sapphire
 
         public static void LogErrorFormat(string message, params object[] args)
         {
-        if (GameObject.Find("ModTools") == null)
+            if (!FoundModTools)
             {
                 ExceptionDialog.Show(String.Format(message, args));
             }
