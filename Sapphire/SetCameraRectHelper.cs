@@ -81,11 +81,11 @@ namespace Sapphire
             {
                 cachedFreeCameraField.SetValue(cameraController, cameraController.m_freeCamera);
                 UIView.Show(!cameraController.m_freeCamera);
-                Singleton<NotificationManager>.instance.NotificationsVisible = !cameraController.m_freeCamera;
-                Singleton<GameAreaManager>.instance.BordersVisible = !cameraController.m_freeCamera;
-                Singleton<DistrictManager>.instance.NamesVisible = !cameraController.m_freeCamera;
-                Singleton<PropManager>.instance.MarkersVisible = !cameraController.m_freeCamera;
-                Singleton<GuideManager>.instance.TutorialDisabled = cameraController.m_freeCamera;
+                NotificationManager.instance.NotificationsVisible = !cameraController.m_freeCamera;
+                GameAreaManager.instance.BordersVisible = !cameraController.m_freeCamera;
+                DistrictManager.instance.NamesVisible = !cameraController.m_freeCamera;
+                PropManager.instance.MarkersVisible = !cameraController.m_freeCamera;
+                GuideManager.instance.TutorialDisabled = cameraController.m_freeCamera;
             }
             if ((bool)cachedFreeCameraField.GetValue(cameraController))
             {

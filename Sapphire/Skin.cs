@@ -543,18 +543,13 @@ namespace Sapphire
 
             currentModuleClass = moduleClass;
 
-            try
-            {
-                applicator.Apply(modules[moduleClass]);
-            }
-            catch (Exception )
+            if (!applicator.Apply(modules[moduleClass]))
             {
                 applicator.Rollback();
                 Debug.LogWarning("Failed to apply skin module (look for an error in the messages above). All changes have been reverted.");
                 isValid = false;
-                return;
             }
-
+          
             SetCameraRectHelper.CameraRect = renderArea;
         }
 

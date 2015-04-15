@@ -74,7 +74,6 @@
     <Compile Include="SkinApplicator.cs" />
     <Compile Include="SkinModule.cs" />
     <Compile Include="SkinLoader.cs" />
-    <Compile Include="TypeUtil.cs" />
     <Compile Include="UIUtil.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="XmlUtil.cs" />
