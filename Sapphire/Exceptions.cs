@@ -156,8 +156,25 @@ namespace Sapphire
         }
     }
 
-    public class AtlasMissingTextureException : Exception
+    public class SpriteAtlasNotFoundException : Exception
     {
+        private string atlasNameInternal;
+
+        public string AtlasName
+        {
+            get { return atlasNameInternal; }
+        }
+
+
+        public SpriteAtlasNotFoundException(string atlasName)
+        {
+            atlasNameInternal = atlasName;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Failed to find atlas \"{0}\" in skin.xml", atlasNameInternal);
+        }
     }
 
     public class SpriteNotFoundException : Exception
@@ -184,6 +201,26 @@ namespace Sapphire
         public override string ToString()
         {
             return String.Format("Failed to find sprite \"{0}\" in atlas \"{1}\"", spriteNameInternal, atlasInternal.name);
+        }
+    }
+
+    public class ColorNotFoundException : Exception
+    {
+        private string colorNameInternal;
+
+        public string ColorName
+        {
+            get {  return colorNameInternal; }
+        }
+
+        public ColorNotFoundException(string colorName)
+        {
+            colorNameInternal = colorName;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Failed to find definition for color \"{0}\" in skin.xml", colorNameInternal);
         }
     }
 

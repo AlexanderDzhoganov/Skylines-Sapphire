@@ -108,11 +108,19 @@ namespace Sapphire
             get { return author; }
         }
 
+        private Dictionary<string, Color32> colorDefinitions = new Dictionary<string, Color32>(); 
+
+        public Color32 GetNamedColor(string name)
+        {
+            if (!colorDefinitions.ContainsKey(name))
+            {
+                throw new ColorNotFoundException(name);
+            }
+
+            return colorDefinitions[name];
+        }
+
         public Dictionary<string, UITextureAtlas> spriteAtlases = new Dictionary<string, UITextureAtlas>();
-
-        public Dictionary<string, Color32> colorDefinitions = new Dictionary<string, Color32>(); 
-
-        public Dictionary<string, string> tags = new Dictionary<string, string>(); 
 
         private string sapphirePath;
         private string skinXmlPath;
@@ -123,6 +131,7 @@ namespace Sapphire
         }
 
         private XmlDocument document;
+        private XmlNode root;
 
         private FileWatcher fileWatcher;
 
@@ -208,20 +217,46 @@ namespace Sapphire
                 fileWatcher.WatchFile("skin.xml");
             }
 
-            var root = document.SelectSingleNode("/SapphireSkin");
+            root = document.SelectSingleNode("/SapphireSkin");
             if (root == null)
             {
                 isValid = false;
                 throw new ParseException("Skin missing root SapphireSkin node at " + sapphirePath, null);
             }
 
-            LoadSkinSettings();
-            LoadSprites();
-            LoadColors();
-
             name = XmlUtil.GetStringAttribute(root, "name");
             author = XmlUtil.GetStringAttribute(root, "author");
 
+            LoadSkinSettings();
+            LoadSprites();
+            LoadColors();
+            LoadModules();
+        }
+
+        public void Dispose()
+        {
+            Rollback();
+            foreach (var atlas in spriteAtlases)
+            {
+                GameObject.Destroy(atlas.Value.material.mainTexture);
+                GameObject.Destroy(atlas.Value);
+            }
+
+            colorDefinitions.Clear();
+
+            spriteAtlases.Clear();
+
+            renderArea = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
+
+            if (fileWatcher != null)
+            {
+                fileWatcher.Dispose();
+                fileWatcher = null;
+            }
+        }
+
+        private void LoadModules()
+        {
             foreach (XmlNode childNode in root.ChildNodes)
             {
                 if (childNode.Name == "Module")
@@ -251,30 +286,6 @@ namespace Sapphire
                             ("Invalid module class \"{0}\"", moduleClass), childNode);
                     }
                 }
-            }
-        }
-
-        public void Dispose()
-        {
-            Rollback();
-            foreach (var atlas in spriteAtlases)
-            {
-                GameObject.Destroy(atlas.Value.material.mainTexture);
-                GameObject.Destroy(atlas.Value);
-            }
-
-            colorDefinitions.Clear();
-
-            spriteAtlases.Clear();
-
-            tags.Clear();
-
-            renderArea = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
-
-            if (fileWatcher != null)
-            {
-                fileWatcher.Dispose();
-                fileWatcher = null;
             }
         }
 
@@ -437,14 +448,7 @@ namespace Sapphire
         {
             Debug.LogWarning("Loading sprites");
 
-            var rootNode = document.SelectSingleNode("/SapphireSkin");
-
-            if (rootNode == null)
-            {
-                throw new Exception("Skin missing root SapphireSkin node");
-            }
-
-            foreach (XmlNode childNode in rootNode)
+            foreach (XmlNode childNode in root)
             {
                 if (childNode.Name != "SpriteAtlas")
                 {

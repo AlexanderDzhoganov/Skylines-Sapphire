@@ -138,13 +138,7 @@ namespace Sapphire
 
             if (property.PropertyType == typeof(Color32) && !raw)
             {
-                var colorName = setNode.InnerText;
-                if (!skin.colorDefinitions.ContainsKey(colorName))
-                {
-                    throw new ParseException(String.Format("Invalid or undefined color name \"{0}\"", colorName), setNode);
-                }
-
-                value = skin.colorDefinitions[colorName];
+                value = skin.GetNamedColor(setNode.InnerText);
             }
             else
             {
